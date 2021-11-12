@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-    <p>a</p>
+    <p>Home</p>
 @stop
 
 @section('footer')
@@ -19,15 +19,3 @@
 @section('js')
     {{-- <script> console.log('Hi!'); </script> --}}
 @stop
-
-{{-----------------
-Section	Description
--------------------
-title
-content_header
-content
-footer
-right-sidebar
-css
-js
---}}
