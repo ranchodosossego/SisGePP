@@ -1299,7 +1299,7 @@
         </section><!-- End Testimonials Section --> --}}
 
         <!-- ======= Pricing Section ======= -->
-        <section id="pricing" class="pricing">
+        {{-- <section id="pricing" class="pricing">
             <div class="container">
 
                 <div class="section-title" data-aos="zoom-in">
@@ -1365,7 +1365,7 @@
                 </div>
 
             </div>
-        </section><!-- End Pricing Section -->
+        </section><!-- End Pricing Section --> --}}
 
         <!-- ======= F.A.Q Section ======= -->
         <section id="faq" class="faq">
