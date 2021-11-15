@@ -466,9 +466,9 @@
                     <li><a class="nav-link scrollto" href="#hero">Vamos lá</a></li>
                     <li><a class="nav-link scrollto" href="#about">Sobre</a></li>
                     <li><a class="nav-link scrollto" href="#services">O Leite</a></li>
-                    <li><a class="nav-link scrollto " href="#portfolio">Portfolio</a></li>
-                    <li><a class="nav-link scrollto" href="#team">Team</a></li>
-
+                    <li><a class="nav-link scrollto " href="#portfolio">Derivados</a></li>
+                    <li><a class="nav-link scrollto" href="#team">Equipe</a></li>
+                    <li><a class="nav-link scrollto" href="#contact">Contato</a></li>
                     @if (Route::has('login'))
                         @auth
                             <li><a class="nav-link scrollto active" href="{{ url('/home') }}">Home</a></li>
@@ -505,8 +505,8 @@
                             class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
                     </div>
 
-                    <div
-                        class="col-xl-6 col-lg-6 d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5">
+                    <div class="col-xl-6 col-lg-6 d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5">
+
                         <div class="box-heading" data-aos="fade-up">
                             <h4>Sobre</h4>
                             <h3>Trazendo o Vale do Paraíba para o mapa</h3>
@@ -625,7 +625,7 @@
             <div class="container" data-aos="zoom-in">
 
                 <div class="text-center">
-                    <h3>Estamos Juntos</h3>
+                    <h3>#EstamosJuntos</h3>
                     <p>Teremos a imensa satisfação em atendê-los no que for possível.</p>
                     <a class="cta-btn" href="#">Fale Conosco</a>
                 </div>
@@ -641,7 +641,8 @@
                     <h2>O Leite</h2>
                     <h3>Conhecendo <span><i class="bx bxs-message-rounded-add"></i></span></h3>
                     <p>
-                        Basta dar uma breve olhada nas prateleiras para constatar que existe leite para todos os tipos de
+                        Basta dar uma breve olhada nas prateleiras para constatar que existe leite para todos os tipos
+                        de
                         gosto e necessidades. Vamos entender um pouco mais!
                     </p>
                 </div>
@@ -649,49 +650,149 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                         <div class="icon-box" data-aos="zoom-in">
-                            <div class="icon"><i class="bx bxl-dribbble"></i></div>
-                            <h4><a href="">Lorem Ipsum</a></h4>
-                            <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+                            <div class="icon"><i class="fas fa-battery-full"></i></div>
+                            <h4><a href="">Integral</a></h4>
+                            <p>
+                                O leite integral é aquele que contém maior teor de gordura,
+                                <a href="" class="fw-bolder initialism">no mínimo 3%.</a> Vale destacar que a gordura do
+                                leite é importante para o organismo. Esse nutriente ajuda na absorção de vitaminas
+                                lipossolúveis, como a vitamina A e D. Além disso, auxiliam em quadros de desnutrição
+                                infantil que apresentam baixo peso.
+
+                            </p>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
                         <div class="icon-box" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="icon"><i class="bx bx-file"></i></div>
-                            <h4><a href="">Sed ut perspiciatis</a></h4>
-                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+                            <div class="icon"><i class="fas fa-battery-three-quarters"></i></div>
+                            <h4><a href="">Semidesnatado</a></h4>
+                            <p>Em relação aos seus valores nutricionais, o leite semidesnatado possui uma quantidade
+                                maior de
+                                vitaminas A, D e E, se comparado ao leite desnatado, passando a ter
+                                <a href="" class="fw-bolder initialism">entre 0,6% e 2,9%</a>. Por exemplo, para cada
+                                100 g de leite,
+                                o leite semidesnatado terá entre 0,6 e 2,9 g de gordura. Por causa disso, ele é uma
+                                opção saudável
+                                para ser usado no preparo de receitas feitas à base de leite, como bolos,
+                                massas, iogurtes e bebidas lácteas.
+                            </p>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
                         <div class="icon-box" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="icon"><i class="bx bx-tachometer"></i></div>
-                            <h4><a href="">Magni Dolores</a></h4>
-                            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+                            <div class="icon"><i class="fas fa-battery-empty"></i></div>
+                            <h4><a href="">Desnatado</a></h4>
+                            <p>Esse tipo de leite é mais indicado para aqueles que sofrem de alguma doença do sistema
+                                cardiovascular ou que estejam em uma dieta alimentar para a perda de peso. O leite
+                                desnatado após o processo de industrialização tem seu índice de gordura reduzido a
+                                <a href="" class="fw-bolder initialism">no máximo 0,5%.</a> Assim como os outros dois
+                                tipos este mantém os mesmos minerais.
+                            </p>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                         <div class="icon-box" data-aos="zoom-in" data-aos-delay="300">
-                            <div class="icon"><i class="bx bx-world"></i></div>
-                            <h4><a href="">Nemo Enim</a></h4>
-                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+                            <div class="icon"><i class="fab fa-autoprefixer"></i></div>
+                            <h4><a href="">Tipo A</a></h4>
+                            <p>É obtido de um único rebanho e não há contato manual com o leite em nenhuma fase do
+                                processo,
+                                ou seja, a ordenha é mecânica e o leite segue por tubulações diretamente para o
+                                compartimento
+                                onde sofre pasteurização, homogeneização e envase. O número máximo de bactérias
+                                permitido para
+                                este leite é de 500/ml.</p>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                         <div class="icon-box" data-aos="zoom-in" data-aos-delay="400">
-                            <div class="icon"><i class="bx bx-slideshow"></i></div>
-                            <h4><a href="">Dele cardo</a></h4>
-                            <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>
+                            <div class="icon"><i class="fas fa-bold"></i></div>
+                            <h4><a href="">Tipo B</a></h4>
+                            <p>É obtido de rebanhos diferentes e sua ordenha pode ser realizada mecânica ou manualmente.
+                                O leite deve ser refrigerado no próprio local da ordenha (propriedade rural) por até 48
+                                horas em
+                                temperatura igual ou inferior a 4 ºC e transportado em tanques até o local apropriado,
+                                onde será processado.
+                                O número máximo de bactérias permitido para este leite é de 40.000/ml.</p>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
                         <div class="icon-box" data-aos="zoom-in" data-aos-delay="500">
-                            <div class="icon"><i class="bx bx-arch"></i></div>
-                            <h4><a href="">Divera don</a></h4>
-                            <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
+                            <div class="icon"><i class="fab fa-cuttlefish"></i></div>
+                            <h4><a href="">Tipo C</a></h4>
+                            <p>Tem a mesma origem e tipo de ordenha do leite tipo B. Entretanto, não é refrigerado na
+                                fazenda leiteira.
+                                Após a ordenha, o leite é transportado em tanques até um local apropriado
+                                (estabelecimento industrial)
+                                até as 10:00 h do dia de sua obtenção, onde só então é processado, seguindo os prazos
+                                estipulados por lei.
+                                Este processo eleva bastante o número de bactérias presentes no leite, que pode chegar,
+                                por determinação da lei, a 100.000/ml.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
+                        <div class="icon-box" data-aos="zoom-in" data-aos-delay="300">
+                            <div class="icon"><i class="fas fa-thermometer-half"></i></div>
+                            <h4><a href="">Pasteurizado</a></h4>
+                            <p>
+                                É um processo de esterilização, geralmente <a href=""
+                                    class="fw-bolder initialism">encontrado em saquinho</a>
+                                , é aquecido a mais de 7ºC até 20 segundos, e então resfriado muito rapidamente a -4ºC.
+                                Esse método, mata apenas as
+                                bactérias que causam doenças
+                            <figure>
+                                <blockquote class="blockquote">
+                                    <p></p>
+                                </blockquote>
+                                <figcaption class="blockquote-footer">
+                                    <cite title="Conserva">e conserva o leite por até sete dias.</cite>
+                                </figcaption>
+                            </figure>
+                            <cite>
+
+
+                                </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
+                        <div class="icon-box" data-aos="zoom-in" data-aos-delay="400">
+                            <div class="icon"><i class="fas fa-temperature-high"></i></div>
+                            <h4><a href="">UHT</a></h4>
+                            <p>Outro processo de esterilização, também conhecido como ultrapasteurização, é o processo
+                                UHT (ultra high temperature, em inglês),
+                                típico do <a href="" class="fw-bolder initialism">leite de caixinha ou longa vida</a>
+                                , é mais radical: o leite é aquecido a 140 °C por até 8 segundos. Como praticamente
+                                nenhuma bactéria sobrevive,
+                            <figure>
+                                <blockquote class="blockquote">
+                                    <p></p>
+                                </blockquote>
+                                <figcaption class="blockquote-footer">
+                                    <cite title="Conserva">ele dura 4 meses em temperatura ambiente.</cite>
+                                </figcaption>
+                            </figure>
+                            <cite>
+                                </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
+                        <div class="icon-box" data-aos="zoom-in" data-aos-delay="500">
+                            <div class="icon"><i class="fab fa-pagelines"></i></div>
+                            <h4><a href="">in Natura</a></h4>
+                            <p>Consiste no emprego de tecnologias (boas práticas) e cuidados higiênicos, que envolvem a
+                                limpeza
+                                e a desinfecção periódica das instalações, dos materiais e dos utensílios utilizados,
+                                pela
+                                coleta e pelo ordenhador, no transporte, no armazenamento e no processamento, visando à
+                                produção
+                                de leite de alta qualidade.</p>
                         </div>
                     </div>
 
@@ -705,138 +806,310 @@
             <div class="container">
 
                 <div class="section-title" data-aos="zoom-in">
-                    <h2>Portfolio</h2>
-                    <h3>Check our <span>Portfolio</span></h3>
-                    <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas
-                        atque vitae autem.</p>
+                    <h2>Derivados</h2>
+                    <h3>Para <span>Você</span></h3>
+                    <p>Os produtos lácteos, também conhecidos como laticínios, são os derivados do
+                        leite que fazem parte do cotidiano alimentar da maioria das pessoas e que são produzidos
+                        a partir do uso de leite.</p>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up">
                         <ul id="portfolio-flters">
-                            <li data-filter="*" class="filter-active">All</li>
-                            <li data-filter=".filter-app">App</li>
-                            <li data-filter=".filter-card">Card</li>
-                            <li data-filter=".filter-web">Web</li>
+                            <li data-filter="*" class="filter-active">Todos</li>
+                            <li data-filter=".filter-fermentado">Fermentados</li>
+                            <li data-filter=".filter-creme">Creme de Leite</li>
+                            <li data-filter=".filter-manteiga">Manteiga</li>
+                            <li data-filter=".filter-requeijao">Requeijão</li>
+                            <li data-filter=".filter-queijos">Queijos</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                        <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-13.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>App 1</h4>
-                            <p>App</p>
-                            <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="App 1"><i
+                            <h4>Mozzarella</h4>
+                            <p>Queijo Mozzarella</p>
+                            <a href="assets/img/portfolio/portfolio-13.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Mozzarella"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                        <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-requeijao">
+                        <img src="assets/img/portfolio/portfolio-12.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>Web 3</h4>
-                            <p>Web</p>
-                            <a href="assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="Web 3"><i
+                            <h4>Requeijão</h4>
+                            <p>Requeijão</p>
+                            <a href="assets/img/portfolio/portfolio-12.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Requeijão"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                        <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-manteiga">
+                        <img src="assets/img/portfolio/portfolio-11.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>App 2</h4>
-                            <p>App</p>
-                            <a href="assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="App 2"><i
+                            <h4>Acidificada</h4>
+                            <p>Manteiga acidificada</p>
+                            <a href="assets/img/portfolio/portfolio-11.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Manteiga acidificada"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                        <img src="assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-manteiga">
+                        <img src="assets/img/portfolio/portfolio-10.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>Card 2</h4>
-                            <p>Card</p>
-                            <a href="assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="Card 2"><i
+                            <h4>Ghee</h4>
+                            <p>Manteiga clarificada (manteiga ghee)</p>
+                            <a href="assets/img/portfolio/portfolio-10.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Manteiga clarificada (manteiga ghee)"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-15.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Provolone </h4>
+                            <p>Queijo Provolone</p>
+                            <a href="assets/img/portfolio/portfolio-15.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Provolone"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-creme">
                         <img src="assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>Web 2</h4>
-                            <p>Web</p>
+                            <h4>Light</h4>
+                            <p>Creme de Leite Light</p>
                             <a href="assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="Web 2"><i
+                                class="portfolio-lightbox preview-link" title="Creme de Leite Light"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-creme">
                         <img src="assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>App 3</h4>
-                            <p>App</p>
+                            <h4>Chantilly</h4>
+                            <p>Creme de Leite para Chantilly</p>
                             <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="App 3"><i
+                                class="portfolio-lightbox preview-link" title="Creme de Leite para Chantilly"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-16.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Prato</h4>
+                            <p>Queijo Prato</p>
+                            <a href="assets/img/portfolio/portfolio-16.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Prato"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-creme">
                         <img src="assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>Card 1</h4>
-                            <p>Card</p>
+                            <h4>Buttermilk</h4>
+                            <p>Buttermilk ou leitelho</p>
                             <a href="assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="Card 1"><i
+                                class="portfolio-lightbox preview-link" title="Buttermilk ou leitelho"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-manteiga">
+                        <img src="assets/img/portfolio/portfolio-18.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Manteiga</h4>
+                            <p>Manteiga batida</p>
+                            <a href="assets/img/portfolio/portfolio-18.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Manteiga batida"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-24.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Manteiga</h4>
+                            <p>Queijo Manteiga</p>
+                            <a href="assets/img/portfolio/portfolio-24.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Manteiga"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-fermentado">
+                        <img src="assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Kefir</h4>
+                            <p>Kefir</p>
+                            <a href="assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Kefir"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-17.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Minas</h4>
+                            <p>Queijo Minas Frescal</p>
+                            <a href="assets/img/portfolio/portfolio-17.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Minas Frescal"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-fermentado">
+                        <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Coalhada</h4>
+                            <p>Coalhada</p>
+                            <a href="assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Coalhada"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-19.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Gorgonzola</h4>
+                            <p>Queijo Gorgonzola</p>
+                            <a href="assets/img/portfolio/portfolio-19.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Gorgonzola"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-creme">
                         <img src="assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>Card 3</h4>
-                            <p>Card</p>
+                            <h4>Sour cream</h4>
+                            <p>Sour cream ou creme de leite azedo</p>
                             <a href="assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="Card 3"><i
+                                class="portfolio-lightbox preview-link" title="Sour cream ou creme de leite azedo"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-23.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Coalho</h4>
+                            <p>Queijo Coalho</p>
+                            <a href="assets/img/portfolio/portfolio-23.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Coalho"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-fermentado">
+                        <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Leite</h4>
+                            <p>Leite Fermentado</p>
+                            <a href="assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Leite Fermentado"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-manteiga">
                         <img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>Web 3</h4>
-                            <p>Web</p>
+                            <h4>Baratte</h4>
+                            <p>Manteiga de baratte ou extrafina</p>
                             <a href="assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery"
-                                class="portfolio-lightbox preview-link" title="Web 3"><i
+                                class="portfolio-lightbox preview-link" title="Manteiga de baratte ou extrafina"><i
                                     class="bx bx-plus"></i></a>
-                            <a href="portfolio-details.html" class="details-link" title="More Details"><i
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-20.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Parmesão</h4>
+                            <p>Queijo Parmesão</p>
+                            <a href="assets/img/portfolio/portfolio-20.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Parmesão"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-fermentado">
+                        <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Iogurte</h4>
+                            <p>Bebida Fermentada</p>
+                            <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Iogurte"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
+                                    class="bx bx-link"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-queijos">
+                        <img src="assets/img/portfolio/portfolio-21.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-info">
+                            <h4>Cheddar</h4>
+                            <p>Queijo Cheddar</p>
+                            <a href="assets/img/portfolio/portfolio-21.jpg" data-gallery="portfolioGallery"
+                                class="portfolio-lightbox preview-link" title="Queijo Cheddar"><i
+                                    class="bx bx-plus"></i></a>
+                            <a href="portfolio-details.html" class="details-link" title="+ Detalhes"><i
                                     class="bx bx-link"></i></a>
                         </div>
                     </div>
@@ -851,10 +1124,10 @@
             <div class="container">
 
                 <div class="section-title" data-aos="zoom-in">
-                    <h2>Team</h2>
-                    <h3>Our Hard Working <span>Team</span></h3>
-                    <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas
-                        atque vitae autem.</p>
+                    <h2>Equipe</h2>
+                    <h3>Trabalhamos <span> Duro!</span></h3>
+                    <p>Para oferecer aos nossos clientes leite <i>in natura</i> de alta qualidade, com
+                        altos padrões de manejo e melhoramento genético.</p>
                 </div>
 
                 <div class="row">
@@ -871,8 +1144,8 @@
                                 </div>
                             </div>
                             <div class="member-info">
-                                <h4>Walter White</h4>
-                                <span>Chief Executive Officer</span>
+                                <h4>Dayana Ferreira</h4>
+                                <span>Gerente Geral</span>
                             </div>
                         </div>
                     </div>
@@ -889,12 +1162,12 @@
                                 </div>
                             </div>
                             <div class="member-info">
-                                <h4>Sarah Jhonson</h4>
-                                <span>Product Manager</span>
+                                <h4>Marcelo Maia</h4>
+                                <span>Gerente de Produção e Novas Tecnologias</span>
                             </div>
                         </div>
                     </div>
-
+{{--
                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
                         <div class="member" data-aos="fade-up" data-aos-delay="200">
                             <div class="member-img">
@@ -929,7 +1202,7 @@
                                 <span>Accountant</span>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
 
@@ -937,7 +1210,7 @@
         </section><!-- End Team Section -->
 
         <!-- ======= Testimonials Section ======= -->
-        <section id="testimonials" class="testimonials">
+        {{-- <section id="testimonials" class="testimonials invisible">
             <div class="container">
 
                 <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
@@ -1023,17 +1296,16 @@
                 </div>
 
             </div>
-        </section><!-- End Testimonials Section -->
+        </section><!-- End Testimonials Section --> --}}
 
         <!-- ======= Pricing Section ======= -->
         <section id="pricing" class="pricing">
             <div class="container">
 
                 <div class="section-title" data-aos="zoom-in">
-                    <h2>Pricing</h2>
-                    <h3>Check our <span>Pricing</span></h3>
-                    <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas
-                        atque vitae autem.</p>
+                    <h2>Equipamentos</h2>
+                    <h3>Equipamentos <span>Básicos</span></h3>
+                    <p>lsfs sdfsdfg df .</p>
                 </div>
 
                 <div class="row">
@@ -1101,85 +1373,104 @@
 
                 <div class="section-title" data-aos="zoom-in">
                     <h2>F.A.Q</h2>
-                    <h3>Frequently Asked <span>Questions</span></h3>
-                    <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas
-                        atque vitae autem.</p>
+                    <h3>Dúvidas <span>Frequentes</span></h3>
+                    <p>Preparamos algumas respostas para você tirar suas dúvidas de um jeito fácil.
+                        Fique por dentro de tudo sobre o Leite!</p>
                 </div>
 
                 <div class="faq-list">
                     <ul>
-                        <li data-aos="fade-up">
+                        <li data-aos="fade-up" data-aos-delay="100">
                             <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse"
-                                class="collapse" data-bs-target="#faq-list-1">Non consectetur a erat nam at
-                                lectus urna duis? <i class="bx bx-chevron-down icon-show"></i><i
+                                data-bs-target="#faq-list-1" class="collapsed">Qual o tipo de leite que as
+                                crianças devem receber – leite semi-desnatado, desnatado, integral? <i class="bx bx-chevron-down icon-show"></i><i
                                     class="bx bx-chevron-up icon-close"></i></a>
-                            <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
+                            <div id="faq-list-1" class="collapse" data-bs-parent=".faq-list">
                                 <p>
-                                    Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet
-                                    non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor
-                                    purus non.
+                                    A criança de mais de 1 ano precisa tomar leite integral, que contém a gordura
+                                    original do leite. Há vitaminas, como a A e D, que precisam da gordura. Crianças até 2 anos devem
+                                    tomar leite que tem de conter pelo menos 3% de gordura.
+                                </p>
+                                <p>
+                                    O semidesnatado é o leite que contém parte da gordura natural do leite, numa proporção de 0,6% a 2,9%.
+                                    Em situações especiais, pode ser dado a crianças de mais de 2 anos com problema de obesidade, seguindo
+                                    orientação do pediatra.
+                                </p>
+                                <p>
+                                    Já o desnatado é aquele que pode ter, no máximo, 0,5% de gordura. Não é recomendado para crianças em nenhuma situação.
                                 </p>
                             </div>
                         </li>
-
-                        <li data-aos="fade-up" data-aos-delay="100">
+                        <li data-aos="fade-up" data-aos-delay="200">
                             <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse"
-                                data-bs-target="#faq-list-2" class="collapsed">Feugiat scelerisque varius morbi
-                                enim nunc? <i class="bx bx-chevron-down icon-show"></i><i
+                                data-bs-target="#faq-list-2" class="collapsed">Para quem são indicados os produtos sem lactose? <i class="bx bx-chevron-down icon-show"></i><i
                                     class="bx bx-chevron-up icon-close"></i></a>
                             <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
                                 <p>
-                                    Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum
-                                    velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend
-                                    donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in
-                                    cursus turpis massa tincidunt dui.
+                                    O leite é um alimento rico em nutrientes que trazem benefícios a saúde, como proteínas e cálcio. Porém, algumas pessoas podem apresentar
+                                    desconfortos intestinais relacionado a ingestão da lactose, que é um açúcar naturalmente presente no leite. A intolerância à lactose é a
+                                    condição relacionada a deficiência total ou parcial na produção da enzima lactase pelo organismo.
                                 </p>
-                            </div>
-                        </li>
-
-                        <li data-aos="fade-up" data-aos-delay="200">
-                            <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse"
-                                data-bs-target="#faq-list-3" class="collapsed">Dolor sit amet consectetur
-                                adipiscing elit? <i class="bx bx-chevron-down icon-show"></i><i
-                                    class="bx bx-chevron-up icon-close"></i></a>
-                            <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
                                 <p>
-                                    Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus
-                                    pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit.
-                                    Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis
-                                    tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
+                                    Essa deficiência é responsável por causar sintomas como dor, distensão abdominal, flatulência e diarreia após o consumo de produtos lácteos tradicionais.
+                                    Apesar disso, não há a necessidade de excluir totalmente o leite e seus derivados da alimentação dos intolerantes que assim desejem, pois hoje existem no
+                                    mercado diversos produtos que conta com a adição da enzima lactase na sua fórmula.
+                                </p>
+                                <p>
+                                    No processo de fabricação desses produtos, as enzimas adicionadas quebram o açúcar do leite em moléculas menores e de mais fácil digestão: a glicose e a galactose.
+                                    Desta forma, eles podem ser consumidos tranquilamente por intolerantes à lactose e aqueles que sentem algum desconforto ao ingerir lácteos. As pessoas que não
+                                    apresentam intolerância à lactose não precisam utilizar alimentos sem lactose, entretanto podem fazê-lo se assim desejarem.
                                 </p>
                             </div>
                         </li>
 
                         <li data-aos="fade-up" data-aos-delay="300">
                             <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse"
-                                data-bs-target="#faq-list-4" class="collapsed">Tempus quam pellentesque nec nam
-                                aliquam sem et tortor consequat? <i class="bx bx-chevron-down icon-show"></i><i
+                                data-bs-target="#faq-list-3" class="collapsed">Existem conservantes usados no leite UHT?
+                                 <i class="bx bx-chevron-down icon-show"></i><i
                                     class="bx bx-chevron-up icon-close"></i></a>
-                            <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
+                            <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
                                 <p>
-                                    Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in
-                                    est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl
-                                    suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in.
+                                    O tratamento térmico ultra-alto usado na produção do leite UHT mata todos os micro-organismos.
+                                    Em seguida, o leite é acondicionado em uma embalagem asséptica que o protege da entrada de quaisquer
+                                    micro-organismos, tornando-o seguro por meses sem necessidade de refrigeração. Simplesmente, não há
+                                    necessidade de adicionar conservantes em um produto tratado com UHT, pois não há micro-organismos crescendo.
+                                    Os recipientes assépticos também protegem o produto do ar e da luz, protegendo assim a qualidade do produto.
                                 </p>
                             </div>
                         </li>
 
                         <li data-aos="fade-up" data-aos-delay="400">
                             <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse"
-                                data-bs-target="#faq-list-5" class="collapsed">Tortor vitae purus faucibus ornare.
-                                Varius vel pharetra vel turpis nunc eget lorem dolor? <i
+                                data-bs-target="#faq-list-4" class="collapsed">O leite UHT contém cálcio? <i
+                                    class="bx bx-chevron-down icon-show"></i><i
+                                    class="bx bx-chevron-up icon-close"></i></a>
+                            <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
+                                <p>
+                                    Sim, claro. O valor nutricional do leite UHT e do leite fresco é o mesmo quando se trata dos principais
+                                    nutrientes do leite, como proteínas, cálcio e vitamina D.
+                                </p>
+                            </div>
+                        </li>
+
+                        <li data-aos="fade-up" data-aos-delay="400">
+                            <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse"
+                                data-bs-target="#faq-list-5" class="collapsed">Queijos amarelos engordam mais que os brancos? <i
                                     class="bx bx-chevron-down icon-show"></i><i
                                     class="bx bx-chevron-up icon-close"></i></a>
                             <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
                                 <p>
-                                    Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo
-                                    integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc
-                                    eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque.
+                                    Normalmente, sim. Mas, ao contrário do que muita gente pensa, o teor calórico dos queijos amarelos, como Cheddar, Emental,
+                                    Prato e Gruyère, não têm nada a ver com sua cor, mas com a grande quantidade de leite e, consequentemente, de gordura presente
+                                    em sua composição. Para produzir 1 quilo de Parmesão, por exemplo, são necessários 12 litros de leite,
+                                    ao passo que basta a metade para fazer a mesma quantidade de um Minas Frescal.
                                 </p>
                             </div>
                         </li>
+
+
+
+
 
                     </ul>
                 </div>
@@ -1192,16 +1483,15 @@
             <div class="container">
 
                 <div class="section-title" data-aos="zoom-in">
-                    <h2>Contact</h2>
-                    <h3>Check our <span>Contact</span> Details</h3>
-                    <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas
-                        atque vitae autem.</p>
+                    <h2>Contato</h2>
+                    <h3>Fale <span>Conosco</span></h3>
+                    <p>Seu feedback contribuirá muito. Obrigado por ter dedicado um pouco do seu tempo para nos ajudar. </p>
                 </div>
 
                 <div>
-                    <iframe style="border:0; width: 100%; height: 270px;"
-                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                        frameborder="0" allowfullscreen></iframe>
+                    <iframe style="border:0; width: 100%; height: 270px;" frameborder="0" allowfullscreen
+                    src="https://www.google.com/maps/d/embed?mid=1fnrAh1793fSShnc3dsyd1G-bKaP3T6Ou"></iframe>
+
                 </div>
 
                 <div class="row mt-5">
@@ -1210,20 +1500,20 @@
                         <div class="info">
                             <div class="address">
                                 <i class="bi bi-geo-alt"></i>
-                                <h4>Location:</h4>
-                                <p>A108 Adam Street, New York, NY 535022</p>
+                                <h4>Localização:</h4>
+                                <p>Santa Efigênia, Capela - AL, 57780-000</p>
                             </div>
 
                             <div class="email">
                                 <i class="bi bi-envelope"></i>
                                 <h4>Email:</h4>
-                                <p>info@example.com</p>
+                                <p>ranchodosossego.al29@gmail.com</p>
                             </div>
 
                             <div class="phone">
-                                <i class="bi bi-phone"></i>
-                                <h4>Call:</h4>
-                                <p>+1 5589 55488 55s</p>
+                                <i class="fab fa-whatsapp"></i>
+                                <h4>Cel:</h4>
+                                <p>+55 82 98161 3742</p>
                             </div>
 
                         </div>
@@ -1236,19 +1526,19 @@
                             <div class="row">
                                 <div class="col-md-6 form-group">
                                     <input type="text" name="name" class="form-control" id="name"
-                                        placeholder="Your Name" required>
+                                        placeholder="Seu Nome" required>
                                 </div>
                                 <div class="col-md-6 form-group mt-3 mt-md-0">
                                     <input type="email" class="form-control" name="email" id="email"
-                                        placeholder="Your Email" required>
+                                        placeholder="Seu Email" required>
                                 </div>
                             </div>
                             <div class="form-group mt-3">
                                 <input type="text" class="form-control" name="subject" id="subject"
-                                    placeholder="Subject" required>
+                                    placeholder="Assunto" required>
                             </div>
                             <div class="form-group mt-3">
-                                <textarea class="form-control" name="message" rows="5" placeholder="Message"
+                                <textarea class="form-control" name="message" rows="5" placeholder="Mensagem"
                                     required></textarea>
                             </div>
                             <div class="my-3">
@@ -1256,7 +1546,7 @@
                                 <div class="error-message"></div>
                                 <div class="sent-message">Your message has been sent. Thank you!</div>
                             </div>
-                            <div class="text-center"><button type="submit">Send Message</button></div>
+                            <div class="text-center"><button type="submit">Enviar</button></div>
                         </form>
 
                     </div>
@@ -1271,7 +1561,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer">
 
-        <div class="footer-top">
+        {{-- <div class="footer-top">
 
             <div class="container">
 
@@ -1301,13 +1591,13 @@
                 </div>
 
             </div>
-        </div>
+        </div> --}}
 
         <div class="container footer-bottom clearfix">
             <div class="copyright">
-                &copy; Copyright <strong><span>Remember</span></strong>. All Rights Reserved
+                &copy; Copyright <strong><span>Rancho do Sossego</span></strong>. Todos os direitos reservados.
             </div>
-            <div class="credits">
+            <div class="credits invisible">
                 <!-- All the links in the footer should remain intact. -->
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
