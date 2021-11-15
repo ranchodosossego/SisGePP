@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- Favicons -->
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link rel='icon' href='assets/img/favicon.png' type='image/x-icon' sizes="16x16" />
 
     <!-- Google Fonts -->
     <link
