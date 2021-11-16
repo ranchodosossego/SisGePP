@@ -1,7 +1,7 @@
 @extends('adminlte::page', ['iFrameEnabled' => true])
 
 @section('content_header')
-    <h1></h1>
+
 @stop
 
 @section('content')
@@ -14,6 +14,9 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    <style>
+        body { overflow-y: hidden; }
+    </style>
 @stop
 
 @section('js')
