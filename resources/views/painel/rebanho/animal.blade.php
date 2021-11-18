@@ -51,23 +51,19 @@
                                     </select>
                                 </div>
 
-                                <!-- Date -->
-                                <div class="form-group">
-                                    <label>Date:</label>
-                                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input"
-                                            data-target="#reservationdate" />
-                                        <div class="input-group-append" data-target="#reservationdate"
-                                            data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
 
                             </div>
 
+                            {{-- Datepicker aqui --}}
+                            <div class="form-group col-md-2" id="raca-container">
+                                <label for="raca">Data de Entrada</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            {{-- Datepicker Fim --}}
+
                         </div>
                         <!-- /.card-body -->
+
                     </div>
                     <!-- /.card -->
 
@@ -78,9 +74,19 @@
 @stop
 
 @section('css')
-
+    <link rel="stylesheet" href="css\bootstrap-datepicker3.min.css">
 @stop
 
 @section('js')
-
+    <script src="js\bootstrap-datepicker.min.js"></script>
+    <script src="js\bootstrap-datepicker.pt-BR.min.js"></script>
+    <script>
+        $('#raca-container input').datepicker({
+            format: "dd/mm/yyyy",
+            language: "pt-BR",
+            calendarWeeks: true,
+            autoclose: true,
+            todayHighlight: true
+        });
+    </script>
 @stop
