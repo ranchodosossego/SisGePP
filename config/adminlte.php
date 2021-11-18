@@ -87,7 +87,7 @@ return [
     'layout_boxed' => null,
     'layout_fixed_sidebar' => true,
     'layout_fixed_navbar' => true,
-    'layout_fixed_footer' => true,
+    'layout_fixed_footer' => null,
     'layout_dark_mode' => true,
 
     /*
@@ -264,7 +264,7 @@ return [
                     'icon'    => 'fab fa-cloudscale p-1',
                 ],
                 [
-                    'text' => 'Animal',
+                    'text' => 'Novos Animais',
                     'url'  => 'animal',
                     'icon'    => 'fas fa-paw p-1',
                 ],

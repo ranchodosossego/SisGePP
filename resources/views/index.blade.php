@@ -1167,7 +1167,7 @@
                             </div>
                         </div>
                     </div>
-{{--
+
                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
                         <div class="member" data-aos="fade-up" data-aos-delay="200">
                             <div class="member-img">
@@ -1180,11 +1180,13 @@
                                 </div>
                             </div>
                             <div class="member-info">
-                                <h4>William Anderson</h4>
-                                <span>CTO</span>
+                                <h4>Antenor Melo</h4>
+                                <span>Co-fundador</span>
                             </div>
                         </div>
                     </div>
+{{--
+
 
                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
                         <div class="member" data-aos="fade-up" data-aos-delay="300">

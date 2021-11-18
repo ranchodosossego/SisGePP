@@ -9,13 +9,19 @@
 @stop
 
 @section('footer')
-    <small>Copyright &copy; 2020-2021 - <strong>Rancho do Sossego</strong></small>
 @stop
 
 @section('css')
     {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
     <style>
-        body { overflow-y: hidden; }
+        body {
+            overflow-y: hidden;
+        }
+
+        .main-footer {
+            display: none;
+        }
+
     </style>
 @stop
 
