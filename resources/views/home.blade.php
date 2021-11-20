@@ -1,7 +1,7 @@
 @extends('adminlte::page', ['iFrameEnabled' => true])
 
 @section('content_header')
-
+<!DOCTYPE html>
 @stop
 
 @section('content')
