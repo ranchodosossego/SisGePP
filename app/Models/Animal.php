@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idanimal
- * @property int    $grau_sangue_idgrau_sangue
- * @property int    $origem_idorigem
- * @property int    $peso_entrada
- * @property int    $propriedade_idpropriedade
  * @property int    $raca_idraca
- * @property string $apelido
- * @property string $foto
- * @property string $genero
- * @property string $nome
- * @property string $numero_brinco
- * @property string $numero_sisbov
- * @property string $observacao
- * @property string $rgd
- * @property string $rgn
+ * @property int    $propriedade_idpropriedade
+ * @property int    $peso_entrada
+ * @property int    $origem_idorigem
+ * @property int    $grau_sangue_idgrau_sangue
  * @property Date   $data_entrada
+ * @property string $rgn
+ * @property string $rgd
+ * @property string $observacao
+ * @property string $numero_sisbov
+ * @property string $numero_brinco
+ * @property string $nome
+ * @property string $genero
+ * @property string $foto
+ * @property string $apelido
  */
 class Animal extends Model
 {
@@ -44,7 +44,7 @@ class Animal extends Model
      * @var array
      */
     protected $fillable = [
-        'apelido', 'data_entrada', 'foto', 'genero', 'grau_sangue_idgrau_sangue', 'nome', 'numero_brinco', 'numero_sisbov', 'observacao', 'origem_idorigem', 'peso_entrada', 'propriedade_idpropriedade', 'raca_idraca', 'rgd', 'rgn'
+        'data_entrada', 'rgn', 'rgd', 'raca_idraca', 'propriedade_idpropriedade', 'peso_entrada', 'origem_idorigem', 'observacao', 'numero_sisbov', 'numero_brinco', 'nome', 'grau_sangue_idgrau_sangue', 'genero', 'foto', 'apelido'
     ];
 
     /**
@@ -62,7 +62,7 @@ class Animal extends Model
      * @var array
      */
     protected $casts = [
-        'idanimal' => 'int', 'apelido' => 'string', 'data_entrada' => 'date', 'foto' => 'string', 'genero' => 'string', 'grau_sangue_idgrau_sangue' => 'int', 'nome' => 'string', 'numero_brinco' => 'string', 'numero_sisbov' => 'string', 'observacao' => 'string', 'origem_idorigem' => 'int', 'peso_entrada' => 'int', 'propriedade_idpropriedade' => 'int', 'raca_idraca' => 'int', 'rgd' => 'string', 'rgn' => 'string'
+        'idanimal' => 'int', 'data_entrada' => 'date', 'rgn' => 'string', 'rgd' => 'string', 'raca_idraca' => 'int', 'propriedade_idpropriedade' => 'int', 'peso_entrada' => 'int', 'origem_idorigem' => 'int', 'observacao' => 'string', 'numero_sisbov' => 'string', 'numero_brinco' => 'string', 'nome' => 'string', 'grau_sangue_idgrau_sangue' => 'int', 'genero' => 'string', 'foto' => 'string', 'apelido' => 'string'
     ];
 
     /**

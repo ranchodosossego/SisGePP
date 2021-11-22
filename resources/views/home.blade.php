@@ -1,7 +1,10 @@
 @extends('adminlte::page', ['iFrameEnabled' => true])
+{{--
+@include('layouts.app')
+
 
 @section('content_header')
-<!DOCTYPE html>
+
 @stop
 
 @section('content')
@@ -12,19 +15,9 @@
 @stop
 
 @section('css')
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-    <style>
-        body {
-            overflow-y: hidden;
-        }
-
-        .main-footer {
-            display: none;
-        }
-
-    </style>
+    <link rel="stylesheet" href="/resources/css/app.css">
 @stop
 
 @section('js')
-    {{-- <script> console.log('Hi!'); </script> --}}
-@stop
+
+@stop --}}

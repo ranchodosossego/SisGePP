@@ -1,0 +1,19 @@
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.content-wrapper {
+    min-height: auto !important;
+    -ms-overflow-style: none;
+    /* for Internet Explorer, Edge */
+    scrollbar-width: none;
+    /* for Firefox */
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    /* remove scrollbar space /
+    background: transparent; / optional: just make scrollbar invisible /
+}

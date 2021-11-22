@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Animal;
-use App\Models\Origem;
-use App\Models\Raca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
+use App\Models\Animal;
+use App\Models\GrauSangue;
+use App\Models\Origem;
+use App\Models\Propriedade;
+use App\Models\Raca;
+use App\Models\Usuario;
 
 class AnimalController extends Controller
 {
@@ -22,10 +26,10 @@ class AnimalController extends Controller
 
     public function index()
     {
-        $lstraca = Raca::get();
-        $lstorigem = Origem::get();
-        return view('painel.rebanho.animal', compact('lstraca', 'lstorigem'));
-        //return view('painel.rebanho.animal');
+        $lstraca = Raca::get()->sortBy('nome');
+        $lstorigem = Origem::get()->sortByDesc('nome');
+        $lstgrausangue = GrauSangue::get();
+        return view('painel.rebanho.animal', compact('lstraca', 'lstorigem', 'lstgrausangue'));
     }
 
     public function listraca()

@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <section class="content-header ">
+    <section class="content-header text-xs">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -36,20 +36,25 @@
 
                         <div class="card-body">
 
-                            {{-- Nome / Apelido / Genero --}}
+                            {{-- Nome / Apelido --}}
                             <div class="row">
 
-                                <div class="form-group col-sm-5">
+                                <div class="form-group col-sm-7">
                                     <label for="nome">Nome</label>
                                     <input type="text" class="form-control form-control-border nome" id="nome"
                                         placeholder="Nome">
                                 </div>
 
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-5">
                                     <label for="apelido">Apelido</label>
                                     <input type="text" class="form-control form-control-border apelido" id="apelido"
                                         placeholder="apelido">
                                 </div>
+
+                            </div>
+
+                            {{-- Genero / Origem / Data de Chegada --}}
+                            <div class="row">
 
                                 <div class="form-group col-sm-3">
                                     <label for="genero">Genero</label>
@@ -60,32 +65,18 @@
                                     </select>
                                 </div>
 
-                            </div>
-
-                            {{-- Raça / Origem / Data de Chegada --}}
-                            <div class="row">
-
-                                <div class="form-group col-sm-4">
-                                    <label for="lstraca">Raça</label>
-                                    <select name="lstraca" id="lstraca" class="custom-select form-control-border lstraca">
-                                        <option value="0">----</option>
-                                        @foreach($lstraca as $raca)
-                                            <option value="{{ $raca->idraca }}">{{ $raca->nome }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
                                 <div class="form-group col-sm-4">
                                     <label for="lstorigem">Origem</label>
-                                    <select name="lstorigem" id="lstorigem" class="custom-select form-control-border lstorigem">
+                                    <select name="lstorigem" id="lstorigem"
+                                        class="custom-select form-control-border lstorigem">
                                         <option value="0">----</option>
-                                        @foreach($lstorigem as $origem)
+                                        @foreach ($lstorigem as $origem)
                                             <option value="{{ $origem->idorigem }}">{{ $origem->nome }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                <div class="form-group col-sm-4" id="data_entrada">
+                                <div class="form-group col-sm-5" id="data_entrada">
                                     <label for="data_entrada">Data de Chegada</label>
                                     <input type="text" class="form-control data_entrada">
                                 </div>
@@ -121,21 +112,68 @@
                         <!-- /.card-header -->
 
                         <div class="card-body">
+
+                            {{-- Brinco / Raça / Grau de Sangue --}}
                             <div class="row">
 
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-4">
                                     <label for="numero_brinco">Brinco</label>
-                                    <input type="text" class="form-control form-control-border numero_brinco"
-                                        id="numero_brinco" placeholder="Número">
+                                    <input type="text" class="form-control form-control-border numero_brinco" id="numero_brinco"
+                                        placeholder="Brinco">
                                 </div>
 
                                 <div class="form-group col-sm-4">
-                                    <label for="apelido">Apelido</label>
-                                    <input type="text" class="form-control form-control-border ww" id="www"
-                                        placeholder="apelido">
+                                    <label for="lstraca">Raça</label>
+                                    <select name="lstraca" id="lstraca" class="custom-select form-control-border lstraca">
+                                        <option value="0">----</option>
+                                        @foreach ($lstraca as $raca)
+                                            <option value="{{ $raca->idraca }}">{{ $raca->nome }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-sm-4">
+                                    <label for="lstgrausangue">Grau de Sangue</label>
+                                    <select name="lstgrausangue" id="lstraca" class="custom-select form-control-border lstgrausangue">
+                                        <option value="0">----</option>
+                                        @foreach ($lstgrausangue as $grausangue)
+                                            <option value="{{ $grausangue->idgrausangue }}">{{ $grausangue->grau }} - {{ $grausangue->descricao }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                             </div>
+
+                            {{-- Peso de Entrada / Sisbov / RGD / RGN --}}
+                            <div class="row">
+
+                                <div class="form-group col-sm-3">
+                                    <label for="peso_entrada">Peso</label>
+                                    <input type="text" class="form-control form-control-border peso_entrada" id="peso_entrada"
+                                        placeholder="Peso">
+                                </div>
+
+                                <div class="form-group col-sm-3">
+                                    <label for="numero_sisbov">Sisbov</label>
+                                    <input type="text" class="form-control form-control-border numero_sisbov" id="numero_sisbov"
+                                        placeholder="Sisbov">
+                                </div>
+
+                                <div class="form-group col-sm-3">
+                                    <label for="rgd">RGD</label>
+                                    <input type="text" class="form-control form-control-border rgd" id="rgd"
+                                        placeholder="RGD">
+                                </div>
+
+                                <div class="form-group col-sm-3">
+                                    <label for="rgn">RGN</label>
+                                    <input type="text" class="form-control form-control-border rgn" id="rgn"
+                                        placeholder="RGN">
+                                </div>
+
+                            </div>
+
+
                         </div>
                     </div>
 
@@ -174,6 +212,28 @@
                     </div>
                     <!-- /.card -->
 
+                    <!-- Card: Dados Técnicos -->
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">Observação</h3>
+                        </div>
+                        <!-- /.card-header -->
+
+                        <div class="card-body">
+
+                            {{-- observacao --}}
+                            <div class="row">
+
+                                <div class="form-group col-sm-12">
+                                    <label for="observacao">Observação</label>
+                                    <textarea class="form-control form-control-border observacao" rows="3" placeholder="Digite ..."></textarea>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -186,6 +246,7 @@
 
 @section('css')
     <link rel="stylesheet" href="css\bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="css\iframe.css">
 @stop
 
 @section('js')
@@ -205,6 +266,7 @@
         $(document).ready(function() {
 
             //listraca();
+
 
             //-- Inserir um novo animal
             $(document).on('click', '.salvar', function(e) {
