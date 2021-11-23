@@ -5,28 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $idusuario
- * @property int    $propriedade_idpropriedade
- * @property int    $data_inclusao
+ * @property int    $idclassificacao_etaria
+ * @property int    $dia_inicial
+ * @property int    $dia_final
  * @property string $nome
- * @property string $foto
- * @property string $cargo
  */
-class Usuario extends Model
+class ClassificacaoEtaria extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'usuario';
+    protected $table = 'classificacao_etaria';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'idusuario';
+    protected $primaryKey = 'idclassificacao_etaria';
 
     /**
      * Attributes that should be mass-assignable.
@@ -34,7 +32,7 @@ class Usuario extends Model
      * @var array
      */
     protected $fillable = [
-        'users_id', 'propriedade_idpropriedade', 'nome', 'foto', 'data_inclusao', 'cargo'
+        'nome', 'dia_inicial', 'dia_final'
     ];
 
     /**
@@ -52,7 +50,7 @@ class Usuario extends Model
      * @var array
      */
     protected $casts = [
-        'idusuario' => 'int', 'propriedade_idpropriedade' => 'int', 'nome' => 'string', 'foto' => 'string', 'data_inclusao' => 'timestamp', 'cargo' => 'string'
+        'idclassificacao_etaria' => 'int', 'nome' => 'string', 'dia_inicial' => 'int', 'dia_final' => 'int'
     ];
 
     /**
@@ -61,7 +59,7 @@ class Usuario extends Model
      * @var array
      */
     protected $dates = [
-        'data_inclusao'
+        
     ];
 
     /**

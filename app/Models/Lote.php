@@ -5,28 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $idusuario
- * @property int    $propriedade_idpropriedade
- * @property int    $data_inclusao
- * @property string $nome
- * @property string $foto
- * @property string $cargo
+ * @property int    $idlote
+ * @property int    $animal_idanimal
+ * @property int    $criado_em
+ * @property int    $dieta_iddieta
+ * @property int    $tipo_lote_idtipo_lote
+ * @property string $codigo
+ * @property string $limite
  */
-class Usuario extends Model
+class Lote extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'usuario';
+    protected $table = 'lote';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'idusuario';
+    protected $primaryKey = 'idlote';
 
     /**
      * Attributes that should be mass-assignable.
@@ -34,7 +35,7 @@ class Usuario extends Model
      * @var array
      */
     protected $fillable = [
-        'users_id', 'propriedade_idpropriedade', 'nome', 'foto', 'data_inclusao', 'cargo'
+        'animal_idanimal', 'codigo', 'criado_em', 'dieta_iddieta', 'limite', 'tipo_lote_idtipo_lote'
     ];
 
     /**
@@ -52,7 +53,7 @@ class Usuario extends Model
      * @var array
      */
     protected $casts = [
-        'idusuario' => 'int', 'propriedade_idpropriedade' => 'int', 'nome' => 'string', 'foto' => 'string', 'data_inclusao' => 'timestamp', 'cargo' => 'string'
+        'idlote' => 'int', 'animal_idanimal' => 'int', 'codigo' => 'string', 'criado_em' => 'timestamp', 'dieta_iddieta' => 'int', 'limite' => 'string', 'tipo_lote_idtipo_lote' => 'int'
     ];
 
     /**
@@ -61,7 +62,7 @@ class Usuario extends Model
      * @var array
      */
     protected $dates = [
-        'data_inclusao'
+        'criado_em'
     ];
 
     /**

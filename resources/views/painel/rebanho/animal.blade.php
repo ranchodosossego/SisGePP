@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <section class="content-header text-xs">
+    <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -24,11 +24,55 @@
         <div class="container-fluid">
             <div class="row">
 
-                <!-- left column: Dados do Indivíduo / Dados Técnicos -->
-                <div class="col-md-6">
+                <!-- Coluna: 1 -->
+                <div class="col-md-4">
+                    <div class="callout callout-success card-outline direct-chat direct-chat-primary">
+                        <h5>Cadastro de Novos Animais</h5>
+
+                        <p>Esses espaço é dedicada ao cadastro de novos animais. São informados dados básicos, como:</p>
+
+                        <ol class="list-group list-group-numbered">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Origem</div>
+                                    <small>Animal nascido, comprado ou adquirido de outra forma. Ex.: animal
+                                        doado.</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">1</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Grau de Sangue</div>
+                                    <small>Grau de sangue da raça predominante ou Puro.</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">2</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Data de Chegada</div>
+                                    <small>É data em que o animal chegou a propriedade. Se nascido, informe a data do
+                                        nascimento.</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">3</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="callout callout-success card-outline direct-chat direct-chat-primary">
+                        <h5>Foto do Animal</h5>
+
+                        <small>Essa foto será usada como avatar para o animal. Tamanho do arquivo não deve ultrapassar:
+                            160px L/A.
+                            Formato: jpg.
+                        </small>
+                    </div>
+
+                </div>
+
+                <!-- Coluna: 2 -->
+                <div class="col-md-8">
 
                     <!-- Card: Dados do Indivíduo -->
-                    <div class="card card-primary card-outline">
+                    <div class="card card-success card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Dados do Indivíduo</h3>
                         </div>
@@ -39,22 +83,23 @@
                             {{-- Nome / Apelido --}}
                             <div class="row">
 
-                                <div class="form-group col-sm-7">
+                                <div class="form-group col-sm-2">
+                                    <label for="numero_brinco">Brinco</label>
+                                    <input type="text" class="form-control form-control-border numero_brinco"
+                                        id="numero_brinco" placeholder="Brinco">
+                                </div>
+
+                                <div class="form-group col-sm-4">
                                     <label for="nome">Nome</label>
                                     <input type="text" class="form-control form-control-border nome" id="nome"
                                         placeholder="Nome">
                                 </div>
 
-                                <div class="form-group col-sm-5">
+                                <div class="form-group col-sm-3">
                                     <label for="apelido">Apelido</label>
                                     <input type="text" class="form-control form-control-border apelido" id="apelido"
                                         placeholder="apelido">
                                 </div>
-
-                            </div>
-
-                            {{-- Genero / Origem / Data de Chegada --}}
-                            <div class="row">
 
                                 <div class="form-group col-sm-3">
                                     <label for="genero">Genero</label>
@@ -65,64 +110,12 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-sm-4">
-                                    <label for="lstorigem">Origem</label>
-                                    <select name="lstorigem" id="lstorigem"
-                                        class="custom-select form-control-border lstorigem">
-                                        <option value="0">----</option>
-                                        @foreach ($lstorigem as $origem)
-                                            <option value="{{ $origem->idorigem }}">{{ $origem->nome }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-sm-5" id="data_entrada">
-                                    <label for="data_entrada">Data de Chegada</label>
-                                    <input type="text" class="form-control data_entrada">
-                                </div>
-
                             </div>
 
-                        </div>
-                        <!-- /.card-body -->
-
-                        <!-- /.card-footer -->
-                        <div class="card-footer">
-
-                            <div class="row d-flex flex-row-reverse bd-highlight">
-
-                                <div class="">
-                                    <button type="button" class="btn btn-primary btn-block btn-sm salvar">
-                                        <i class="fas fa-cloud-upload-alt"></i> Salvar
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-                        <!-- /.card-footer -->
-
-                    </div>
-                    <!-- /.card -->
-
-                    <!-- Card: Dados Técnicos -->
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">Dados Técnicos</h3>
-                        </div>
-                        <!-- /.card-header -->
-
-                        <div class="card-body">
-
-                            {{-- Brinco / Raça / Grau de Sangue --}}
+                            {{-- Genero / Origem / Data de Chegada --}}
                             <div class="row">
 
-                                <div class="form-group col-sm-4">
-                                    <label for="numero_brinco">Brinco</label>
-                                    <input type="text" class="form-control form-control-border numero_brinco" id="numero_brinco"
-                                        placeholder="Brinco">
-                                </div>
-
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-3">
                                     <label for="lstraca">Raça</label>
                                     <select name="lstraca" id="lstraca" class="custom-select form-control-border lstraca">
                                         <option value="0">----</option>
@@ -134,12 +127,31 @@
 
                                 <div class="form-group col-sm-4">
                                     <label for="lstgrausangue">Grau de Sangue</label>
-                                    <select name="lstgrausangue" id="lstraca" class="custom-select form-control-border lstgrausangue">
+                                    <select name="lstgrausangue" id="lstraca"
+                                        class="custom-select form-control-border lstgrausangue">
                                         <option value="0">----</option>
                                         @foreach ($lstgrausangue as $grausangue)
-                                            <option value="{{ $grausangue->idgrausangue }}">{{ $grausangue->grau }} - {{ $grausangue->descricao }}</option>
+                                            <option value="{{ $grausangue->idgrausangue }}">{{ $grausangue->grau }} -
+                                                {{ $grausangue->descricao }}</option>
                                         @endforeach
                                     </select>
+                                </div>
+
+                                <div class="form-group col-sm-3">
+                                    <label for="lstorigem">Origem</label>
+                                    <select name="lstorigem" id="lstorigem"
+                                        class="custom-select form-control-border lstorigem">
+                                        <option value="0">----</option>
+                                        @foreach ($lstorigem as $origem)
+                                            <option value="{{ $origem->idorigem }}">{{ $origem->nome }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-sm-2">
+                                    <label for="peso_entrada">Peso (Kg)</label>
+                                    <input type="text" class="form-control form-control-border peso_entrada"
+                                        id="peso_entrada" placeholder="Peso">
                                 </div>
 
                             </div>
@@ -147,16 +159,15 @@
                             {{-- Peso de Entrada / Sisbov / RGD / RGN --}}
                             <div class="row">
 
-                                <div class="form-group col-sm-3">
-                                    <label for="peso_entrada">Peso</label>
-                                    <input type="text" class="form-control form-control-border peso_entrada" id="peso_entrada"
-                                        placeholder="Peso">
+                                <div class="form-group col-sm-3" id="data_entrada">
+                                    <label for="data_entrada">Data de Chegada</label>
+                                    <input type="text" class="form-control data_entrada">
                                 </div>
 
                                 <div class="form-group col-sm-3">
                                     <label for="numero_sisbov">Sisbov</label>
-                                    <input type="text" class="form-control form-control-border numero_sisbov" id="numero_sisbov"
-                                        placeholder="Sisbov">
+                                    <input type="text" class="form-control form-control-border numero_sisbov"
+                                        id="numero_sisbov" placeholder="Sisbov">
                                 </div>
 
                                 <div class="form-group col-sm-3">
@@ -173,69 +184,62 @@
 
                             </div>
 
+                            {{-- Observação / Foto --}}
+                            <div class="row">
 
-                        </div>
-                    </div>
+                                <div class="form-group col-sm-6">
 
-                </div>
+                                    <div class="attachment-block clearfix">
+                                        <div class="text-center">
+                                            <img class="profile-user-img img-fluid img-circle"
+                                                src="/storage/assets/img/girolando-128x128-2.jpg"
+                                                alt="User profile picture">
+                                        </div>
 
-                <!-- right column -->
-                <div class="col-md-6">
+                                        <h3 class="profile-username text-center">Escolha o Avatar</h3>
 
-                    <!-- Profile Image -->
-                    <div class="card card-primary card-outline">
-                        <div class="card-body box-profile">
-                            <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle"
-                                    src="/storage/assets/img/girolando-128x128-2.jpg" alt="User profile picture">
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="exampleInputFile">
+                                                <label class="custom-file-label" for="exampleInputFile">Foto...</label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="">Gravar</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-sm-6">
+                                    <label for="observacao">Observação</label>
+                                    <textarea class="form-control form-control-border observacao" rows="6"
+                                        placeholder="Digite ..."></textarea>
+                                </div>
+
                             </div>
 
-                            <h3 class="profile-username text-center">Nina Mcintire</h3>
+                        </div>
+                        <!-- /end.card-body -->
 
-                            <p class="text-muted text-center">Software Engineer</p>
+                        <!-- /.card-footer -->
+                        <div class="card-footer">
 
-                            <div class="form-group">
-                                <label for="exampleInputFile">Foto do Animal</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="exampleInputFile">
-                                        <label class="custom-file-label" for="exampleInputFile">Escolha uma foto</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="">Gravar</span>
-                                    </div>
+                            <div class="row d-flex flex-row-reverse bd-highlight">
+
+                                <div class="">
+                                    <button type="button" class="btn btn-primary btn-block btn-sm salvar">
+                                        <i class="fas fa-cloud-upload-alt"></i> Salvar
+                                    </button>
                                 </div>
                             </div>
 
                         </div>
-                        <!-- /.card-body -->
+                        <!-- /end.card-footer -->
+
                     </div>
                     <!-- /.card -->
 
-                    <!-- Card: Dados Técnicos -->
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">Observação</h3>
-                        </div>
-                        <!-- /.card-header -->
-
-                        <div class="card-body">
-
-                            {{-- observacao --}}
-                            <div class="row">
-
-                                <div class="form-group col-sm-12">
-                                    <label for="observacao">Observação</label>
-                                    <textarea class="form-control form-control-border observacao" rows="3" placeholder="Digite ..."></textarea>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-
                 </div>
-
             </div>
 
         </div>

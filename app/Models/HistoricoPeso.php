@@ -5,28 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $idusuario
- * @property int    $propriedade_idpropriedade
- * @property int    $data_inclusao
- * @property string $nome
- * @property string $foto
- * @property string $cargo
+ * @property int    $idhistorico_peso
+ * @property int    $peso_atual
+ * @property int    $animal_idanimal
+ * @property int    $data_pesagem
+ * @property string $peso_anterior
  */
-class Usuario extends Model
+class HistoricoPeso extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'usuario';
+    protected $table = 'historico_peso';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'idusuario';
+    protected $primaryKey = 'idhistorico_peso';
 
     /**
      * Attributes that should be mass-assignable.
@@ -34,7 +33,7 @@ class Usuario extends Model
      * @var array
      */
     protected $fillable = [
-        'users_id', 'propriedade_idpropriedade', 'nome', 'foto', 'data_inclusao', 'cargo'
+        'peso_atual', 'animal_idanimal', 'data_pesagem', 'peso_anterior'
     ];
 
     /**
@@ -52,7 +51,7 @@ class Usuario extends Model
      * @var array
      */
     protected $casts = [
-        'idusuario' => 'int', 'propriedade_idpropriedade' => 'int', 'nome' => 'string', 'foto' => 'string', 'data_inclusao' => 'timestamp', 'cargo' => 'string'
+        'idhistorico_peso' => 'int', 'peso_atual' => 'int', 'animal_idanimal' => 'int', 'data_pesagem' => 'timestamp', 'peso_anterior' => 'string'
     ];
 
     /**
@@ -61,7 +60,7 @@ class Usuario extends Model
      * @var array
      */
     protected $dates = [
-        'data_inclusao'
+        'data_pesagem'
     ];
 
     /**

@@ -5,28 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $idusuario
- * @property int    $propriedade_idpropriedade
- * @property int    $data_inclusao
+ * @property int    $iddieta
  * @property string $nome
- * @property string $foto
- * @property string $cargo
  */
-class Usuario extends Model
+class Dieta extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'usuario';
+    protected $table = 'dieta';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'idusuario';
+    protected $primaryKey = 'iddieta';
 
     /**
      * Attributes that should be mass-assignable.
@@ -34,7 +30,7 @@ class Usuario extends Model
      * @var array
      */
     protected $fillable = [
-        'users_id', 'propriedade_idpropriedade', 'nome', 'foto', 'data_inclusao', 'cargo'
+        'nome'
     ];
 
     /**
@@ -52,7 +48,7 @@ class Usuario extends Model
      * @var array
      */
     protected $casts = [
-        'idusuario' => 'int', 'propriedade_idpropriedade' => 'int', 'nome' => 'string', 'foto' => 'string', 'data_inclusao' => 'timestamp', 'cargo' => 'string'
+        'iddieta' => 'int', 'nome' => 'string'
     ];
 
     /**
@@ -61,7 +57,7 @@ class Usuario extends Model
      * @var array
      */
     protected $dates = [
-        'data_inclusao'
+        
     ];
 
     /**
