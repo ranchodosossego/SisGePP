@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Novos Animais</h1>
+                    <h1></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -27,7 +27,7 @@
                 <!-- Coluna: 1 -->
                 <div class="col-md-4">
                     <div class="callout callout-success card-outline direct-chat direct-chat-primary">
-                        <h5>Cadastro de Novos Animais</h5>
+                        <h5><i class="far fa-question-circle"></i> Cadastro de Novos Animais</h5>
 
                         <p>Esses espaço é dedicada ao cadastro de novos animais. São informados dados básicos, como:</p>
 
