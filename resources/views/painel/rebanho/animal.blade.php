@@ -2,6 +2,7 @@
 
 @section('content')
 
+    <!-- Header com o Breadcrumb -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -24,7 +25,7 @@
         <div class="container-fluid">
             <div class="row">
 
-                <!-- Coluna: 1 -->
+                <!-- Coluna 1: Help -->
                 <div class="col-md-4">
                     <div class="callout callout-success card-outline direct-chat direct-chat-primary">
                         <h5><i class="far fa-question-circle"></i> Cadastro de Novos Animais</h5>
@@ -68,19 +69,19 @@
 
                 </div>
 
-                <!-- Coluna: 2 -->
+                <!-- Coluna 2: Dados -->
                 <div class="col-md-8">
 
-                    <!-- Card: Dados do Indivíduo -->
+                    <!-- Card: Dados do Animal -->
                     <div class="card card-success card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Dados do Indivíduo</h3>
+                            <h3 class="card-title">Dados do Animal</h3>
                         </div>
                         <!-- /.card-header -->
 
                         <div class="card-body">
 
-                            {{-- Nome / Apelido --}}
+                            {{-- Brinco / Nome / Apelido / Genero / Peso --}}
                             <div class="row">
 
                                 <div class="form-group col-sm-2">
@@ -112,7 +113,7 @@
 
                             </div>
 
-                            {{-- Genero / Origem / Data de Chegada --}}
+                            {{-- Raça / Grau de Sangue / Origem --}}
                             <div class="row">
 
                                 <div class="form-group col-sm-3">
@@ -156,30 +157,36 @@
 
                             </div>
 
-                            {{-- Peso de Entrada / Sisbov / RGD / RGN --}}
+                            {{-- Sisbov / RGD / RGN / Dias de Vida / Data de Chegada --}}
                             <div class="row">
 
-                                <div class="form-group col-sm-3" id="data_entrada">
-                                    <label for="data_entrada">Data de Chegada</label>
-                                    <input type="text" class="form-control data_entrada">
-                                </div>
-
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-2">
                                     <label for="numero_sisbov">Sisbov</label>
                                     <input type="text" class="form-control form-control-border numero_sisbov"
                                         id="numero_sisbov" placeholder="Sisbov">
                                 </div>
 
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-2">
                                     <label for="rgd">RGD</label>
                                     <input type="text" class="form-control form-control-border rgd" id="rgd"
                                         placeholder="RGD">
                                 </div>
 
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-2">
                                     <label for="rgn">RGN</label>
                                     <input type="text" class="form-control form-control-border rgn" id="rgn"
                                         placeholder="RGN">
+                                </div>
+
+                                <div class="form-group col-sm-2">
+                                    <label for="dias_vida">Dias de Vida</label>
+                                    <input type="text" class="form-control form-control-border rgn" id="dias_vida"
+                                        placeholder="Dias">
+                                </div>
+
+                                <div class="form-group col-sm-4" id="data_entrada">
+                                    <label for="data_entrada">Data de Chegada</label>
+                                    <input type="text" class="form-control data_entrada">
                                 </div>
 
                             </div>
