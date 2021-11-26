@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idlote
- * @property int    $animal_idanimal
+ * @property int    $tipo_lote_idtipo_lote
  * @property int    $criado_em
  * @property int    $dieta_iddieta
- * @property int    $tipo_lote_idtipo_lote
- * @property string $codigo
  * @property string $limite
+ * @property string $codigo
  */
 class Lote extends Model
 {
@@ -35,7 +34,7 @@ class Lote extends Model
      * @var array
      */
     protected $fillable = [
-        'animal_idanimal', 'codigo', 'criado_em', 'dieta_iddieta', 'limite', 'tipo_lote_idtipo_lote'
+        'tipo_lote_idtipo_lote', 'criado_em', 'dieta_iddieta', 'limite', 'codigo'
     ];
 
     /**
@@ -53,7 +52,7 @@ class Lote extends Model
      * @var array
      */
     protected $casts = [
-        'idlote' => 'int', 'animal_idanimal' => 'int', 'codigo' => 'string', 'criado_em' => 'timestamp', 'dieta_iddieta' => 'int', 'limite' => 'string', 'tipo_lote_idtipo_lote' => 'int'
+        'idlote' => 'int', 'tipo_lote_idtipo_lote' => 'int', 'criado_em' => 'timestamp', 'dieta_iddieta' => 'int', 'limite' => 'string', 'codigo' => 'string'
     ];
 
     /**

@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idclassificacao_etaria
- * @property int    $dia_inicial
  * @property int    $dia_final
+ * @property int    $dia_inicial
  * @property string $nome
  */
 class ClassificacaoEtaria extends Model
@@ -32,7 +32,7 @@ class ClassificacaoEtaria extends Model
      * @var array
      */
     protected $fillable = [
-        'nome', 'dia_inicial', 'dia_final'
+        'dia_final', 'dia_inicial', 'nome'
     ];
 
     /**
@@ -50,7 +50,7 @@ class ClassificacaoEtaria extends Model
      * @var array
      */
     protected $casts = [
-        'idclassificacao_etaria' => 'int', 'nome' => 'string', 'dia_inicial' => 'int', 'dia_final' => 'int'
+        'idclassificacao_etaria' => 'int', 'dia_final' => 'int', 'dia_inicial' => 'int', 'nome' => 'string'
     ];
 
     /**

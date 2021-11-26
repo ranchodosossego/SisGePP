@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idhistorico_peso
+ * @property int    $data_pesagem
  * @property int    $peso_atual
  * @property int    $animal_idanimal
- * @property int    $data_pesagem
  * @property string $peso_anterior
  */
 class HistoricoPeso extends Model
@@ -33,7 +33,7 @@ class HistoricoPeso extends Model
      * @var array
      */
     protected $fillable = [
-        'peso_atual', 'animal_idanimal', 'data_pesagem', 'peso_anterior'
+        'peso_anterior', 'data_pesagem', 'peso_atual', 'animal_idanimal'
     ];
 
     /**
@@ -51,7 +51,7 @@ class HistoricoPeso extends Model
      * @var array
      */
     protected $casts = [
-        'idhistorico_peso' => 'int', 'peso_atual' => 'int', 'animal_idanimal' => 'int', 'data_pesagem' => 'timestamp', 'peso_anterior' => 'string'
+        'idhistorico_peso' => 'int', 'peso_anterior' => 'string', 'data_pesagem' => 'timestamp', 'peso_atual' => 'int', 'animal_idanimal' => 'int'
     ];
 
     /**

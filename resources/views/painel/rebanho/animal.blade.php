@@ -81,7 +81,7 @@
 
                         <div class="card-body">
 
-                            {{-- Brinco / Nome / Apelido / Genero / Peso --}}
+                            {{-- Brinco / Nome / Apelido / Genero --}}
                             <div class="row">
 
                                 <div class="form-group col-sm-2">
@@ -118,7 +118,8 @@
 
                                 <div class="form-group col-sm-3">
                                     <label for="lstraca">Raça</label>
-                                    <select name="lstraca" id="lstraca" class="custom-select form-control-border lstraca">
+                                    <select name="raca_idraca" class="custom-select form-control-border raca_idraca"
+                                        id="raca_idraca">
                                         <option value="0">----</option>
                                         @foreach ($lstraca as $raca)
                                             <option value="{{ $raca->idraca }}">{{ $raca->nome }}</option>
@@ -127,21 +128,21 @@
                                 </div>
 
                                 <div class="form-group col-sm-4">
-                                    <label for="lstgrausangue">Grau de Sangue</label>
-                                    <select name="lstgrausangue" id="lstraca"
-                                        class="custom-select form-control-border lstgrausangue">
+                                    <label for="grau_sangue_idgrau_sangue">Grau de Sangue</label>
+                                    <select name="grau_sangue_idgrau_sangue" id="grau_sangue_idgrau_sangue"
+                                        class="custom-select form-control-border grau_sangue_idgrau_sangue">
                                         <option value="0">----</option>
                                         @foreach ($lstgrausangue as $grausangue)
-                                            <option value="{{ $grausangue->idgrausangue }}">{{ $grausangue->grau }} -
+                                            <option value="{{ $grausangue->idgrau_sangue }}">{{ $grausangue->grau }} -
                                                 {{ $grausangue->descricao }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-group col-sm-3">
-                                    <label for="lstorigem">Origem</label>
-                                    <select name="lstorigem" id="lstorigem"
-                                        class="custom-select form-control-border lstorigem">
+                                    <label for="origem_idorigem">Origem</label>
+                                    <select name="origem_idorigem" id="origem_idorigem"
+                                        class="custom-select form-control-border origem_idorigem">
                                         <option value="0">----</option>
                                         @foreach ($lstorigem as $origem)
                                             <option value="{{ $origem->idorigem }}">{{ $origem->nome }}</option>
@@ -160,28 +161,37 @@
                             {{-- Sisbov / RGD / RGN / Dias de Vida / Data de Chegada --}}
                             <div class="row">
 
-                                <div class="form-group col-sm-2">
+                                <div class="form-group col-sm-4">
                                     <label for="numero_sisbov">Sisbov</label>
                                     <input type="text" class="form-control form-control-border numero_sisbov"
                                         id="numero_sisbov" placeholder="Sisbov">
                                 </div>
 
-                                <div class="form-group col-sm-2">
+                                <div class="form-group col-sm-4">
                                     <label for="rgd">RGD</label>
                                     <input type="text" class="form-control form-control-border rgd" id="rgd"
                                         placeholder="RGD">
                                 </div>
 
-                                <div class="form-group col-sm-2">
+                                <div class="form-group col-sm-4">
                                     <label for="rgn">RGN</label>
                                     <input type="text" class="form-control form-control-border rgn" id="rgn"
                                         placeholder="RGN">
                                 </div>
 
-                                <div class="form-group col-sm-2">
+                            </div>
+
+                            <div class="row">
+
+                                <div class="form-group col-sm-4">
                                     <label for="dias_vida">Dias de Vida</label>
-                                    <input type="text" class="form-control form-control-border rgn" id="dias_vida"
+                                    <input type="text" class="form-control form-control-border dias_vida" id="dias_vida"
                                         placeholder="Dias">
+                                </div>
+
+                                <div class="form-group col-sm-4" id="data_nascimento">
+                                    <label for="data_nascimento">Data de Nascimento</label>
+                                    <input type="text" class="form-control data_nascimento">
                                 </div>
 
                                 <div class="form-group col-sm-4" id="data_entrada">
@@ -263,8 +273,18 @@
 @section('js')
     <script src="js\bootstrap-datepicker.min.js"></script>
     <script src="js\bootstrap-datepicker.pt-BR.min.js"></script>
+
+    {{-- Datepickers --}}
     <script>
         $('#data_entrada input').datepicker({
+            format: "dd/mm/yyyy",
+            language: "pt-BR",
+            calendarWeeks: true,
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        $('#data_nascimento input').datepicker({
             format: "dd/mm/yyyy",
             language: "pt-BR",
             calendarWeeks: true,
@@ -276,9 +296,6 @@
     <script>
         $(document).ready(function() {
 
-            //listraca();
-
-
             //-- Inserir um novo animal
             $(document).on('click', '.salvar', function(e) {
                 e.preventDefault();
@@ -286,28 +303,27 @@
                 // $(this).text('Sending..');
 
                 var data = {
-
+                    'nome': $('.nome').val(),
+                    'genero': $('.genero').val(),
+                    'dias_vida': $('.dias_vida').val(),
+                    'data_nascimento': $('.data_nascimento').val(),
+                    'data_nescimento_estimado': '1',
+                    'data_entrada': $('.data_entrada').val(),
+                    'peso_entrada': $('.peso_entrada').val(),
                     'numero_brinco': $('.numero_brinco').val(),
+                    'apelido': $('.apelido').val(),
                     'rgn': $('.rgn').val(),
                     'rgd': $('.rgd').val(),
-                    'peso_entrada': $('.peso_entrada').val(),
-                    'origem': $('.origem').val(),
-                    'observacao': $('.observacao').val(),
                     'numero_sisbov': $('.numero_sisbov').val(),
-                    'apelido': $('.apelido').val(),
-                    'idade': $('.idade').val(),
                     'foto': $('.foto').val(),
+                    'observacao': $('.observacao').val(),
 
-                    'grau_sangue_idgrau_sangue': $('.grau_sangue_idgrau_sangue').val(),
-                    'genero': $('.genero').val(),
+                    // Foreign keys
                     'raca_idraca': $('.raca_idraca').val(),
-                    'propriedade_idpropriedade': $('.propriedade_idpropriedade').val(),
-                    'data_entrada': $('.data_entrada').val(),
-                    'nome': $('.nome').val(),
+                    'grau_sangue_idgrau_sangue': $('.grau_sangue_idgrau_sangue').val(),
+                    'origem_idorigem': $('.origem_idorigem').val(),
 
                 }
-
-                console.log(data);
 
                 $.ajaxSetup({
                     headers: {
@@ -321,54 +337,18 @@
                     data: data,
                     dataType: "json",
                     success: function(response) {
-                        console.log(response);
-                        // if (response.status == 400) {
-                        //     $('#save_msgList').html("");
-                        //     $('#save_msgList').addClass('alert alert-danger');
-                        //     $.each(response.errors, function(key, err_value) {
-                        //         $('#save_msgList').append('<li>' + err_value + '</li>');
-                        //     });
-                        //     $('.add_student').text('Save');
-                        // } else {
-                        //     $('#save_msgList').html("");
-                        //     $('#success_message').addClass('alert alert-success');
-                        //     $('#success_message').text(response.message);
-                        //     $('#AddStudentModal').find('input').val('');
-                        //     $('.add_student').text('Save');
-                        //     $('#AddStudentModal').modal('hide');
-                        //     fetchstudent();
-                        // }
+                        // console.log(response);
+                        if (response.status == 400) {
+                            console.log(response);
+                        } else {
+                            console.log('200 Ok');
+                        }
                     }
                 });
+
+
 
             });
-
-            //-- Lista Origem
-            function listraca() {
-                //e.preventDefault();
-                $.ajax({
-                    type: "GET",
-                    url: "/list-raca",
-                    dataType: "json",
-                    success: function(response) {
-                        console.log(response);
-                        // $('tbody').html("");
-                        // $.each(response.students, function(key, item) {
-                        //     $('tbody').append('<tr>\
-                        //                     <td>' + item.id + '</td>\
-                        //                     <td>' + item.name + '</td>\
-                        //                     <td>' + item.course + '</td>\
-                        //                     <td>' + item.email + '</td>\
-                        //                     <td>' + item.phone + '</td>\
-                        //                     <td><button type="button" value="' + item.id + '" class="btn btn-primary editbtn btn-sm">Edit</button></td>\
-                        //                     <td><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm">Delete</button></td>\
-                        //                 \</tr>');
-                        // });
-                    }
-                });
-            }
-
-
 
         });
     </script>
