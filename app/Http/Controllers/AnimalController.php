@@ -133,7 +133,6 @@ class AnimalController extends Controller
         }
     }
 
-
     function classificacao_etaria($diasvida)
     {
         $fxetaria = DB::select(DB::raw("SELECT idclassificacao_etaria FROM classificacao_etaria WHERE :diasvida BETWEEN dia_inicial AND dia_final"), array(
