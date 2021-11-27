@@ -14,6 +14,8 @@ use App\Models\Propriedade;
 use App\Models\Raca;
 use App\Models\Usuario;
 use App\Models\ClassificacaoEtaria;
+use MigrationsGenerator\Generators\MigrationConstants\Method\Foreign;
+
 
 class AnimalController extends Controller
 {
@@ -73,16 +75,19 @@ class AnimalController extends Controller
     public function create(Request $request)
     {
 
-
-
+        // Validação
         $validator = Validator::make($request->all(), [
-            'nome' => 'required|max:25',
+
+            // Campos obrigatórios
+            'numero_brinco' => ['required', 'string', 'max:15'],
+            'nome' => ['required', 'string', 'max:25'],
             'genero' => 'required',
             'dias_vida' => 'required|integer|min:1|max:10000',
             'data_entrada' => 'required',
             'data_nascimento' => 'required',
             'peso_entrada' => 'required|integer|min:1|max:1000',
 
+            // Foreign Keys
             'grau_sangue_idgrau_sangue' => 'required',
             'raca_idraca' => 'required',
             'origem_idorigem' => 'required',
@@ -99,45 +104,75 @@ class AnimalController extends Controller
             //Propriedade ID e Facha Etaria ID
             $fxetaria = $this->classificacao_etaria($request->input('dias_vida'));
             $propid = Usuario::find(auth()->user()->id)->propriedade_idpropriedade;
-            // Dados do Indivíduo
+
+            //Verifica se o brinco pertence a outro animal
+            $animal = $this->animal_brinco($request->input('numero_brinco'));
+
+            if ($animal) {
+                return response()->json([
+                    'status' => 100,
+                    'message' => 'Este Animal já foi cadastrado.'
+                ]);
+            }
+
+            // Campos obrigatórios
             $animal = new Animal;
             $animal->nome = $request->input('nome');
             $animal->genero = $request->input('genero');
             $animal->dias_vida = $request->input('dias_vida');
+            $animal->numero_brinco = $request->input('numero_brinco');
 
             $animal->peso_entrada = $request->input('peso_entrada');
             $animal->apelido = $request->input('apelido');
             $animal->foto = $request->input('foto');
-            $animal->numero_brinco = $request->input('numero_brinco');
             $animal->numero_sisbov = $request->input('numero_sisbov');
             $animal->observacao = $request->input('observacao');
             $animal->rgd = $request->input('rgd');
             $animal->rgn = $request->input('rgn');
-            $animal->data_entrada = strtotime($request->input('data_entrada'));
-            $animal->data_nascimento = strtotime($request->input('data_nascimento'));
+            $animal->data_entrada = $request->input('data_entrada');
+            $animal->data_nascimento = $request->input('data_nascimento');
 
+            // Foreign Keys
             $animal->propriedade_idpropriedade = $propid;
             $animal->raca_idraca = $request->input('raca_idraca');
             $animal->grau_sangue_idgrau_sangue = $request->input('grau_sangue_idgrau_sangue');
             $animal->origem_idorigem = $request->input('origem_idorigem');
 
-            //$animal->classificacao_etaria_idclassificacao_etaria = $fxetaria[0]->idclassificacao_etaria;
-            // $animal->propriedade_idpropriedade = $propid;
-            // $animal->classificacao_etaria_idclassificacao_etaria = $fxetaria;
-
-            $animal->save();
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Added Successfully.'
-            ]);
+            try {
+                $animal->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Novo Animal salvo com sucesso.'
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 503,
+                    'message' => 'Não foi possível cadastrar esse novo animal. Tente novamente.' //$e->getMessage()
+                ]);
+            }
         }
     }
 
+    /**
+     * Consulta a faixa etária em que o animal se encontra atualmente
+     *
+     * @param [type] $diasvida
+     * @return Array Classificação Etária
+     */
     function classificacao_etaria($diasvida)
     {
         $fxetaria = DB::select(DB::raw("SELECT idclassificacao_etaria FROM classificacao_etaria WHERE :diasvida BETWEEN dia_inicial AND dia_final"), array(
             'diasvida' => $diasvida,
         ));
         return ($fxetaria);
+    }
+
+    function animal_brinco($numbrinco)
+    {
+        //Verifica se o brinco pertence a outro animal
+        $animal = DB::select(DB::raw("SELECT * FROM animal WHERE numero_brinco = :numbrinco"), array(
+            'numbrinco' => $numbrinco,
+        ));
+        return ($animal);
     }
 }
