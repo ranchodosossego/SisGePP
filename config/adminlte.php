@@ -464,7 +464,7 @@ return [
 
     'iframe' => [
         'default_tab' => [
-            'url' => 'animal',
+            'url' => 'rebanho',
             'title' => null,
         ],
         'buttons' => [

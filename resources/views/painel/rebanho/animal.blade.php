@@ -23,6 +23,7 @@
     <div class="content-wrapper">
 
         <div class="container-fluid">
+
             <div class="row">
 
                 <!-- Coluna 1: Help -->
@@ -366,9 +367,7 @@
                                 position: 'center',
                                 icon: 'info',
                                 title: response.message,
-                                //showConfirmButton: false,
                                 text: 'Esse número de brinco pertence a outro animal.',
-                                //timer: 2000
                             });
                         }
 
@@ -381,6 +380,21 @@
                                 showConfirmButton: false,
                                 text: response.message,
                                 timer: 2000
+                            });
+                            $("#cform")[0].reset();
+                        }
+
+                        //-- Erro na aplicação
+                        if (response.status == 503) {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                text: 'Ocorreu algum problema. Verifique seu acesso a internet!',
+                                title: response.message,
+                                showConfirmButton: false,
+                                showCancelButton: true,
+                                cancelButtonText: '<i class="fa fa-thumbs-down"></i> Cancelar',
+
                             });
                             $("#cform")[0].reset();
                         }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idraca
+ * @property int    $porte_idporte
  * @property string $nome
  */
 class Raca extends Model
@@ -30,7 +31,7 @@ class Raca extends Model
      * @var array
      */
     protected $fillable = [
-        'nome'
+        'nome', 'porte_idporte'
     ];
 
     /**
@@ -48,7 +49,7 @@ class Raca extends Model
      * @var array
      */
     protected $casts = [
-        'idraca' => 'int', 'nome' => 'string'
+        'idraca' => 'int', 'nome' => 'string', 'porte_idporte' => 'int'
     ];
 
     /**

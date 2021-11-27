@@ -10,20 +10,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property int    $propriedade_idpropriedade
  * @property int    $peso_entrada
  * @property int    $origem_idorigem
+ * @property int    $lote_idlote
  * @property int    $grau_sangue_idgrau_sangue
  * @property int    $dias_vida
  * @property int    $data_nescimento_estimado
- * @property string $nome
+ * @property string $data_entrada
  * @property string $rgn
  * @property string $rgd
  * @property string $observacao
  * @property string $numero_sisbov
  * @property string $numero_brinco
- * @property string $apelido
  * @property string $genero
  * @property string $foto
  * @property string $data_nascimento
- * @property string $data_entrada
+ * @property string $apelido
+ * @property string $nome
  */
 class Animal extends Model
 {
@@ -47,7 +48,7 @@ class Animal extends Model
      * @var array
      */
     protected $fillable = [
-        'nome', 'rgn', 'rgd', 'raca_idraca', 'propriedade_idpropriedade', 'peso_entrada', 'origem_idorigem', 'observacao', 'numero_sisbov', 'numero_brinco', 'apelido', 'grau_sangue_idgrau_sangue', 'genero', 'foto', 'dias_vida', 'data_nescimento_estimado', 'data_nascimento', 'data_entrada'
+        'data_entrada', 'rgn', 'rgd', 'raca_idraca', 'propriedade_idpropriedade', 'peso_entrada', 'origem_idorigem', 'observacao', 'numero_sisbov', 'numero_brinco', 'lote_idlote', 'grau_sangue_idgrau_sangue', 'genero', 'foto', 'dias_vida', 'data_nescimento_estimado', 'data_nascimento', 'apelido', 'nome'
     ];
 
     /**
@@ -65,7 +66,7 @@ class Animal extends Model
      * @var array
      */
     protected $casts = [
-        'idanimal' => 'int', 'nome' => 'string', 'rgn' => 'string', 'rgd' => 'string', 'raca_idraca' => 'int', 'propriedade_idpropriedade' => 'int', 'peso_entrada' => 'int', 'origem_idorigem' => 'int', 'observacao' => 'string', 'numero_sisbov' => 'string', 'numero_brinco' => 'string', 'apelido' => 'string', 'grau_sangue_idgrau_sangue' => 'int', 'genero' => 'string', 'foto' => 'string', 'dias_vida' => 'int', 'data_nescimento_estimado' => 'int', 'data_nascimento' => 'string', 'data_entrada' => 'string'
+        'idanimal' => 'int', 'data_entrada' => 'string', 'rgn' => 'string', 'rgd' => 'string', 'raca_idraca' => 'int', 'propriedade_idpropriedade' => 'int', 'peso_entrada' => 'int', 'origem_idorigem' => 'int', 'observacao' => 'string', 'numero_sisbov' => 'string', 'numero_brinco' => 'string', 'lote_idlote' => 'int', 'grau_sangue_idgrau_sangue' => 'int', 'genero' => 'string', 'foto' => 'string', 'dias_vida' => 'int', 'data_nescimento_estimado' => 'int', 'data_nascimento' => 'string', 'apelido' => 'string', 'nome' => 'string'
     ];
 
     /**
