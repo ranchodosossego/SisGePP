@@ -131,12 +131,14 @@ class AnimalController extends Controller
             $animal->rgn = $request->input('rgn');
             $animal->data_entrada = $request->input('data_entrada');
             $animal->data_nascimento = $request->input('data_nascimento');
+            $animal->ativo = 1;
 
             // Foreign Keys
             $animal->propriedade_idpropriedade = $propid;
             $animal->raca_idraca = $request->input('raca_idraca');
             $animal->grau_sangue_idgrau_sangue = $request->input('grau_sangue_idgrau_sangue');
             $animal->origem_idorigem = $request->input('origem_idorigem');
+            $animal->lote_idlote = 1;
 
             try {
                 $animal->save();
@@ -159,7 +161,7 @@ class AnimalController extends Controller
      * @param [type] $diasvida
      * @return Array Classificação Etária
      */
-    function classificacao_etaria($diasvida)
+    private function classificacao_etaria($diasvida)
     {
         $fxetaria = DB::select(DB::raw("SELECT idclassificacao_etaria FROM classificacao_etaria WHERE :diasvida BETWEEN dia_inicial AND dia_final"), array(
             'diasvida' => $diasvida,
@@ -167,12 +169,14 @@ class AnimalController extends Controller
         return ($fxetaria);
     }
 
-    function animal_brinco($numbrinco)
+    private function animal_brinco($numbrinco)
     {
         //Verifica se o brinco pertence a outro animal
-        $animal = DB::select(DB::raw("SELECT * FROM animal WHERE numero_brinco = :numbrinco"), array(
+        $animal = DB::select(DB::raw("SELECT * FROM animal WHERE numero_brinco = :numbrinco AND ativo = :ativo"), array(
             'numbrinco' => $numbrinco,
+            'ativo' => 1,
         ));
         return ($animal);
     }
+
 }

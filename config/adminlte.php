@@ -257,7 +257,7 @@ return [
             'icon'    => 'fab fa-mendeley p-1',
             'submenu' => [
                 [
-                    'text' => 'Visão Geral',
+                    'text' => 'Quadro Geral',
                     'url'  => 'rebanho',
                     'icon'    => 'fab fa-cloudscale p-1',
                 ],
@@ -464,7 +464,7 @@ return [
 
     'iframe' => [
         'default_tab' => [
-            'url' => 'rebanho',
+            'url' => 'lote',
             'title' => null,
         ],
         'buttons' => [

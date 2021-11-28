@@ -5,25 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $idtipo_lote
- * @property int    $em_lactacao
- * @property string $nome
+ * @property int  $idcontrole_leiteiro
+ * @property int  $descartado
+ * @property int  $animal_idanimal
+ * @property Date $data_producao
  */
-class TipoLote extends Model
+class ControleLeiteiro extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'tipo_lote';
+    protected $table = 'controle_leiteiro';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'idtipo_lote';
+    protected $primaryKey = 'idcontrole_leiteiro';
 
     /**
      * Attributes that should be mass-assignable.
@@ -31,7 +32,7 @@ class TipoLote extends Model
      * @var array
      */
     protected $fillable = [
-        'em_lactacao', 'nome'
+        'data_producao', 'descartado', 'ordenha1', 'ordenha2', 'ordenha3', 'animal_idanimal'
     ];
 
     /**
@@ -49,7 +50,7 @@ class TipoLote extends Model
      * @var array
      */
     protected $casts = [
-        'idtipo_lote' => 'int', 'em_lactacao' => 'int', 'nome' => 'string'
+        'idcontrole_leiteiro' => 'int', 'data_producao' => 'date', 'descartado' => 'int', 'animal_idanimal' => 'int'
     ];
 
     /**
@@ -58,7 +59,7 @@ class TipoLote extends Model
      * @var array
      */
     protected $dates = [
-        
+        'data_producao'
     ];
 
     /**

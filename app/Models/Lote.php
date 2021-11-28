@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int    $idlote
  * @property int    $criado_em
  * @property int    $tipo_lote_idtipo_lote
+ * @property int    $tempo_limite
+ * @property int    $quantidade_limite
  * @property int    $dieta_iddieta
- * @property string $limite
+ * @property string $observacao
  * @property string $codigo
  */
 class Lote extends Model
@@ -34,7 +36,7 @@ class Lote extends Model
      * @var array
      */
     protected $fillable = [
-        'criado_em', 'tipo_lote_idtipo_lote', 'limite', 'dieta_iddieta', 'codigo'
+        'criado_em', 'tipo_lote_idtipo_lote', 'tempo_limite', 'quantidade_limite', 'observacao', 'dieta_iddieta', 'codigo'
     ];
 
     /**
@@ -52,7 +54,7 @@ class Lote extends Model
      * @var array
      */
     protected $casts = [
-        'idlote' => 'int', 'criado_em' => 'timestamp', 'tipo_lote_idtipo_lote' => 'int', 'limite' => 'string', 'dieta_iddieta' => 'int', 'codigo' => 'string'
+        'idlote' => 'int', 'criado_em' => 'timestamp', 'tipo_lote_idtipo_lote' => 'int', 'tempo_limite' => 'int', 'quantidade_limite' => 'int', 'observacao' => 'string', 'dieta_iddieta' => 'int', 'codigo' => 'string'
     ];
 
     /**
