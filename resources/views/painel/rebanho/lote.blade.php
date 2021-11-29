@@ -1,7 +1,6 @@
 @extends('adminlte::page')
 
 @section('content')
-
     <!-- Header com o Breadcrumb -->
     <section class="content-header">
         <div class="container-fluid">
@@ -23,87 +22,125 @@
     <section class="content-wrapper">
         <div class="container-fluid">
 
-            <!-- Box de lotes -->
-            {{-- <h5 class="mb-2 mt-4">Small Box</h5> --}}
-            <div class="row">
+            {{-- Menu --}}
+            <div class="card">
 
-                {{-- Vazias --}}
-                <div class="col-lg-3 col-6">
-                    <!-- small card -->
-                    <div class="small-box teal-100">
-                        <div class="inner">
-                            <h3>150</h3>
-                            <p>Vazias</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            Listar <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
+                <div class="card-body text-center">
+
+                    <a class="btn btn-app ml-0">
+                        <span class="badge bg-success">
+                            {{ $lstanimal->where('idtipo_lote', '=', '1')->count() }}
+                        </span>
+                        <i class="fab fa-creative-commons-zero"></i><small> Vazia</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-orange">
+                            {{ $lstanimal->where('idtipo_lote', '=', '2')->count() }}
+                        </span>
+                        <i class="fas fa-circle-notch"></i><small> Vacas Secas</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-light">
+                            {{ $lstanimal->where('idtipo_lote', '=', '3')->count() }}
+                        </span>
+                        <i class="fas fa-ambulance"></i><small> Pré-Parto</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-maroon">
+                            {{ $lstanimal->where('idtipo_lote', '=', '4')->count() }}
+                        </span>
+                        <i class="fas fa-briefcase-medical"></i><small> Pós-Parto</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-primary">
+                            {{ $lstanimal->where('idtipo_lote', '=', '5')->count() }}
+                        </span>
+                        <i class="fab fa-product-hunt"></i><small> Primíparas</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-danger">
+                            {{ $lstanimal->where('idtipo_lote', '=', '6')->count() }}
+                        </span>
+                        <i class="fas fa-hand-holding"></i><small> Baixa Produção</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-blue">
+                            {{ $lstanimal->where('idtipo_lote', '=', '7')->count() }}
+                        </span>
+                        <i class="fas fa-hand-holding-usd"></i><small> Alta Produção</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-green">
+                            {{ $lstanimal->where('idtipo_lote', '=', '8')->count() }}
+                        </span>
+                        <i class="fas fa-baby-carriage"></i><small> Bezerreiro</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-warning">
+                            {{ $lstanimal->where('idtipo_lote', '=', '9')->count() }}
+                        </span>
+                        <i class="fas fa-clinic-medical"></i><small> Enfermaria</small>
+                    </a>
+                    <a class="btn btn-app">
+                        <span class="badge bg-indigo">
+                            {{ $lstanimal->where('idtipo_lote', '=', '10')->count() }}
+                        </span>
+                        <i class="fas fa-laptop-house"></i><small> Triagem</small>
+                    </a>
+
                 </div>
+                <!-- /.card-body -->
+            </div>
 
-                <div class="col-lg-3 col-6">
-                    <!-- small card -->
-                    <div class="small-box teal-200">
-                        <div class="inner">
-                            <h3>150</h3>
-
-                            <p>Vazias</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            Listar <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
+            {{-- Grid --}}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Bordered Table</h3>
                 </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Brinco</th>
+                                <th>Nome</th>
+                                <th>Lote</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($animals as $animal)
+                                <tr>
+                                    <td>{{ $animal->numero_brinco }}</td>
+                                    <td>{{ $animal->nome }}</td>
+                                    <td>{{ $animal->lote_idlote }}</td>
+                                </tr>
+                            @endforeach
 
-                <div class="col-lg-3 col-6">
-                    <!-- small card -->
-                    <div class="small-box teal-300">
-                        <div class="inner">
-                            <h3>150</h3>
+                        </tbody>
+                    </table>
 
-                            <p>Vazias</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            Listar <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
                 </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    {{-- <ul class="pagination pagination-sm m-0 float-right">
+                        <li class="page-item"><a class="page-link" href="#">«</a></li>
 
-                <div class="col-lg-3 col-6">
-                    <!-- small card -->
-                    <div class="small-box teal-400">
-                        <div class="inner">
-                            <h3>150</h3>
+                    </ul> --}}
 
-                            <p>Vazias</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            Listar <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
+                    {{ $animals->onEachSide(1)->links() }}
+
                 </div>
 
             </div>
-            <!-- /.row -->
 
         </div>
     </section>
 @stop
 
 @section('css')
+
 @stop
 
 @section('js')
+
 @stop

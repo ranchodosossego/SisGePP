@@ -32,8 +32,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 -- Controller: Rebanho
 */
 Route::get('/rebanho', [App\Http\Controllers\RebanhoController::class, 'index']);
+Route::get('lote', [App\Http\Controllers\LoteController::class, 'index']);
 Route::get('animal', 'App\Http\Controllers\RebanhoController@animal');
-Route::get('lote', 'App\Http\Controllers\RebanhoController@lote');
+//Route::get('lote', 'App\Http\Controllers\RebanhoController@lote');
 
 
 /*
