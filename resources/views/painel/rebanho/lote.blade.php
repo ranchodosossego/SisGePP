@@ -23,7 +23,7 @@
         <div class="container-fluid">
 
             {{-- Menu --}}
-            <div class="card">
+            <div class="card lotes" id='mycard'>
 
                 <div class="card-body text-center">
 
@@ -142,5 +142,11 @@
 @stop
 
 @section('js')
+    <script>
 
+        $(document).ready(function() {
+            console.log('click iframeLoaded');
+
+        });
+    </script>
 @stop

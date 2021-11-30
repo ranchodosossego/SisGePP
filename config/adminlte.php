@@ -45,9 +45,9 @@ return [
     |
     */
 
-    'logo' => '<b>Painel</b> de Controle',
+    'logo' => '<b>Rancho</b> do Sossego',
     'logo_img' => 'assets/img/logopainel.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo_img_class' => 'brand-image img-circle elevation-3 invisible',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Rancho do Sossego',
@@ -294,15 +294,23 @@ return [
                     'url'     => '#',
                     'icon'    => 'far fa-calendar-alt p-1',
                 ],
+            ],
+        ],
+
+        //-- Estoque
+        [
+            'text'    => 'Estoque',
+            'icon'    => 'fas fa-warehouse p-1',
+            'submenu' => [
                 [
-                    'text'    => 'Insumos',
-                    'url'     => '#',
-                    'icon'    => 'fas fa-spray-can p-1',
+                    'text' => 'Silagem',
+                    'url'  => '#',
+                    'icon'    => 'fas fa-seedling p-1',
                 ],
                 [
-                    'text'    => 'Estoque',
-                    'url'     => '#',
-                    'icon'    => 'fas fa-warehouse p-1',
+                    'text' => 'Insumos',
+                    'url'  => '#',
+                    'icon'    => 'fas fa-spray-can p-1',
                 ],
             ],
         ],
@@ -447,6 +455,8 @@ return [
             ],
         ],
 
+
+
     ],
 
     /*
@@ -479,6 +489,7 @@ return [
             'loading_screen' => 1000,
             'auto_show_new_tab' => true,
             'use_navbar_items' => true,
+
         ],
     ],
 
