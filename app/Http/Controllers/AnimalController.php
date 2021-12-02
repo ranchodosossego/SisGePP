@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-
-
-use App\Models\Animal;
-use App\Models\GrauSangue;
-use App\Models\Origem;
-use App\Models\Propriedade;
 use App\Models\Raca;
+use App\Models\Animal;
+use App\Models\Origem;
+
+
 use App\Models\Usuario;
+use App\Models\GrauSangue;
+use App\Models\Propriedade;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\ClassificacaoEtaria;
+use Illuminate\Support\Facades\Validator;
 use MigrationsGenerator\Generators\MigrationConstants\Method\Foreign;
 
 

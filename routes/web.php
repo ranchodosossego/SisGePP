@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnimalController;
+use App\Http\Controllers\LoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,11 +33,18 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 /*
 -- Controller: Rebanho
 */
-Route::get('/rebanho', [App\Http\Controllers\RebanhoController::class, 'index']);
-Route::get('lote', [App\Http\Controllers\LoteController::class, 'index']);
-Route::get('animal', 'App\Http\Controllers\RebanhoController@animal');
 //Route::get('lote', 'App\Http\Controllers\RebanhoController@lote');
 
+Route::get('/rebanho', [App\Http\Controllers\RebanhoController::class, 'index']);
+Route::get('animal', 'App\Http\Controllers\RebanhoController@animal');
+
+// --Info: Lote
+Route::get('lote', [App\Http\Controllers\LoteController::class, 'index']);
+// Route::post('lote', [App\Http\Controllers\LoteController::class, 'read']);
+Route::get('/getAnimalList', [App\Http\Controllers\LoteController::class, 'getAnimalList'])->name('get.animal.list');
+Route::post('/getAnimalListLote', [App\Http\Controllers\LoteController::class, 'getAnimalListLote'])->name('get.animal.list.lote');
+
+//Route::get('/getAnimalListLote/{id}', 'LoteController@bar');
 
 /*
 -- Controller: AnimalController
@@ -43,10 +52,3 @@ Route::get('animal', 'App\Http\Controllers\RebanhoController@animal');
 Route::get('animal', [AnimalController::class, 'index']);
 Route::post('animal', [AnimalController::class, 'create']);
 Route::get('read', [AnimalController::class, 'read']);
-//Route::get('animal', [AnimalController::class, 'listraca']);
-// Route::get('edit-student/{id}', [AnimalController::class, 'edit']);
-// Route::put('update-student/{id}', [AnimalController::class, 'update']);
-// Route::delete('delete-student/{id}', [AnimalController::class, 'destroy']);
-
-
-

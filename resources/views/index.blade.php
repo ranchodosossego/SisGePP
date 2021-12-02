@@ -1145,7 +1145,7 @@
                             </div>
                             <div class="member-info">
                                 <h4>Dayana Ferreira</h4>
-                                <span>Gerente Geral</span>
+                                <span>Diretora Geral</span>
                             </div>
                         </div>
                     </div>
@@ -1163,7 +1163,7 @@
                             </div>
                             <div class="member-info">
                                 <h4>Marcelo Maia</h4>
-                                <span>Gerente de Produção e Novas Tecnologias</span>
+                                <span>Diretor de Produção e Novas Tecnologias</span>
                             </div>
                         </div>
                     </div>
@@ -1185,7 +1185,7 @@
                             </div>
                         </div>
                     </div>
-{{--
+
 
 
                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
@@ -1200,11 +1200,11 @@
                                 </div>
                             </div>
                             <div class="member-info">
-                                <h4>Amanda Jepson</h4>
-                                <span>Accountant</span>
+                                <h4>Adriana Ferreira</h4>
+                                <span>Proprietária e Co-fundadora</span>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
 
                 </div>
 
@@ -1509,7 +1509,7 @@
                             <div class="email">
                                 <i class="bi bi-envelope"></i>
                                 <h4>Email:</h4>
-                                <p>ranchodosossego.al29@gmail.com</p>
+                                <p>ranchodosossego.al20@gmail.com</p>
                             </div>
 
                             <div class="phone">
