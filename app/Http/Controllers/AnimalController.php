@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Raca;
 use App\Models\Animal;
 use App\Models\Origem;
+use App\Models\Lote;
+use App\Models\TipoLote;
 
 
 use App\Models\Usuario;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ClassificacaoEtaria;
 use Illuminate\Support\Facades\Validator;
 use MigrationsGenerator\Generators\MigrationConstants\Method\Foreign;
+use Yajra\DataTables\DataTables;
 
 
 class AnimalController extends Controller
@@ -37,33 +40,37 @@ class AnimalController extends Controller
         return view('painel.rebanho.animal', compact('lstraca', 'lstorigem', 'lstgrausangue'));
     }
 
-    public function listraca()
+    public function getAnimal(Request $request)
     {
-        $lstraca = Raca::all();
+        $message = $request->get('idanimal');
+
+        $animal = DB::table('animal')
+        ->join('lote', 'animal.lote_idlote', '=', 'lote.idlote')
+        ->join('tipo_lote', 'tipo_lote.idtipo_lote', '=', 'lote.tipo_lote_idtipo_lote')
+        ->where('animal.ativo', '=', '1')
+        ->where('animal.idanimal', '=', $message)
+        ->select(['animal.idanimal', 'animal.numero_brinco', 'animal.nome', 'animal.dias_vida', 'animal.apelido', 'tipo_lote.nome  as tnome'])
+        ->get();
         return response()->json([
-            'lstraca' => $lstraca,
+            'data' => $animal,
         ]);
+        //return ($animal);
     }
 
-    public function listorigem()
+    public function getAnimalList()
     {
-        $lstorigem = Origem::all();
-        return response()->json([
-            'lstorigem' => $lstorigem,
-        ]);
-    }
+        $lstanimal = DB::table('animal')
+            ->join('lote', 'animal.lote_idlote', '=', 'lote.idlote')
+            ->join('tipo_lote', 'tipo_lote.idtipo_lote', '=', 'lote.tipo_lote_idtipo_lote')
+            ->where('animal.ativo', '=', '1')
+            ->select(['animal.idanimal', 'animal.numero_brinco', 'animal.nome', 'animal.dias_vida', 'animal.apelido', 'tipo_lote.nome  as tnome'])
+            ->get();
 
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    public function read()
-    {
-        $animal = Animal::all();
-        return response()->json([
-            'animal' => $animal,
-        ]);
+        return DataTables::of($lstanimal)
+            ->addColumn('action', function ($lstanimal) {
+                return '<button onclick="msgs(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-success btn-sm col-8 me-0">' . $lstanimal->nome . '</button>';
+            })
+            ->make(true);
     }
 
     /**
@@ -178,5 +185,4 @@ class AnimalController extends Controller
         ));
         return ($animal);
     }
-
 }

@@ -94,8 +94,8 @@
             </div>
 
             {{-- Grid --}}
-            <div class="card">
-                <div class="card-header bg-warning">
+            <div class="card card-success card-outline">
+                <div class="card-header">
                     <h3 class="card-title">Lote de Animais </h3>
                 </div>
                 <!-- /.card-header -->
@@ -107,9 +107,7 @@
                                 <th>Nome</th>
                                 <th>Dias de Vida</th>
                                 <th>Apelido</th>
-                                <th>Genero</th>
                                 <th>Tipo</th>
-
                             </tr>
                         </thead>
                         <tbody class="">
@@ -129,15 +127,19 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.semanticui.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+    {{-- <link rel="stylesheet" href="css/app.css" /> --}}
+
+
 @stop
 
 @section('js')
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.semanticui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-
+        //--> Carregamento Principal
         $(document).ready(function() {
             listar();
         });
@@ -145,11 +147,11 @@
         //--> Inserir um novo animal
         $(document).on('click', '.vazia', function(e) {
             e.preventDefault();
-            $('#lstanimallote').DataTable().ajax.reload(null,false);
+            $('#lstanimallote').DataTable().ajax.reload(null, false);
         });
         //-- end
 
-        //--> Carrega a Grid de Animais
+        //--> Carregamento Inicial do Grid de Animais
         var listar = function() {
             var table = $('#lstanimallote').DataTable({
                 processing: true,
@@ -163,18 +165,160 @@
                 "language": {
                     "url": "js/pt-br.json"
                 },
-                columns: [
-                    { data: 'numero_brinco', name: 'numero_brinco' },
-                    { data: 'nome', name: 'nome' },
-                    { data: 'dias_vida', name: 'dias_vida' },
-                    { data: 'apelido', name: 'apelido' },
-                    { data: 'genero', name: 'genero' },
-                    { data: 'tnome', name: 'tnome' },
+                columns: [{
+                        data: 'numero_brinco',
+                        name: 'numero_brinco'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'dias_vida',
+                        name: 'dias_vida'
+                    },
+                    {
+                        data: 'apelido',
+                        name: 'apelido'
+                    },
+                    {
+                        data: 'tnome',
+                        name: 'tnome'
+                    },
+
                 ]
             });
         };
         //-- end
 
+        //--> Função incorporada ao botão dentro do grid.
+        var msgs = function(idanimal) {
 
+            //--> Token
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = {
+                idanimal: idanimal,
+            };
+            //-- .end
+            // $.ajax({
+            //     type: "GET",
+            //     url: "/getAnimal",
+            //     data: data,
+            //     dataType: "json",
+            //     success: function(response) {
+            //         console.log('Foi ' + response.data[0].nome);
+            //     }
+            // });
+
+            var animal = function() {
+                var tmp = null;
+                $.ajax({
+                    type: "GET",
+                    url: "/getAnimal",
+                    data: data,
+                    dataType: "json",
+                    async: false,
+                    success: function(response) {
+                        tmp = response.data[0];
+                    }
+                });
+                return tmp;
+            }();
+
+            $.ajax({
+                type: "POST",
+                url: "/getTipoLote",
+                data: data,
+                dataType: "json",
+                success: function(response) {
+
+                    //--> Parametrização
+                    var options = {};
+                    $.map(response.data,
+                        function(o) {
+                            options[o.idtipo_lote] = o.nome;
+                        });
+
+                    var html =
+                        '<div class="card bg-light d-flex flex-fill" style="overflow: hidden;">' +
+                        '<div class="row g-0">' +
+
+                        '<div class="col-md-7">' +
+                        '<div class="card-body " style="text-align: start !important;">' +
+                        '<h2 class="lead"><b>' + animal.nome + '</b></h2>' +
+                        // '<p class="text-muted text-sm"><b>Brinco: </b> ' + animal.numero_brinco + '</p>' +
+                        // '<p class="text-muted text-sm"><b>Dias de Vida: </b> ' + animal.dias_vida + '</p>' +
+                        // '<p class="text-muted text-sm"><b>Brinco: </b> ' + animal.numero_brinco + '</p>' +
+
+                        '<ul class="list-group">' +
+
+                        '<li class="list-group-item bg-light"><b>Brinco: </b> ' + animal.numero_brinco + '</li>' +
+                        '<li class="list-group-item bg-light">A third item</li>' +
+                        '<li class="list-group-item bg-light">A fourth item</li>' +
+                        '<li class="list-group-item bg-light">And a fifth one</li>' +
+                        '</ul>' +
+
+
+                        '</div>' +
+                        '</div>' +
+
+                        '<div class="col-4 mt-3">' +
+                        '<img src="assets/img/animal/vacaseca.jpg" alt="user-avatar" class="profile-user-img img-fluid img-circle">' +
+                        '</div>' +
+
+                        '</div>' +
+
+                        '</div>'
+                    //--> .end parametrização
+
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    });
+
+                    swalWithBootstrapButtons.fire({
+                        html: html,
+                        input: 'select',
+                        inputPlaceholder: '<i class="fas fa-angle-right"></i> Selecione',
+                        inputOptions: options,
+                        imageWidth: 400,
+                        imageHeight: 200,
+                        imageAlt: 'Vaca Seca',
+                        showCancelButton: true,
+                        confirmButtonText: 'Associar',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true
+                    }).then((result) => {
+
+                        if (result.isConfirmed) {
+                            console.log('result.isConfirmed');
+
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            /* Read more about handling dismissals below */
+                            swalWithBootstrapButtons.fire(
+                                'Cancelled',
+                                'Your imaginary file is safe :)',
+                                'error'
+                            )
+                        }
+                    });
+                    //-- end
+
+
+                }
+            });
+
+
+
+        };
     </script>
 @stop
