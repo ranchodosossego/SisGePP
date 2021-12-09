@@ -29,61 +29,62 @@
 
                         <a class="btn btn-app ml-0 vazia">
                             <span class="badge bg-success">
-                                {{ $lstanimal->where('idtipo_lote', '=', '1')->count() }}
+                                {{-- {{ $lstanimal->where('idtipo_lote', '=', '1')->count() }} --}}
+                                <span id="vazia"></span>
                             </span>
                             <i class="fab fa-creative-commons-zero"></i><small> Vazia</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app vacaseca">
                             <span class="badge bg-orange">
-                                {{ $lstanimal->where('idtipo_lote', '=', '2')->count() }}
+                                <span id="vacaseca"></span>
                             </span>
                             <i class="fas fa-circle-notch"></i><small> Vacas Secas</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app pre-parto">
                             <span class="badge bg-light">
-                                {{ $lstanimal->where('idtipo_lote', '=', '3')->count() }}
+                                <span id="pre-parto"></span>
                             </span>
                             <i class="fas fa-ambulance"></i><small> Pré-Parto</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app pos-parto">
                             <span class="badge bg-maroon">
-                                {{ $lstanimal->where('idtipo_lote', '=', '4')->count() }}
+                                <span id="pos-parto"></span>
                             </span>
                             <i class="fas fa-briefcase-medical"></i><small> Pós-Parto</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app primiparas">
                             <span class="badge bg-primary">
-                                {{ $lstanimal->where('idtipo_lote', '=', '5')->count() }}
+                                <span id="primiparas"></span>
                             </span>
                             <i class="fab fa-product-hunt"></i><small> Primíparas</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app baixaproducao">
                             <span class="badge bg-danger">
-                                {{ $lstanimal->where('idtipo_lote', '=', '6')->count() }}
+                                <span id="baixaproducao"></span>
                             </span>
                             <i class="fas fa-hand-holding"></i><small> Baixa Produção</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app altaproducao">
                             <span class="badge bg-blue">
-                                {{ $lstanimal->where('idtipo_lote', '=', '7')->count() }}
+                                <span id="altaproducao"></span>
                             </span>
                             <i class="fas fa-hand-holding-usd"></i><small> Alta Produção</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app bezerreiro">
                             <span class="badge bg-green">
-                                {{ $lstanimal->where('idtipo_lote', '=', '8')->count() }}
+                                <span id="bezerreiro"></span>
                             </span>
                             <i class="fas fa-baby-carriage"></i><small> Bezerreiro</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app enfermaria">
                             <span class="badge bg-warning">
-                                {{ $lstanimal->where('idtipo_lote', '=', '9')->count() }}
+                                <span id="enfermaria"></span>
                             </span>
                             <i class="fas fa-clinic-medical"></i><small> Enfermaria</small>
                         </a>
-                        <a class="btn btn-app">
+                        <a class="btn btn-app triagem">
                             <span class="badge bg-indigo">
-                                {{ $lstanimal->where('idtipo_lote', '=', '10')->count() }}
+                                <span id="triagem"></span>
                             </span>
                             <i class="fas fa-laptop-house"></i><small> Triagem</small>
                         </a>
@@ -128,6 +129,12 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.semanticui.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
     {{-- <link rel="stylesheet" href="css/app.css" /> --}}
+    <style>
+        .button-action {
+            margin-end: 10px;
+        }
+
+    </style>
 
 
 @stop
@@ -139,9 +146,17 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        //--> Inclusão do Token CSRF
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         //--> Carregamento Principal
         $(document).ready(function() {
             listar();
+            lstLotes();
         });
 
         //--> Inserir um novo animal
@@ -149,6 +164,36 @@
             e.preventDefault();
             $('#lstanimallote').DataTable().ajax.reload(null, false);
         });
+        //-- end
+
+        //--> Atualiza as quantidades para cada lote
+        var lstLotes = function() {
+
+            var data = {
+                idanimal: 1,
+            };
+            $.ajax({
+                type: "POST",
+                url: "/getLotesAnimal",
+                data: data,
+                dataType: "json",
+                success: function(response) {
+                    //--
+                    if (response.status == 200) {
+                        $("#vazia").html(response.objeto.filter(x => x.idtipo_lote === 1).length);
+                        $("#vacaseca").html(response.objeto.filter(x => x.idtipo_lote === 2).length);
+                        $("#pre-parto").html(response.objeto.filter(x => x.idtipo_lote === 3).length);
+                        $("#pos-parto").html(response.objeto.filter(x => x.idtipo_lote === 4).length);
+                        $("#primiparas").html(response.objeto.filter(x => x.idtipo_lote === 5).length);
+                        $("#baixaproducao").html(response.objeto.filter(x => x.idtipo_lote === 6).length);
+                        $("#altaproducao").html(response.objeto.filter(x => x.idtipo_lote === 7).length);
+                        $("#bezerreiro").html(response.objeto.filter(x => x.idtipo_lote === 8).length);
+                        $("#enfermaria").html(response.objeto.filter(x => x.idtipo_lote === 9).length);
+                        $("#triagem").html(response.objeto.filter(x => x.idtipo_lote === 10).length);
+                    }
+                }
+            });
+        };
         //-- end
 
         //--> Carregamento Inicial do Grid de Animais
@@ -196,26 +241,12 @@
         //--> Função incorporada ao botão dentro do grid.
         var msgs = function(idanimal) {
 
-            //--> Token
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             var data = {
                 idanimal: idanimal,
             };
             //-- .end
-            // $.ajax({
-            //     type: "GET",
-            //     url: "/getAnimal",
-            //     data: data,
-            //     dataType: "json",
-            //     success: function(response) {
-            //         console.log('Foi ' + response.data[0].nome);
-            //     }
-            // });
 
+            //--> Obtem o animal pelo ID
             var animal = function() {
                 var tmp = null;
                 $.ajax({
@@ -231,6 +262,9 @@
                 return tmp;
             }();
 
+            //-- .end
+
+            //--> Carrega a modal de associação - HTML
             $.ajax({
                 type: "POST",
                 url: "/getTipoLote",
@@ -245,35 +279,43 @@
                             options[o.idtipo_lote] = o.nome;
                         });
 
+                    //--> Corpo da modal de associação
                     var html =
                         '<div class="card bg-light d-flex flex-fill" style="overflow: hidden;">' +
                         '<div class="row g-0">' +
 
-                        '<div class="col-md-7">' +
-                        '<div class="card-body " style="text-align: start !important;">' +
-                        '<h2 class="lead"><b>' + animal.nome + '</b></h2>' +
-                        // '<p class="text-muted text-sm"><b>Brinco: </b> ' + animal.numero_brinco + '</p>' +
-                        // '<p class="text-muted text-sm"><b>Dias de Vida: </b> ' + animal.dias_vida + '</p>' +
-                        // '<p class="text-muted text-sm"><b>Brinco: </b> ' + animal.numero_brinco + '</p>' +
+                        '<div class="col-md-6 bg-warning bg-gradient">' +
+                        '<div class="card-body" style="text-align: start !important;">' +
+                        '<h2 class="lead"><i class="far fa-bookmark"></i> <b> Ficha Técnica</b></h2>' +
 
-                        '<ul class="list-group">' +
+                        '<dl>' +
+                        '<dt class="mb-1" style="font-size: 0.8em;"><i class="fas fa-thumbtack fa-xs"></i> Nome</dt>' +
+                        '<dd class="mb-2" style="font-size: 0.65em;">' + (animal.nome ?? '-') + '</dd>' +
+                        '<dt class="mb-1" style="font-size: 0.8em;"><i class="fas fa-thumbtack fa-xs"></i> Lote Atual</dt>' +
+                        '<dd class="mb-3" style="font-size: 0.65em;">' + animal.tnome + '</dd>' + '</dd>' +
+                        '<dt class="mb-1" style="font-size: 0.8em;"><i class="fas fa-thumbtack fa-xs"></i> Brinco</dt>' +
+                        '<dd class="mb-2" style="font-size: 0.65em;">' + ("000000" + animal.numero_brinco).slice(-6) + '</dd>' +
+                        '<dt class="mb-1" style="font-size: 0.8em;"><i class="fas fa-thumbtack fa-xs"></i> Dias de Vida</dt>' +
+                        '<dd class="mb-2" style="font-size: 0.65em;">' + animal.dias_vida + '</dd>' +
 
-                        '<li class="list-group-item bg-light"><b>Brinco: </b> ' + animal.numero_brinco + '</li>' +
-                        '<li class="list-group-item bg-light">A third item</li>' +
-                        '<li class="list-group-item bg-light">A fourth item</li>' +
-                        '<li class="list-group-item bg-light">And a fifth one</li>' +
-                        '</ul>' +
-
-
+                        '</dl>' +
                         '</div>' +
                         '</div>' +
 
-                        '<div class="col-4 mt-3">' +
-                        '<img src="assets/img/animal/vacaseca.jpg" alt="user-avatar" class="profile-user-img img-fluid img-circle">' +
-                        '</div>' +
+                        '<div class="col-md-6 mt-3">' +
+                        //'<img src="assets/img/animal/vacaseca.jpg" alt="user-avatar" class="profile-user-img img-fluid img-circle">' +
+                        '<img src=\"' + (animal.foto ?? 'assets/img/no-foto.jpg') +
+                        '\" alt="user-avatar" class="img-thumbnail img-responsive">' +
 
-                        '</div>' +
 
+                        '<dl class="mt-3" style="text-align: start !important;">' +
+                        '<dt class="mb-1" style="font-size: 0.8em;"><i class="fas fa-thumbtack fa-xs"></i> Peso de Entrada</dt>' +
+                        '<dd class="mb-3" style="font-size: 0.65em;">' + animal.peso_entrada + '</dd>' +
+                        '<dt class="mb-1" style="font-size: 0.8em;"><i class="fas fa-thumbtack fa-xs"></i> Observação</dt>' +
+                        '<dd class="mb-2" style="font-size: 0.65em;">' + (animal.observacao ?? '-') +
+                        '</dl>' +
+                        '</div>' +
+                        '</div>' +
                         '</div>'
                     //--> .end parametrização
 
@@ -290,35 +332,78 @@
                         input: 'select',
                         inputPlaceholder: '<i class="fas fa-angle-right"></i> Selecione',
                         inputOptions: options,
+                        //position: 'top',
                         imageWidth: 400,
                         imageHeight: 200,
                         imageAlt: 'Vaca Seca',
                         showCancelButton: true,
-                        confirmButtonText: 'Associar',
-                        cancelButtonText: 'Cancelar',
-                        reverseButtons: true
+                        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Associar!',
+                        cancelButtonText: '<i class="fas fa-ban"></i> Cancelar',
+                        reverseButtons: true,
+                        customClass: {
+                            confirmButton: 'btn btn-success m-2 btn-sm',
+                            cancelButton: 'btn btn-danger btn-sm',
+                        }
                     }).then((result) => {
 
-                        if (result.isConfirmed) {
-                            console.log('result.isConfirmed');
+                        if (result.isConfirmed && result.value != '') {
 
+                            var dataupdate = {
+                                idanimal: animal.idanimal,
+                                idtipo_lote: result.value,
+                            }
+
+                            //--> Atualiza o lote do animal
+                            $.ajax({
+                                type: "POST",
+                                url: "/updateAnimal",
+                                data: dataupdate,
+                                dataType: "json",
+                                success: function(response) {
+
+                                    //-- Salvo com sucesso
+                                    if (response.status == 200) {
+                                        Swal.fire({
+                                            position: 'center',
+                                            icon: 'success',
+                                            //title: 'Salvo com sucesso!',
+                                            showConfirmButton: false,
+                                            text: response.message,
+                                            timer: 1800
+                                        });
+                                    }
+                                    tmp = response;
+                                }
+                            });
+
+                            //--> Atualiza as quantidades para cada lote
+                            lstLotes();
+
+                            //--> Atualiza o grid
+                            $('#lstanimallote').DataTable().ajax.reload(null, false);
+
+                        } else if (result.isConfirmed && result.value == '') {
+                            swalWithBootstrapButtons.fire(
+                                'Atenção',
+                                'Selecione um lote!)',
+                                'warning'
+                            )
                         } else if (result.dismiss === Swal.DismissReason.cancel) {
                             /* Read more about handling dismissals below */
-                            swalWithBootstrapButtons.fire(
-                                'Cancelled',
-                                'Your imaginary file is safe :)',
-                                'error'
-                            )
+                            // swalWithBootstrapButtons.fire(
+                            //     'Cancelled',
+                            //     'Your imaginary file is safe :)',
+                            //     'error'
+                            // )
                         }
                     });
                     //-- end
 
-
                 }
             });
-
-
+            //--> .end
 
         };
+        //--> .end msgs
     </script>
 @stop

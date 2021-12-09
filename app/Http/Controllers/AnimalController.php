@@ -40,17 +40,77 @@ class AnimalController extends Controller
         return view('painel.rebanho.animal', compact('lstraca', 'lstorigem', 'lstgrausangue'));
     }
 
+    public function getLotesAnimal()
+    {
+        $lstanimal = DB::table('animal')
+            ->join('lote', 'animal.lote_idlote', '=', 'lote.idlote')
+            ->join('tipo_lote', 'tipo_lote.idtipo_lote', '=', 'lote.tipo_lote_idtipo_lote')
+            ->where('animal.ativo', '=', '1')
+            ->get();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Alteração de lote realizado com sucesso!',
+                'objeto' => $lstanimal,
+            ]);
+    }
+
+    /**
+     * Atualiza o lote em que o animal se encontra no momento.
+     *
+     * @param Request $request
+     * @return Mensagem com status
+     */
+    public function updateAnimal(Request $request)
+    {
+        $idanimal = $request->get('idanimal');
+        $idtipo_lote = $request->get('idtipo_lote');
+
+
+        try {
+
+            $lote = DB::table('lote')
+                ->where('lote.tipo_lote_idtipo_lote', '=', $idtipo_lote)
+                ->get();
+
+            $animal = DB::table('animal')
+                ->where('animal.idanimal', $idanimal)
+                ->update(['animal.lote_idlote' => $lote[0]->idlote]);
+
+            $oanimal = DB::table('animal')
+                ->where('animal.idanimal', $idanimal)
+                ->get();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Alteração de lote realizado com sucesso!',
+                'objeto' => $oanimal,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 503,
+                'message' => $e->getMessage(), //'Não foi possível cadastrar esse novo animal. Tente novamente.' //$e->getMessage()
+                'objeto' => null,
+            ]);
+        }
+    }
+
     public function getAnimal(Request $request)
     {
         $message = $request->get('idanimal');
 
         $animal = DB::table('animal')
-        ->join('lote', 'animal.lote_idlote', '=', 'lote.idlote')
-        ->join('tipo_lote', 'tipo_lote.idtipo_lote', '=', 'lote.tipo_lote_idtipo_lote')
-        ->where('animal.ativo', '=', '1')
-        ->where('animal.idanimal', '=', $message)
-        ->select(['animal.idanimal', 'animal.numero_brinco', 'animal.nome', 'animal.dias_vida', 'animal.apelido', 'tipo_lote.nome  as tnome'])
-        ->get();
+            ->join('lote', 'animal.lote_idlote', '=', 'lote.idlote')
+            ->join('tipo_lote', 'tipo_lote.idtipo_lote', '=', 'lote.tipo_lote_idtipo_lote')
+            ->where('animal.ativo', '=', '1')
+            ->where('animal.idanimal', '=', $message)
+            ->select([
+                'animal.idanimal', 'animal.numero_brinco', 'animal.nome', 'animal.dias_vida', 'animal.apelido',
+                'tipo_lote.nome  as tnome', 'animal.observacao', 'animal.peso_entrada', 'animal.data_nascimento',
+                'animal.apelido', 'animal.foto', 'tipo_lote.idtipo_lote'
+            ])
+            ->get();
         return response()->json([
             'data' => $animal,
         ]);

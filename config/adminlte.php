@@ -258,22 +258,43 @@ return [
             'submenu' => [
                 [
                     'text' => 'Quadro Geral',
+                    'shift'   => 'ml-2',
                     'url'  => 'rebanho',
                     'icon'    => 'fab fa-cloudscale p-1',
                 ],
                 [
                     'text' => 'Novos Animais',
+                    'shift'   => 'ml-2',
                     'url'  => 'animal',
                     'icon'    => 'fas fa-paw p-1',
                 ],
                 [
                     'text'    => 'Lote',
+                    'shift'   => 'ml-2',
                     'url'     => 'lote',
                     'icon'    => 'fas fa-grip-horizontal p-1',
                 ],
             ],
         ],
-
+        //-- Dieta <i class=""></i>
+        [
+            'text'    => 'Alimentação',
+            'icon'    => 'fas fa-utensils p-1',
+            'submenu' => [
+                [
+                    'text' => 'Dieta',
+                    'shift'   => 'ml-3',
+                    'url'  => '#',
+                    'icon'    => 'fab fa-nutritionix p-1',
+                ],
+                [
+                    'text' => 'Receitas',
+                    'shift'   => 'ml-3',
+                    'url'  => '#',
+                    'icon'    => 'fas fa-mitten p-1',
+                ],
+            ],
+        ],
         //-- Plantio
         [
             'text'    => 'Pantio',
@@ -281,16 +302,19 @@ return [
             'submenu' => [
                 [
                     'text' => 'Cultura',
+                    'shift'   => 'ml-3',
                     'url'  => '#',
                     'icon'    => 'fas fa-seedling p-1',
                 ],
                 [
                     'text' => 'Área',
+                    'shift'   => 'ml-3',
                     'url'  => '#',
                     'icon'    => 'far fa-map p-1',
                 ],
                 [
                     'text'    => 'Agenda',
+                    'shift'   => 'ml-3',
                     'url'     => '#',
                     'icon'    => 'far fa-calendar-alt p-1',
                 ],
@@ -304,17 +328,44 @@ return [
             'submenu' => [
                 [
                     'text' => 'Silagem',
+                    'shift'   => 'ml-3',
                     'url'  => '#',
                     'icon'    => 'fas fa-seedling p-1',
                 ],
                 [
                     'text' => 'Insumos',
+                    'shift'   => 'ml-3',
                     'url'  => '#',
                     'icon'    => 'fas fa-spray-can p-1',
                 ],
             ],
         ],
+        //-- Produção <i class="fab fa-affiliatetheme"></i>
+        [
+            'text'    => 'Produção',
+            'icon'    => 'fas fa-industry p-1',
+            'submenu' => [
+                [
+                    'text' => 'Leite',
+                    'shift'   => 'ml-3',
+                    'url'  => '#',
+                    'icon'    => 'fas fa-fill-drip p-1',
+                ],
+                [
+                    'text' => 'Corte',
+                    'shift'   => 'ml-3',
+                    'url'  => '#',
+                    'icon'    => 'fab fa-affiliatetheme p-1',
+                ],
+                [
+                    'text' => 'Bezerro',
+                    'shift'   => 'ml-3',
+                    'url'  => '#',
+                    'icon'    => 'fab fa-behance p-1',
+                ],
 
+            ],
+        ],
         //-- Sanidade
         [
             'text'    => 'Sanidade',
@@ -322,21 +373,57 @@ return [
             'submenu' => [
                 [
                     'text' => 'Prontuário',
+                    'shift'   => 'ml-3',
                     'url'  => '#',
                     'icon'    => 'fas fa-notes-medical p-1',
                 ],
                 [
                     'text' => 'Reprodução',
+                    'shift'   => 'ml-3',
                     'url'  => '#',
                     'icon'    => 'fas fa-microscope p-1',
                 ],
                 [
                     'text'    => 'Vacina',
+                    'shift'   => 'ml-3',
                     'url'     => '#',
                     'icon'    => 'fas fa-syringe p-1',
                 ],
+                [
+                    'text'    => 'Farmácia',
+                    'shift'   => 'ml-3',
+                    'url'     => '#',
+                    'icon'    => 'fas fa-pills p-1',
+                ],
             ],
         ],
+        //--> Equipe
+        [
+            'text'    => 'Equipe',
+            'icon'    => 'fas fa-users p-1',
+            'submenu' => [
+                [
+                    'text' => 'Funcionário',
+                    'shift'   => 'ml-3',
+                    'url'  => '#',
+                    'icon'    => 'fas fa-user-cog p-1',
+                ],
+                [
+                    'text' => 'Veterinário',
+                    'shift'   => 'ml-3',
+                    'url'  => '#',
+                    'icon'    => 'fas fa-user-md p-1',
+                ],
+                [
+                    'text' => 'Fornecedor',
+                    'shift'   => 'ml-3',
+                    'url'  => '#',
+                    'icon'    => 'fas fa-truck p-1',
+                ],
+
+            ],
+        ],
+        // Autenticação
         [
             'header'   => '',
             'classes'  => 'w-auto m-1 p-0 border-top border-secondary',
@@ -474,7 +561,7 @@ return [
 
     'iframe' => [
         'default_tab' => [
-            'url' => 'lote',
+            'url' => 'animal',
             'title' => null,
         ],
         'buttons' => [

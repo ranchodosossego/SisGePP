@@ -5,30 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $idlote
- * @property int    $criado_em
- * @property int    $dieta_iddieta
- * @property int    $quantidade_limite
- * @property int    $tempo_limite
- * @property int    $tipo_lote_idtipo_lote
- * @property string $codigo
- * @property string $observacao
+ * @property int    $idmanejo_reprodutivo
+ * @property int    $animal_idanimal
+ * @property int    $metodo_reprodutivo_idmetodo_reprodutivo
+ * @property int    $estagio_reprodutivo_idestagio_reprodutivo
+ * @property string $local
+ * @property string $data_procedimento
  */
-class Lote extends Model
+class ManejoReprodutivo extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'lote';
+    protected $table = 'manejo_reprodutivo';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'idlote';
+    protected $primaryKey = 'idmanejo_reprodutivo';
 
     /**
      * Attributes that should be mass-assignable.
@@ -36,7 +34,7 @@ class Lote extends Model
      * @var array
      */
     protected $fillable = [
-        'codigo', 'criado_em', 'dieta_iddieta', 'observacao', 'quantidade_limite', 'tempo_limite', 'tipo_lote_idtipo_lote'
+        'local', 'data_procedimento', 'animal_idanimal', 'metodo_reprodutivo_idmetodo_reprodutivo', 'estagio_reprodutivo_idestagio_reprodutivo'
     ];
 
     /**
@@ -54,7 +52,7 @@ class Lote extends Model
      * @var array
      */
     protected $casts = [
-        'idlote' => 'int', 'codigo' => 'string', 'criado_em' => 'timestamp', 'dieta_iddieta' => 'int', 'observacao' => 'string', 'quantidade_limite' => 'int', 'tempo_limite' => 'int', 'tipo_lote_idtipo_lote' => 'int'
+        'idmanejo_reprodutivo' => 'int', 'local' => 'string', 'data_procedimento' => 'string', 'animal_idanimal' => 'int', 'metodo_reprodutivo_idmetodo_reprodutivo' => 'int', 'estagio_reprodutivo_idestagio_reprodutivo' => 'int'
     ];
 
     /**
@@ -63,7 +61,7 @@ class Lote extends Model
      * @var array
      */
     protected $dates = [
-        'criado_em'
+        
     ];
 
     /**

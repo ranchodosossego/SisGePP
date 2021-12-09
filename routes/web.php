@@ -46,3 +46,6 @@ Route::post('animal', [App\Http\Controllers\AnimalController::class, 'create']);
 Route::get('/getAnimalList', [App\Http\Controllers\AnimalController::class, 'getAnimalList'])->name('get.animal.list');
 Route::get('/getAnimal', [App\Http\Controllers\AnimalController::class, 'getAnimal'])->name('get.animal');
 Route::get('getAnimal', 'App\Http\Controllers\AnimalController@getAnimal');
+Route::post('/updateAnimal', [App\Http\Controllers\AnimalController::class, 'updateAnimal'])->name('update.animal');
+Route::post('/getLotesAnimal', [App\Http\Controllers\AnimalController::class, 'getLotesAnimal'])->name('get.lotes.animal');
+
