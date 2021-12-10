@@ -28,7 +28,7 @@
 
                 <!-- Coluna 1: Help -->
                 <div class="col-md-4">
-                    <div class="callout callout-success card-outline direct-chat direct-chat-primary">
+                    <div class="callout callout-warning card-outline direct-chat direct-chat-primary">
                         <h5><i class="far fa-question-circle"></i> Cadastro de Novos Animais</h5>
 
                         <p>Esses espaço é dedicada ao cadastro de novos animais. São informados dados básicos, como:</p>
@@ -59,7 +59,7 @@
                             </li>
                         </ol>
                     </div>
-                    <div class="callout callout-success card-outline direct-chat direct-chat-primary">
+                    <div class="callout callout-warning card-outline direct-chat direct-chat-primary">
                         <h5>Campos Obrigatórios</h5>
                         <i class="fas fa-asterisk text-danger  fa-xs"></i>
                         <small class="fw-light">Todos os campos com asterisco são de preenchimento obrigatório.
@@ -74,7 +74,7 @@
                     <form action="" id="cform">
 
                         <!-- Card: Dados do Animal -->
-                        <div class="card card-success card-outline">
+                        <div class="card card-warning card-outline">
                             <div class="card-header">
                                 <h3 class="card-title">Dados do Animal</h3>
                             </div>
@@ -85,62 +85,28 @@
                                 {{-- Brinco / Nome / Apelido / Genero --}}
                                 <div class="row">
 
-                                    <div class="form-group col-sm-2">
+                                    <div class="form-group col-sm-3">
                                         <label for="numero_brinco">Brinco <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control form-control-border numero_brinco"
                                             id="numero_brinco" placeholder="Brinco">
                                     </div>
 
-                                    <div class="form-group col-sm-4">
+                                    <div class="form-group col-sm-5">
                                         <label for="nome">Nome <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control form-control-border nome" id="nome"
                                             placeholder="Nome">
                                     </div>
 
-                                    <div class="form-group col-sm-3">
+                                    <div class="form-group col-sm-4">
                                         <label for="apelido">Apelido</label>
                                         <input type="text" class="form-control form-control-border apelido" id="apelido"
                                             placeholder="apelido">
-                                    </div>
-
-                                    <div class="form-group col-sm-3">
-                                        <label for="genero">Genero <span class="text-danger">*</span></label>
-                                        <select class="custom-select form-control-border genero" id="genero">
-                                            <option value="0">----</option>
-                                            <option value="1">Fêmea</option>
-                                            <option value="2">Macho</option>
-                                        </select>
                                     </div>
 
                                 </div>
 
                                 {{-- Raça / Grau de Sangue / Origem --}}
                                 <div class="row">
-
-                                    <div class="form-group col-sm-3">
-                                        <label for="lstraca">Raça <span class="text-danger">*</span></label>
-                                        <select name="raca_idraca" class="custom-select form-control-border raca_idraca"
-                                            id="raca_idraca">
-                                            <option value="0">----</option>
-                                            @foreach ($lstraca as $raca)
-                                                <option value="{{ $raca->idraca }}">{{ $raca->nome }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group col-sm-4">
-                                        <label for="grau_sangue_idgrau_sangue">Grau de Sangue <span
-                                                class="text-danger">*</span></label>
-                                        <select name="grau_sangue_idgrau_sangue" id="grau_sangue_idgrau_sangue"
-                                            class="custom-select form-control-border grau_sangue_idgrau_sangue">
-                                            <option value="0">----</option>
-                                            @foreach ($lstgrausangue as $grausangue)
-                                                <option value="{{ $grausangue->idgrau_sangue }}">{{ $grausangue->grau }}
-                                                    -
-                                                    {{ $grausangue->descricao }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
 
                                     <div class="form-group col-sm-3">
                                         <label for="origem_idorigem">Origem <span class="text-danger">*</span></label>
@@ -153,10 +119,25 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-group col-sm-2">
+                                    <div class="form-group col-sm-3">
+                                        <label for="dias_vida">Dias de Vida <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-border dias_vida" id="dias_vida"
+                                            placeholder="Dias">
+                                    </div>
+
+                                    <div class="form-group col-sm-3">
                                         <label for="peso_entrada">Peso (Kg) <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control form-control-border peso_entrada"
                                             id="peso_entrada" placeholder="Peso">
+                                    </div>
+
+                                    <div class="form-group col-sm-3">
+                                        <label for="genero">Genero <span class="text-danger">*</span></label>
+                                        <select class="custom-select form-control-border genero" id="genero">
+                                            <option value="0">----</option>
+                                            <option value="1">Fêmea</option>
+                                            <option value="2">Macho</option>
+                                        </select>
                                     </div>
 
                                 </div>
@@ -182,56 +163,105 @@
                                             placeholder="RGN">
                                     </div>
 
-                                    <div class="form-group col-sm-3">
-                                        <label for="dias_vida">Dias de Vida <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control form-control-border dias_vida" id="dias_vida"
-                                            placeholder="Dias">
-                                    </div>
+
 
                                 </div>
 
-                                {{-- Observação / Foto --}}
+                                {{-- Data de Nascimento / Data Nascimento Real? / Data de Chegada / Raça / Grau de Sangue / Observação --}}
                                 <div class="row">
 
-                                    <div class="form-group col-sm-4">
+                                    {{-- Data de Nascimento / Data Nascimento Real? / Data de Chegada --}}
+                                    <div class="form-group col-sm-5">
 
                                         <div class="attachment-block clearfix">
 
-                                            <div class="form-group col-sm-12" id="data_nascimento">
-                                                <label for="data_nascimento">Data de Nascimento <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control data_nascimento">
+                                            <div class="row">
+
+                                                <div class="form-group col-md-8" id="data_nascimento">
+                                                    <label for="data_nascimento">Data de Nascimento <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control data_nascimento">
+                                                </div>
+
+                                                <div class="form-group col-md-4" id="data_real">
+
+                                                    <label for="data_nascimento_real">Data Real? <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="checkbox" checked data-toggle="toggle" data-onstyle="warning"
+                                                        data-on="Sim" data-off="Não">
+                                                </div>
+
                                             </div>
 
-                                            <div class="form-group col-sm-12" id="data_entrada">
-                                                <label for="data_entrada">Data de Chegada <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control data_entrada">
+                                            <div class="row">
+
+                                                <div class="form-group col-sm-12" id="data_entrada">
+                                                    <label for="data_entrada">Data de Chegada <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control data_entrada">
+                                                </div>
+
                                             </div>
 
                                             {{-- <h3 class="profile-username text-center">Escolha o Avatar</h3>
 
-                                        <form method="POST" enctype="multipart/form-data" id="laravel-ajax-file-upload"
-                                            action="javascript:void(0)">
+                                            <form method="POST" enctype="multipart/form-data" id="laravel-ajax-file-upload"
+                                                action="javascript:void(0)">
 
-                                            <div class="input-group">
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input foto" id="foto">
-                                                    <label class="custom-file-label" for="foto">Foto...</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input foto" id="foto">
+                                                        <label class="custom-file-label" for="foto">Foto...</label>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text gravar" id="gravar">Gravar</span>
+                                                    </div>
                                                 </div>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text gravar" id="gravar">Gravar</span>
-                                                </div>
-                                            </div>
-                                        </form> --}}
+                                            </form> --}}
 
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-sm-8">
-                                        <label for="observacao">Observação</label>
-                                        <textarea class="form-control form-control-border observacao" rows="5"
-                                            placeholder="Digite ..."></textarea>
+                                    {{-- Raça / Grau de Sangue / Observação --}}
+                                    <div class="form-group col-sm-7">
+
+                                        <div class="row">
+
+                                            <div class="form-group col-md-4">
+                                                <label for="lstraca">Raça <span class="text-danger">*</span></label>
+                                                <select name="raca_idraca"
+                                                    class="custom-select form-control-border raca_idraca" id="raca_idraca">
+                                                    <option value="0">----</option>
+                                                    @foreach ($lstraca as $raca)
+                                                        <option value="{{ $raca->idraca }}">{{ $raca->nome }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group col-md-8">
+                                                <label for="grau_sangue_idgrau_sangue">Grau de Sangue <span
+                                                        class="text-danger">*</span></label>
+                                                <select name="grau_sangue_idgrau_sangue" id="grau_sangue_idgrau_sangue"
+                                                    class="custom-select form-control-border grau_sangue_idgrau_sangue">
+                                                    <option value="0">----</option>
+                                                    <option value="99">GEN - Genérico</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+
+                                                <label for="observacao">Observação</label>
+                                                <textarea class="form-control form-control-border observacao" rows="2"
+                                                    placeholder="Digite ..."></textarea>
+
+                                            </div>
+
+                                        </div>
+
                                     </div>
 
                                 </div>
@@ -245,7 +275,7 @@
                                 <div class="row d-flex flex-row-reverse bd-highlight">
 
                                     <div class="">
-                                        <button type="button" class="btn btn-primary btn-block btn-sm salvar">
+                                        <button type="button" class="btn btn-warning btn-block btn-sm salvar">
                                             <i class="fas fa-cloud-upload-alt"></i> Salvar
                                         </button>
                                     </div>
@@ -269,12 +299,14 @@
 @section('css')
     <link rel="stylesheet" href="css\bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="css\iframe.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 @stop
 
 @section('js')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js\bootstrap-datepicker.min.js"></script>
     <script src="js\bootstrap-datepicker.pt-BR.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
     {{-- Datepickers --}}
     <script>
@@ -297,6 +329,7 @@
 
     {{-- Info: Carrgamento da página --}}
     <script>
+        //--> Load da tela
         $(document).ready(function() {
 
             //-- Inserir um novo animal
@@ -404,7 +437,48 @@
 
             });
 
+            //-- Carregar Grau de Sangue
+            $(document).on('click', '.raca_idraca', function(e) {
+                e.preventDefault();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                var data = {
+                    'raca_idraca': $('.raca_idraca').val(),
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/getGrauSangue",
+                    data: data,
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.objeto.length == 0) {
+                            var empty = '<option value="0">----</option>';
+                            empty += '<option value="99">GEN - Genérico</option>';
+                            $("#grau_sangue_idgrau_sangue").html(empty);
+                        } else {
+                            var sel = '<option value="0">----</option>';
+                            var i = 0;
+                            while (i < response.objeto.length) {
+                                sel += '<option value="' + response.objeto[i].idgrau_sangue +
+                                    '">' +
+                                    response.objeto[i].descricao +
+                                    '</option>';
+                                i++;
+                            }
+                            $("#grau_sangue_idgrau_sangue").html(sel);
+                        }
+                    }
+                });
+
+            });
+
         });
+        //--> .end load
     </script>
 
 @stop

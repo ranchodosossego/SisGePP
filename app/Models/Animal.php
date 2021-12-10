@@ -6,26 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idanimal
- * @property int    $lote_idlote
- * @property int    $raca_idraca
- * @property int    $propriedade_idpropriedade
- * @property int    $peso_entrada
- * @property int    $origem_idorigem
  * @property int    $grau_sangue_idgrau_sangue
- * @property int    $dias_vida
- * @property int    $data_nascimento_estimado
+ * @property int    $lote_idlote
+ * @property int    $origem_idorigem
+ * @property int    $propriedade_idpropriedade
  * @property int    $ativo
- * @property string $rgn
- * @property string $rgd
- * @property string $observacao
- * @property string $numero_sisbov
+ * @property int    $peso_entrada
+ * @property int    $data_nascimento_estimado
+ * @property int    $dias_vida
  * @property string $numero_brinco
- * @property string $nome
- * @property string $apelido
- * @property string $genero
+ * @property string $observacao
  * @property string $foto
- * @property string $data_nascimento
+ * @property string $numero_sisbov
+ * @property string $rgd
+ * @property string $apelido
  * @property string $data_entrada
+ * @property string $data_nascimento
+ * @property string $genero
+ * @property string $nome
+ * @property string $rgn
  */
 class Animal extends Model
 {
@@ -49,7 +48,7 @@ class Animal extends Model
      * @var array
      */
     protected $fillable = [
-        'lote_idlote', 'rgn', 'rgd', 'raca_idraca', 'propriedade_idpropriedade', 'peso_entrada', 'origem_idorigem', 'observacao', 'numero_sisbov', 'numero_brinco', 'nome', 'apelido', 'grau_sangue_idgrau_sangue', 'genero', 'foto', 'dias_vida', 'data_nascimento_estimado', 'data_nascimento', 'data_entrada', 'ativo'
+        'numero_brinco', 'grau_sangue_idgrau_sangue', 'lote_idlote', 'origem_idorigem', 'propriedade_idpropriedade', 'ativo', 'observacao', 'foto', 'numero_sisbov', 'rgd', 'apelido', 'peso_entrada', 'data_entrada', 'data_nascimento_estimado', 'data_nascimento', 'dias_vida', 'genero', 'nome', 'rgn'
     ];
 
     /**
@@ -67,7 +66,7 @@ class Animal extends Model
      * @var array
      */
     protected $casts = [
-        'idanimal' => 'int', 'lote_idlote' => 'int', 'rgn' => 'string', 'rgd' => 'string', 'raca_idraca' => 'int', 'propriedade_idpropriedade' => 'int', 'peso_entrada' => 'int', 'origem_idorigem' => 'int', 'observacao' => 'string', 'numero_sisbov' => 'string', 'numero_brinco' => 'string', 'nome' => 'string', 'apelido' => 'string', 'grau_sangue_idgrau_sangue' => 'int', 'genero' => 'string', 'foto' => 'string', 'dias_vida' => 'int', 'data_nascimento_estimado' => 'int', 'data_nascimento' => 'string', 'data_entrada' => 'string', 'ativo' => 'int'
+        'idanimal' => 'int', 'numero_brinco' => 'string', 'grau_sangue_idgrau_sangue' => 'int', 'lote_idlote' => 'int', 'origem_idorigem' => 'int', 'propriedade_idpropriedade' => 'int', 'ativo' => 'int', 'observacao' => 'string', 'foto' => 'string', 'numero_sisbov' => 'string', 'rgd' => 'string', 'apelido' => 'string', 'peso_entrada' => 'int', 'data_entrada' => 'string', 'data_nascimento_estimado' => 'int', 'data_nascimento' => 'string', 'dias_vida' => 'int', 'genero' => 'string', 'nome' => 'string', 'rgn' => 'string'
     ];
 
     /**

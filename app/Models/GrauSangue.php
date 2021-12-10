@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idgrau_sangue
+ * @property int    $raca_idraca
  * @property string $descricao
- * @property string $grau
  */
 class GrauSangue extends Model
 {
@@ -31,7 +31,7 @@ class GrauSangue extends Model
      * @var array
      */
     protected $fillable = [
-        'descricao', 'grau'
+        'descricao', 'raca_idraca'
     ];
 
     /**
@@ -49,7 +49,7 @@ class GrauSangue extends Model
      * @var array
      */
     protected $casts = [
-        'idgrau_sangue' => 'int', 'descricao' => 'string', 'grau' => 'string'
+        'idgrau_sangue' => 'int', 'descricao' => 'string', 'raca_idraca' => 'int'
     ];
 
     /**

@@ -34,10 +34,9 @@ class AnimalController extends Controller
 
     public function index()
     {
-        $lstraca = Raca::get()->sortBy('nome');
+        $lstraca = Raca::where('ativo', '=', '1')->get()->sortBy('nome');
         $lstorigem = Origem::get()->sortByDesc('nome');
-        $lstgrausangue = GrauSangue::get();
-        return view('painel.rebanho.animal', compact('lstraca', 'lstorigem', 'lstgrausangue'));
+        return view('painel.rebanho.animal', compact('lstraca', 'lstorigem'));
     }
 
     public function getLotesAnimal()

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\LoteController;
+use App\Http\Controllers\GrauSangueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,9 @@ Route::get('lote', [App\Http\Controllers\LoteController::class, 'index']);
 // --> Tipo Lote
 Route::post('/getTipoLote', [App\Http\Controllers\TipoLoteController::class, 'getTipoLote'])->name('get.tipo.lote');
 
+// --> Controller: GrauSangueController
+Route::post('/getGrauSangue', [App\Http\Controllers\GrauSangueController::class, 'getGrauSangue'])->name('get.grau.sangue');
+
 
 // --> Controller: AnimalController
 Route::get('animal', [App\Http\Controllers\AnimalController::class, 'index']);
@@ -48,4 +52,5 @@ Route::get('/getAnimal', [App\Http\Controllers\AnimalController::class, 'getAnim
 Route::get('getAnimal', 'App\Http\Controllers\AnimalController@getAnimal');
 Route::post('/updateAnimal', [App\Http\Controllers\AnimalController::class, 'updateAnimal'])->name('update.animal');
 Route::post('/getLotesAnimal', [App\Http\Controllers\AnimalController::class, 'getLotesAnimal'])->name('get.lotes.animal');
+
 
