@@ -5,27 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $iddieta
- * @property int    $enpl_idenpl
- * @property int    $mspl_idmspl
- * @property int    $en_iden
- * @property string $nome
+ * @property int   $iden
+ * @property int   $em_lactacao
+ * @property int   $peso_vivo
+ * @property float $em
+ * @property float $ndt
+ * @property float $p
+ * @property float $pb
+ * @property float $ca
  */
-class Dieta extends Model
+class En extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'dieta';
+    protected $table = 'en';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'iddieta';
+    protected $primaryKey = 'iden';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,7 +36,7 @@ class Dieta extends Model
      * @var array
      */
     protected $fillable = [
-        'enpl_idenpl', 'nome', 'mspl_idmspl', 'en_iden'
+        'em', 'em_lactacao', 'ndt', 'p', 'pb', 'peso_vivo', 'ca'
     ];
 
     /**
@@ -51,7 +54,7 @@ class Dieta extends Model
      * @var array
      */
     protected $casts = [
-        'iddieta' => 'int', 'enpl_idenpl' => 'int', 'nome' => 'string', 'mspl_idmspl' => 'int', 'en_iden' => 'int'
+        'iden' => 'int', 'em' => 'float', 'em_lactacao' => 'int', 'ndt' => 'float', 'p' => 'float', 'pb' => 'float', 'peso_vivo' => 'int', 'ca' => 'float'
     ];
 
     /**

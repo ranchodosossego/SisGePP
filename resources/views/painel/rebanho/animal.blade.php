@@ -28,7 +28,7 @@
 
                 <!-- Coluna 1: Help -->
                 <div class="col-md-4">
-                    <div class="callout callout-warning card-outline direct-chat direct-chat-primary">
+                    <div class="callout callout-success card-outline direct-chat direct-chat-primary">
                         <h5><i class="far fa-question-circle"></i> Cadastro de Novos Animais</h5>
 
                         <p>Esses espaço é dedicada ao cadastro de novos animais. São informados dados básicos, como:</p>
@@ -40,14 +40,14 @@
                                     <small>Animal nascido, comprado ou adquirido de outra forma. Ex.: animal
                                         doado.</small>
                                 </div>
-                                <span class="badge bg-primary rounded-pill">1</span>
+                                <span class="badge bg-success rounded-pill">1</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-start">
                                 <div class="ms-2 me-auto">
                                     <div class="fw-bold">Grau de Sangue</div>
                                     <small>Grau de sangue da raça predominante ou Puro.</small>
                                 </div>
-                                <span class="badge bg-primary rounded-pill">2</span>
+                                <span class="badge bg-success rounded-pill">2</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-start">
                                 <div class="ms-2 me-auto">
@@ -55,11 +55,11 @@
                                     <small>É data em que o animal chegou a propriedade. Se nascido, informe a data do
                                         nascimento.</small>
                                 </div>
-                                <span class="badge bg-primary rounded-pill">3</span>
+                                <span class="badge bg-success rounded-pill">3</span>
                             </li>
                         </ol>
                     </div>
-                    <div class="callout callout-warning card-outline direct-chat direct-chat-primary">
+                    <div class="callout callout-success card-outline direct-chat direct-chat-primary">
                         <h5>Campos Obrigatórios</h5>
                         <i class="fas fa-asterisk text-danger  fa-xs"></i>
                         <small class="fw-light">Todos os campos com asterisco são de preenchimento obrigatório.
@@ -74,7 +74,7 @@
                     <form action="" id="cform">
 
                         <!-- Card: Dados do Animal -->
-                        <div class="card card-warning card-outline">
+                        <div class="card card-success card-outline">
                             <div class="card-header">
                                 <h3 class="card-title">Dados do Animal</h3>
                             </div>
@@ -183,12 +183,12 @@
                                                     <input type="text" class="form-control data_nascimento">
                                                 </div>
 
-                                                <div class="form-group col-md-4" id="data_real">
+                                                <div class="form-group col-md-4 ">
 
-                                                    <label for="data_nascimento_real">Data Real? <span
+                                                    <label for="data_nescimento_estimado">Data Real? <span
                                                             class="text-danger">*</span></label>
-                                                    <input type="checkbox" checked data-toggle="toggle" data-onstyle="warning"
-                                                        data-on="Sim" data-off="Não">
+                                                    <input id="data_nescimento_estimado" type="checkbox" checked data-toggle="toggle"
+                                                        data-onstyle="success data_nescimento_estimado" data-on="Sim" data-off="Não">
                                                 </div>
 
                                             </div>
@@ -275,7 +275,7 @@
                                 <div class="row d-flex flex-row-reverse bd-highlight">
 
                                     <div class="">
-                                        <button type="button" class="btn btn-warning btn-block btn-sm salvar">
+                                        <button type="button" class="btn btn-success btn-block btn-sm salvar">
                                             <i class="fas fa-cloud-upload-alt"></i> Salvar
                                         </button>
                                     </div>
@@ -336,12 +336,15 @@
             $(document).on('click', '.salvar', function(e) {
                 e.preventDefault();
 
+                // var a = $('#data_real')[0].checked;
+                // console.log('Aqui: ' + a);
+
                 var data = {
                     'nome': $('.nome').val(),
                     'genero': $('.genero').val(),
                     'dias_vida': $('.dias_vida').val(),
                     'data_nascimento': $('.data_nascimento').val(),
-                    'data_nescimento_estimado': '1',
+                    'data_nescimento_estimado': $('#data_nescimento_estimado')[0].checked,
                     'data_entrada': $('.data_entrada').val(),
                     'peso_entrada': $('.peso_entrada').val(),
                     'numero_brinco': $('.numero_brinco').val(),

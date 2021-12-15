@@ -5,27 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $iddieta
- * @property int    $enpl_idenpl
- * @property int    $mspl_idmspl
- * @property int    $en_iden
- * @property string $nome
+ * @property int $iddieta_alimento
+ * @property int $alimento_idalimento
+ * @property int $criado_em
+ * @property int $dieta_iddieta
  */
-class Dieta extends Model
+class DietaAlimento extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'dieta';
+    protected $table = 'dieta_alimento';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'iddieta';
+    protected $primaryKey = 'iddieta_alimento';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,7 +32,7 @@ class Dieta extends Model
      * @var array
      */
     protected $fillable = [
-        'enpl_idenpl', 'nome', 'mspl_idmspl', 'en_iden'
+        'alimento_idalimento', 'criado_em', 'dieta_iddieta', 'quantidade'
     ];
 
     /**
@@ -51,7 +50,7 @@ class Dieta extends Model
      * @var array
      */
     protected $casts = [
-        'iddieta' => 'int', 'enpl_idenpl' => 'int', 'nome' => 'string', 'mspl_idmspl' => 'int', 'en_iden' => 'int'
+        'iddieta_alimento' => 'int', 'alimento_idalimento' => 'int', 'criado_em' => 'timestamp', 'dieta_iddieta' => 'int'
     ];
 
     /**
@@ -60,7 +59,7 @@ class Dieta extends Model
      * @var array
      */
     protected $dates = [
-        
+        'criado_em'
     ];
 
     /**

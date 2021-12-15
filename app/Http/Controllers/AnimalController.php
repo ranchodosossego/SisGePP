@@ -47,11 +47,11 @@ class AnimalController extends Controller
             ->where('animal.ativo', '=', '1')
             ->get();
 
-            return response()->json([
-                'status' => 200,
-                'message' => 'Alteração de lote realizado com sucesso!',
-                'objeto' => $lstanimal,
-            ]);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Alteração de lote realizado com sucesso!',
+            'objeto' => $lstanimal,
+        ]);
     }
 
     /**
@@ -151,6 +151,7 @@ class AnimalController extends Controller
             'dias_vida' => 'required|integer|min:1|max:10000',
             'data_entrada' => 'required',
             'data_nascimento' => 'required',
+            'data_nescimento_estimado' => 'required',
             'peso_entrada' => 'required|integer|min:1|max:1000',
 
             // Foreign Keys
@@ -197,11 +198,12 @@ class AnimalController extends Controller
             $animal->rgn = $request->input('rgn');
             $animal->data_entrada = $request->input('data_entrada');
             $animal->data_nascimento = $request->input('data_nascimento');
+            $animal->data_nascimento_estimado = ($request->input('data_nescimento_estimado')=='true' ? 1 : 0);
+
             $animal->ativo = 1;
 
             // Foreign Keys
             $animal->propriedade_idpropriedade = $propid;
-            $animal->raca_idraca = $request->input('raca_idraca');
             $animal->grau_sangue_idgrau_sangue = $request->input('grau_sangue_idgrau_sangue');
             $animal->origem_idorigem = $request->input('origem_idorigem');
             $animal->lote_idlote = 1;

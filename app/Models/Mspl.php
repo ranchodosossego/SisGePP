@@ -5,27 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $iddieta
- * @property int    $enpl_idenpl
- * @property int    $mspl_idmspl
- * @property int    $en_iden
- * @property string $nome
+ * @property int   $idmspl
+ * @property float $percentual_peso_vivo
+ * @property float $peso_vivo
+ * @property float $producao_leite
  */
-class Dieta extends Model
+class Mspl extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'dieta';
+    protected $table = 'mspl';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'iddieta';
+    protected $primaryKey = 'idmspl';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,7 +32,7 @@ class Dieta extends Model
      * @var array
      */
     protected $fillable = [
-        'enpl_idenpl', 'nome', 'mspl_idmspl', 'en_iden'
+        'percentual_peso_vivo', 'peso_vivo', 'producao_leite'
     ];
 
     /**
@@ -51,7 +50,7 @@ class Dieta extends Model
      * @var array
      */
     protected $casts = [
-        'iddieta' => 'int', 'enpl_idenpl' => 'int', 'nome' => 'string', 'mspl_idmspl' => 'int', 'en_iden' => 'int'
+        'idmspl' => 'int', 'percentual_peso_vivo' => 'float', 'peso_vivo' => 'float', 'producao_leite' => 'float'
     ];
 
     /**

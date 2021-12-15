@@ -205,7 +205,7 @@
                 pageLength: 5,
                 aLengthMenu: [
                     [5, 10, 25, 50, -1],
-                    [5, 10, 25, 50, 'Todos']
+                    [5, 10, 25, 50, 'All']
                 ],
                 "language": {
                     "url": "js/pt-br.json"
