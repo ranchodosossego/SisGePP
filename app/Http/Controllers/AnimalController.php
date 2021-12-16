@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
 use App\Models\Raca;
 use App\Models\Animal;
 use App\Models\Origem;
 use App\Models\Lote;
 use App\Models\TipoLote;
-
-
 use App\Models\Usuario;
 use App\Models\GrauSangue;
 use App\Models\Propriedade;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\ClassificacaoEtaria;
-use Illuminate\Support\Facades\Validator;
 use MigrationsGenerator\Generators\MigrationConstants\Method\Foreign;
 use Yajra\DataTables\DataTables;
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\LoteController;
 use App\Http\Controllers\GrauSangueController;
-
+use App\Http\Controllers\DietaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,6 +39,7 @@ Route::get('lote', [App\Http\Controllers\LoteController::class, 'index']);
 
 // --> Tipo Lote
 Route::post('/getTipoLote', [App\Http\Controllers\TipoLoteController::class, 'getTipoLote'])->name('get.tipo.lote');
+Route::get('/obtemTipoLote', [App\Http\Controllers\TipoLoteController::class, 'obtemTipoLote'])->name('obtem.tipo.lote');
 
 // --> Controller: GrauSangueController
 Route::post('/getGrauSangue', [App\Http\Controllers\GrauSangueController::class, 'getGrauSangue'])->name('get.grau.sangue');
@@ -53,4 +54,7 @@ Route::get('getAnimal', 'App\Http\Controllers\AnimalController@getAnimal');
 Route::post('/updateAnimal', [App\Http\Controllers\AnimalController::class, 'updateAnimal'])->name('update.animal');
 Route::post('/getLotesAnimal', [App\Http\Controllers\AnimalController::class, 'getLotesAnimal'])->name('get.lotes.animal');
 
+// --> Dieta
+Route::get('dieta', [App\Http\Controllers\DietaController::class, 'index']);
+//Route::post('dieta', [App\Http\Controllers\DietaController::class, 'index'])->name('painel.rebanho.dieta');
 

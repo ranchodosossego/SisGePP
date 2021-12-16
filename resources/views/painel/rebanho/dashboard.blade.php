@@ -104,7 +104,8 @@
 
                         <div class="col-12 col-sm-6 col-md-3">
                             <div class="info-box shadow-lg mb-3">
-                                <span class="info-box-icon bg-teal elevation-1"><i class="fas fa-prescription-bottle-alt"></i></span>
+                                <span class="info-box-icon bg-teal elevation-1"><i
+                                        class="fas fa-prescription-bottle-alt"></i></span>
 
                                 <div class="info-box-content">
                                     <span class="info-box-text">Aguardando Cobertura</span>
@@ -208,6 +209,7 @@
 
                         </div>
                     </div>
+
                 </div>
 
             </div>
@@ -225,11 +227,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
 
     <script>
-        var total = <?php echo $total; ?>;
-        var totalemtriagem = <?php echo $totalemtriagem; ?>;
-        var totalemlactacao = <?php echo $totalemlactacao; ?>;
-        var totalenfermas = <?php echo $totalenfermas; ?>;
-        var totalcobertura = <?php echo $totalcobertura; ?>;
+        var total = '<?php echo $total; ?>';
+        var totalemtriagem = '<?php echo $totalemtriagem; ?>';
+        var totalemlactacao = '<?php echo $totalemlactacao; ?>';
+        var totalenfermas = '<?php echo $totalenfermas; ?>';
+        var totalcobertura = '<?php echo $totalcobertura; ?>';
 
         //-------------
         //- DONUT CHART -

@@ -82,7 +82,7 @@
 
                             <div class="card-body">
 
-                                {{-- Brinco / Nome / Apelido / Genero --}}
+                                {{-- Brinco / Nome / Apelido  --}}
                                 <div class="row">
 
                                     <div class="form-group col-sm-3">
@@ -105,7 +105,7 @@
 
                                 </div>
 
-                                {{-- Raça / Grau de Sangue / Origem --}}
+                                {{-- Origem / Dias de Vida / Peso / Genero --}}
                                 <div class="row">
 
                                     <div class="form-group col-sm-3">
@@ -142,7 +142,7 @@
 
                                 </div>
 
-                                {{-- Sisbov / RGD / RGN / Dias de Vida / Data de Chegada --}}
+                                {{-- Sisbov / RGD / RGN --}}
                                 <div class="row">
 
                                     <div class="form-group col-sm-3">
@@ -163,11 +163,9 @@
                                             placeholder="RGN">
                                     </div>
 
-
-
                                 </div>
 
-                                {{-- Data de Nascimento / Data Nascimento Real? / Data de Chegada / Raça / Grau de Sangue / Observação --}}
+                                {{-- Data de Nascimento / Data Real? / Data de Chegada --}}
                                 <div class="row">
 
                                     {{-- Data de Nascimento / Data Nascimento Real? / Data de Chegada --}}
@@ -222,7 +220,7 @@
                                         </div>
                                     </div>
 
-                                    {{-- Raça / Grau de Sangue / Observação --}}
+                                    {{-- Raça / Grau de Sangue --}}
                                     <div class="form-group col-sm-7">
 
                                         <div class="row">
@@ -251,6 +249,7 @@
 
                                         </div>
 
+                                        {{-- Observação --}}
                                         <div class="row">
                                             <div class="form-group col-md-12">
 

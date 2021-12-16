@@ -284,7 +284,7 @@ return [
                 [
                     'text' => 'Dieta',
                     'shift'   => 'ml-3',
-                    'url'  => '#',
+                    'url'  => 'dieta',
                     'icon'    => 'fab fa-nutritionix p-1',
                 ],
                 [
@@ -561,7 +561,7 @@ return [
 
     'iframe' => [
         'default_tab' => [
-            'url' => 'animal',
+            'url' => 'dieta',
             'title' => null,
         ],
         'buttons' => [
