@@ -135,8 +135,6 @@
         }
 
     </style>
-
-
 @stop
 
 @section('js')

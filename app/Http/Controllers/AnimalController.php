@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 use App\Models\Raca;
 use App\Models\Animal;
@@ -125,9 +126,20 @@ class AnimalController extends Controller
             ->get();
 
         return DataTables::of($lstanimal)
+            ->addColumn('numero_brinco', function ($lstanimal) {
+                return Str::padLeft((string)$lstanimal->numero_brinco, 5, '0');
+            })
             ->addColumn('action', function ($lstanimal) {
                 return '<button onclick="msgs(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-success btn-sm col-8 me-0">' . $lstanimal->nome . '</button>';
             })
+            ->addColumn('actions', function ($lstanimal) {
+                $butoes = '<div class="btn-group btn-group-sm">' .
+                '<a href="#" onclick="deletar(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-danger" data-tooltip="Remover a ' . $lstanimal->nome . '"><i class="fas fa-trash"></i></a>' .
+                '<a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-warning open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome .'"><i class="fas fa-share-square"></i></a>' .
+                '</div>';
+                return $butoes;
+            })
+            ->rawColumns(['action', 'actions'])
             ->make(true);
     }
 
@@ -197,7 +209,7 @@ class AnimalController extends Controller
             $animal->rgn = $request->input('rgn');
             $animal->data_entrada = $request->input('data_entrada');
             $animal->data_nascimento = $request->input('data_nascimento');
-            $animal->data_nascimento_estimado = ($request->input('data_nescimento_estimado')=='true' ? 1 : 0);
+            $animal->data_nascimento_estimado = ($request->input('data_nescimento_estimado') == 'true' ? 1 : 0);
 
             $animal->ativo = 1;
 

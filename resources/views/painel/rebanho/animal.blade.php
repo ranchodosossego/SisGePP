@@ -201,22 +201,6 @@
 
                                             </div>
 
-                                            {{-- <h3 class="profile-username text-center">Escolha o Avatar</h3>
-
-                                            <form method="POST" enctype="multipart/form-data" id="laravel-ajax-file-upload"
-                                                action="javascript:void(0)">
-
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input foto" id="foto">
-                                                        <label class="custom-file-label" for="foto">Foto...</label>
-                                                    </div>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text gravar" id="gravar">Gravar</span>
-                                                    </div>
-                                                </div>
-                                            </form> --}}
-
                                         </div>
                                     </div>
 
@@ -285,6 +269,7 @@
 
                         </div>
                         <!-- /.card -->
+
                     </form>
                 </div>
             </div>

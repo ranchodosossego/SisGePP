@@ -276,7 +276,7 @@ return [
                 ],
             ],
         ],
-        //-- Dieta <i class=""></i>
+        //-- Dieta
         [
             'text'    => 'Alimentação',
             'icon'    => 'fas fa-utensils p-1',
@@ -561,7 +561,7 @@ return [
 
     'iframe' => [
         'default_tab' => [
-            'url' => 'dieta',
+            'url' => 'rebanho',
             'title' => null,
         ],
         'buttons' => [
