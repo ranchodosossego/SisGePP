@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Painel\Rebanho;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\TipoLote;
 use Illuminate\Http\Request;

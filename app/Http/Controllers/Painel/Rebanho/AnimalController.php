@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Painel\Rebanho;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -95,25 +96,29 @@ class AnimalController extends Controller
         }
     }
 
-    public function getAnimal(Request $request)
+    public function obtemAnimal($id)
     {
-        $message = $request->get('idanimal');
-
         $animal = DB::table('animal')
             ->join('lote', 'animal.lote_idlote', '=', 'lote.idlote')
             ->join('tipo_lote', 'tipo_lote.idtipo_lote', '=', 'lote.tipo_lote_idtipo_lote')
             ->where('animal.ativo', '=', '1')
-            ->where('animal.idanimal', '=', $message)
+            ->where('animal.idanimal', '=', $id)
             ->select([
                 'animal.idanimal', 'animal.numero_brinco', 'animal.nome', 'animal.dias_vida', 'animal.apelido',
                 'tipo_lote.nome  as tnome', 'animal.observacao', 'animal.peso_entrada', 'animal.data_nascimento',
                 'animal.apelido', 'animal.foto', 'tipo_lote.idtipo_lote'
             ])
             ->get();
+        return $animal;
+    }
+
+    public function getAnimal(Request $request)
+    {
+        $id = $request->get('idanimal');
+        $animal = $this->obtemAnimal($id);
         return response()->json([
             'data' => $animal,
         ]);
-        //return ($animal);
     }
 
     public function getAnimalList()
@@ -134,9 +139,9 @@ class AnimalController extends Controller
             })
             ->addColumn('actions', function ($lstanimal) {
                 $butoes = '<div class="btn-group btn-group-sm">' .
-                '<a href="#" onclick="deletar(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-danger" data-tooltip="Remover a ' . $lstanimal->nome . '"><i class="fas fa-trash"></i></a>' .
-                '<a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-warning open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome .'"><i class="fas fa-share-square"></i></a>' .
-                '</div>';
+                    '<a href="#" onclick="deletar(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-danger" data-tooltip="Remover a ' . $lstanimal->nome . '"><i class="fas fa-trash"></i></a>' .
+                    '<a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-warning open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome . '"><i class="fas fa-share-square"></i></a>' .
+                    '</div>';
                 return $butoes;
             })
             ->rawColumns(['action', 'actions'])

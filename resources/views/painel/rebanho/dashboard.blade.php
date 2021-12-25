@@ -236,36 +236,43 @@
 
                                 <div class="col-md-12">
 
-
                                     <div class="card card-success card-outline">
 
                                         <div class="card-header">
-                                            <h3 class="card-title">Dados do Animal</h3>
+                                            <h3 class="card-title">Ficha do Animal</h3>
                                         </div>
 
                                         <div class="card-body">
                                             <div class="row">
 
                                                 {{-- Image --}}
-
                                                 <div class="form-group col-sm-3">
                                                     <div class="form-group col-sm-12">
 
-                                                        <form action="" method="POST" enctype="multipart/form-data" id="upload-avatar">
-                                                            <div class="attachment-block clearfix">
+                                                        <form action="{{ route('painel.configuracao.store') }}"
+                                                            method="POST" enctype="multipart/form-data" id="upload-avatar">
+                                                            @csrf
+                                                            <div class="attachment-block clearfix btn-upload">
                                                                 <img src="" class="img-thumbnail img-responsive"
                                                                     id="avatar">
-                                                                <label for="numero_brinco">Brinco</label>
+                                                                <input type="file" name="avatar" id=""
+                                                                    class="" accept="image/*">
+                                                                @error('file')
+                                                                    <small class="text-danger">{{ $message }}</small>
+                                                                @enderror
+                                                                <button type="submit">Subir Imagem</button>
+                                                                <input type="hidden" id="animalid" name="animalid" value="">
+                                                                <input type="hidden" id="nome" name="nome" value="">
                                                             </div>
                                                         </form>
 
                                                     </div>
                                                 </div>
 
-
                                                 <div class="form-group col-sm-8">
 
                                                     <div class="row">
+
                                                         <div class="form-group col-sm-2">
                                                             <label for="numero_brinco">Brinco</label>
                                                             <input type="text"
@@ -279,7 +286,6 @@
                                                                 class="form-control form-control-border apelido"
                                                                 id="apelido" value="" />
                                                         </div>
-
 
                                                         <div class="form-group col-sm-3">
                                                             <label for="numero_sisbov">Sisbov</label>
@@ -327,8 +333,8 @@
                     </div>
 
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary">Salvar as Alterações</button>
                     </div>
 
                 </div>
@@ -339,12 +345,14 @@
         <!-- /.modal -->
     </section>
 
-
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.semanticui.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.semanticui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css"
+        integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css\util.css">
     <style>
         .align-left {
@@ -360,9 +368,11 @@
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.semanticui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
+    {{-- : Criação do Gráfico de Fases do Animal --}}
     <script>
-        // Criação do Gráfico de Fases do Animal
+        //--: INFO: 1. Criação do Gráfico de Fases do Animal
         var total = '<?php echo $total; ?>';
         var totalemtriagem = '<?php echo $totalemtriagem; ?>';
         var totalemlactacao = '<?php echo $totalemlactacao; ?>';
@@ -426,7 +436,7 @@
 
         // .end Criação do Gráfico
 
-        // Carregamento do Grid de Animais
+        //--: INFO: 2. Carregamento do Grid de Animais
         //--> Inclusão do Token CSRF
         $.ajaxSetup({
             headers: {
@@ -510,6 +520,8 @@
             }();
 
             // --> Preenche o modal para atualização do animal
+            document.getElementById('animalid').value = animal.idanimal;
+            document.getElementById('nome').value = animal.nome;
             document.getElementById('avatar').src = '/' + (animal.foto ?? 'assets/img/no-foto.jpg');
             document.getElementById('numero_brinco').value = (animal.numero_brinco ?? '---');
             document.getElementById('apelido').value = (animal.apelido ?? '---');
@@ -517,223 +529,13 @@
             document.getElementById('rgd').value = (animal.rgd ?? '---');
             document.getElementById('rgn').value = (animal.rgn ?? '---');
             document.getElementById('observacao').value = (animal.observacao ?? '---');
+            console.log('animal: ' + animal);
 
 
 
         });
         //--> .end modal atualização
 
-        var atualizar = function(idanimal) {
-
-            var data = {
-                idanimal: idanimal,
-            };
-            //-- .end
-
-            //--> Obtem o animal pelo ID
-            var animal = function() {
-                var tmp = null;
-                $.ajax({
-                    type: "GET",
-                    url: "/getAnimal",
-                    data: data,
-                    dataType: "json",
-                    async: false,
-                    success: function(response) {
-                        tmp = response.data[0];
-                    }
-                });
-
-                return tmp;
-            }();
-
-            //-- .end
-
-            //--> Carrega a modal de associação - HTML
-            $.ajax({
-                type: "POST",
-                url: "/getTipoLote",
-                data: data,
-                dataType: "json",
-                success: function(response) {
-
-                    //--> Parametrização
-                    var options = {};
-                    $.map(response.data,
-                        function(o) {
-                            options[o.idtipo_lote] = o.nome;
-                        });
-
-                    //--> Corpo da modal de associação class=""
-                    var html =
-                        '<div class="container-fluid align-left">' +
-                        '<div class="row">' +
-                        '<div class="col-md-12">' +
-                        '<form method="POST" enctype="multipart/form-data" id="laravel-ajax-file-upload" action="javascript:void(0)">' +
-                        '<div class="card card-success card-outline">' +
-                        '<div class="card-header">' +
-                        '<h3 class="card-title">Dados do Animal</h3>' +
-                        '</div>' +
-                        '<div class="card-body">' +
-
-                        '<div class="row">' +
-
-                        '<div class="form-group col-sm-4">' +
-                        '<img src=\"' + (animal.foto ?? 'assets/img/no-foto.jpg') +
-                        '\" alt="user-avatar" class="img-thumbnail img-responsive">' +
-                        '</div>' +
-
-
-                        '<div class="form-group col-sm-2">' +
-                        '<label for="numero_brinco">Brinco</label>' +
-                        '<input type="text" class="form-control form-control-border numero_brinco" id="numero_brinco" value="' +
-                        animal.numero_brinco + '" />' +
-                        '</div>' +
-                        '<div class="form-group col-sm-6">' +
-                        '<label for="apelido">Apelido</label>' +
-                        '<input type="text" class="form-control form-control-border apelido" id="apelido" value="' +
-                        (animal.apelido ?? '---') + '" />' +
-                        '</div>' +
-
-                        '</div>' +
-
-                        '<div class="row">' +
-                        '<div class="form-group col-sm-4">' +
-                        '<label for="numero_sisbov">Sisbov</label>' +
-                        '<input type="text" class="form-control form-control-border numero_sisbov" id="numero_sisbov" value="' +
-                        (animal.numero_sisbov ?? '---') + '" />' +
-                        '</div>' +
-                        '<div class="form-group col-sm-4">' +
-                        '<label for="rgd">RGD</label>' +
-                        '<input type="text" class="form-control form-control-border rgd" id="rgd" value="' +
-                        (animal.rgd ?? '---') + '" />' +
-                        '</div>' +
-                        '<div class="form-group col-sm-4">' +
-                        '<label for="rgn">RGN</label>' +
-                        '<input type="text" class="form-control form-control-border rgn" id="rgn" value="' +
-                        (animal.rgn ?? '---') + '" />' +
-                        '</div>' +
-                        '</div>' +
-
-                        '<div class="row">' +
-                        '<div class="form-group col-md-12">' +
-                        '<label for="observacao">Observação</label>' +
-                        '<textarea class="form-control form-control-border observacao" rows="2">' + (animal
-                            .observacao ?? '---') + '</textarea>' +
-                        '</div>' +
-                        '</div>' +
-
-                        // ---------------------
-                        '<div class="row">' +
-                        // '<div class="input-group mb-3">' +
-                        // '<input type="file" class="form-control" id="inputGroupFile02">' +
-                        // //'<label class="input-group-text" for="inputGroupFile02">Upload</label>' +
-                        // '</div>' +
-                        '<div class="input-group col-md-12  mb-3">' +
-                        '<input type="file" class="form-control" id="formFileSm">' +
-                        '<label for="formFileSm" class="input-group-text">Small file input example</label>' +
-                        '</div>' +
-
-                        '</div>' +
-                        // -------------
-
-
-                        '</div>' +
-                        '</form>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>';
-                    //--> .end parametrização
-
-
-
-
-                    // Modal de Atualização
-                    const swalWithBootstrapButtons = Swal.mixin({
-                        customClass: {
-                            confirmButton: 'btn btn-success',
-                            cancelButton: 'btn btn-danger'
-                        },
-                        buttonsStyling: false
-                    });
-
-                    swalWithBootstrapButtons.fire({
-                        html: html,
-                        background: '#212121',
-                        width: '50%',
-                        imageWidth: 400,
-                        imageHeight: 200,
-                        imageAlt: 'Vaca Seca',
-                        showCancelButton: true,
-                        confirmButtonText: '<i class="fas fa-share-square"></i> Atualizar!',
-                        cancelButtonText: '<i class="fas fa-ban"></i> Cancelar',
-                        reverseButtons: true,
-                        customClass: {
-                            confirmButton: 'btn btn-success m-2 btn-sm',
-                            cancelButton: 'btn btn-danger btn-sm',
-                        }
-                    }).then((result) => {
-
-                        if (result.isConfirmed && result.value != '') {
-
-                            var dataupdate = {
-                                idanimal: animal.idanimal,
-                                idtipo_lote: result.value,
-                            }
-
-                            //--> Atualiza o lote do animal
-                            $.ajax({
-                                type: "POST",
-                                url: "/updateAnimal",
-                                data: dataupdate,
-                                dataType: "json",
-                                success: function(response) {
-
-                                    //-- Salvo com sucesso
-                                    if (response.status == 200) {
-                                        Swal.fire({
-                                            position: 'center',
-                                            icon: 'success',
-                                            //title: 'Salvo com sucesso!',
-                                            showConfirmButton: false,
-                                            text: response.message,
-                                            timer: 1800
-                                        });
-                                    }
-                                    tmp = response;
-                                }
-                            });
-
-                            //--> Atualiza as quantidades para cada lote
-                            lstLotes();
-
-                            //--> Atualiza o grid
-                            $('#lstanimallote').DataTable().ajax.reload(null, false);
-
-                        } else if (result.isConfirmed && result.value == '') {
-                            swalWithBootstrapButtons.fire(
-                                'Atenção',
-                                'Selecione um lote!)',
-                                'warning'
-                            )
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            /* Read more about handling dismissals below */
-                            // swalWithBootstrapButtons.fire(
-                            //     'Cancelled',
-                            //     'Your imaginary file is safe :)',
-                            //     'error'
-                            // )
-                        }
-                    });
-                    //-- end
-
-                }
-            });
-            //--> .end
-
-        };
-        //--> .end msgs
-
-        // .end Carregamento do Grid
     </script>
+
 @stop
