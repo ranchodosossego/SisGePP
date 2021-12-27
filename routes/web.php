@@ -51,12 +51,15 @@ Route::post('/getGrauSangue', [App\Http\Controllers\Painel\Rebanho\GrauSangueCon
 // --: Controller: AnimalController
 Route::get('animal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'index']);
 Route::post('animal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'create']);
+
+
+
 Route::get('/getAnimalList', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'getAnimalList'])->name('get.animal.list');
 Route::get('/getAnimal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'getAnimal'])->name('get.animal');
 Route::get('getAnimal', 'App\Http\Controllers\Painel\Rebanho\AnimalController@getAnimal');
-Route::post('/updateAnimal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'updateAnimal'])->name('update.animal');
+Route::post('/updateLoteAnimal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'updateLoteAnimal'])->name('update.lote.animal');
 Route::post('/getLotesAnimal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'getLotesAnimal'])->name('get.lotes.animal');
-
+Route::post('update', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'update'])->name('update.animal');
 // --: Dieta
 Route::get('dieta', [App\Http\Controllers\Painel\Rebanho\DietaController::class, 'index']);
 //Route::post('dieta', [App\Http\Controllers\DietaController::class, 'index'])->name('painel.rebanho.dieta');

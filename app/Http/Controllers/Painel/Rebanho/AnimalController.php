@@ -19,6 +19,8 @@ use App\Models\Propriedade;
 use App\Models\ClassificacaoEtaria;
 use MigrationsGenerator\Generators\MigrationConstants\Method\Foreign;
 use Yajra\DataTables\DataTables;
+use Image;
+
 
 
 class AnimalController extends Controller
@@ -61,7 +63,7 @@ class AnimalController extends Controller
      * @param Request $request
      * @return Mensagem com status
      */
-    public function updateAnimal(Request $request)
+    public function updateLoteAnimal(Request $request)
     {
         $idanimal = $request->get('idanimal');
         $idtipo_lote = $request->get('idtipo_lote');
@@ -237,6 +239,45 @@ class AnimalController extends Controller
                 ]);
             }
         }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $request->validate([
+            'image' => 'mimes:png,jpg,jpeg|max:2048',
+            'animalid' => 'required',
+            'nome' => 'required',
+        ]);
+        $animal = new Animal;
+
+        $image = $request->file('image');
+        $imgnome = 'RSGL-' . $request->animalid . '-' . $request->nome . '.' . $image->extension();
+        $filePath = public_path('assets/img/animal/thumbs');
+        $img = Image::make($image->path());
+
+        //$resize_image->save(public_path('images').$path,100);
+        $img->resize(200,200, function ($const){
+            $const->aspectRatio();
+        })->save($filePath. '/' .$imgnome);
+
+        // $filePath = public_path('assets/img/animal/thumbs');
+        // $img->move($filePath, $imgnome);
+        $save_path = 'assets/img/animal/thumbs/' . $imgnome;
+
+        //
+        DB::table('animal')
+            ->where('idanimal', $request->animalid)
+            ->update(['foto' => $save_path]);
+
+
+        return redirect('/rebanho');
     }
 
     /**

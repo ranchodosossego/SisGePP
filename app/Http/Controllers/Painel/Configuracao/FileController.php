@@ -41,8 +41,8 @@ class FileController extends Controller
 
         $request->validate([
             'file' => 'required|mimes:jpg,jpeg|max:2048',
-            'animalid' => 'required',
-            'nome' => 'required',
+            // 'animalid' => 'required',
+            // 'nome' => 'required',
         ]);
 
         $imgnome = 'RSGL-' . $request->animalid . '-' . $request->nome . '.' . $request->file->extension();

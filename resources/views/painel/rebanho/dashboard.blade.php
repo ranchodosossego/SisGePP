@@ -226,119 +226,105 @@
     {{-- Modal: Atualizar --}}
     <section>
         <div class="modal fade" id="modal-atualizar">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog">
+
                 <div class="modal-content">
+                    <form action="{{ route('update.animal') }}" method="POST" enctype="multipart/form-data"
+                        id="formavatar">
+                        @csrf
+                        <div class="modal-body">
 
-                    <div class="modal-body">
+                            <div class="container-fluid align-left">
+                                <div class="row">
 
-                        <div class="container-fluid align-left">
-                            <div class="row">
+                                    <div class="col-md-12">
 
-                                <div class="col-md-12">
+                                        <div class="card card-success card-outline">
 
-                                    <div class="card card-success card-outline">
-
-                                        <div class="card-header">
-                                            <h3 class="card-title">Ficha do Animal</h3>
-                                        </div>
-
-                                        <div class="card-body">
-                                            <div class="row">
-
-                                                {{-- Image --}}
-                                                <div class="form-group col-sm-3">
-                                                    <div class="form-group col-sm-12">
-
-                                                        <form action="{{ route('painel.configuracao.store') }}"
-                                                            method="POST" enctype="multipart/form-data" id="upload-avatar">
-                                                            @csrf
-                                                            <div class="attachment-block clearfix btn-upload">
-                                                                <img src="" class="img-thumbnail img-responsive"
-                                                                    id="avatar">
-                                                                <input type="file" name="avatar" id=""
-                                                                    class="" accept="image/*">
-                                                                @error('file')
-                                                                    <small class="text-danger">{{ $message }}</small>
-                                                                @enderror
-                                                                <button type="submit">Subir Imagem</button>
-                                                                <input type="hidden" id="animalid" name="animalid" value="">
-                                                                <input type="hidden" id="nome" name="nome" value="">
-                                                            </div>
-                                                        </form>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group col-sm-8">
-
-                                                    <div class="row">
-
-                                                        <div class="form-group col-sm-2">
-                                                            <label for="numero_brinco">Brinco</label>
-                                                            <input type="text"
-                                                                class="form-control form-control-border numero_brinco"
-                                                                id="numero_brinco" value="" />
-                                                        </div>
-
-                                                        <div class="form-group col-sm-4">
-                                                            <label for="apelido">Apelido</label>
-                                                            <input type="text"
-                                                                class="form-control form-control-border apelido"
-                                                                id="apelido" value="" />
-                                                        </div>
-
-                                                        <div class="form-group col-sm-3">
-                                                            <label for="numero_sisbov">Sisbov</label>
-                                                            <input type="text"
-                                                                class="form-control form-control-border numero_sisbov"
-                                                                id="numero_sisbov" value="" />
-                                                        </div>
-
-                                                        <div class="form-group col-sm-3">
-                                                            <label for="rgd">RGD</label>
-                                                            <input type="text" class="form-control form-control-border rgd"
-                                                                id="rgd" value="" />
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="row">
-
-                                                        <div class="form-group col-sm-3">
-                                                            <label for="rgn">RGN</label>
-                                                            <input type="text" class="form-control form-control-border rgn"
-                                                                id="rgn" value="" />
-                                                        </div>
-
-                                                        <div class="form-group col-md-9">
-                                                            <label for="observacao">Observação</label>
-                                                            <textarea class="form-control form-control-border observacao"
-                                                                rows="2" value="" id="observacao"></textarea>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
+                                            <div class="card-header">
+                                                <h3 class="card-title">Atualizar a Foto do Animal</h3>
                                             </div>
+
+                                            <div class="card-body">
+                                                <div class="row">
+
+                                                    {{-- Image Antiga --}}
+                                                    <div class="form-group col-sm-5">
+                                                        <div class="row attachment-block clearfix ">
+                                                            <div class="form-group col-sm-12">
+                                                                <img src="" class="img-thumbnail img-responsive img-fluid"
+                                                                    id="avatar-atual">
+                                                            </div>
+                                                            <div class="form-group col-sm-12">
+                                                                <p class="lead text-muted text-center mt-1">
+                                                                    <i class="fas fa-check"></i><small> Imagem
+                                                                        atual</small>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-sm-2 mt-5">
+                                                        <div class="row text-center">
+                                                            <div class="form-group col-sm-12">
+                                                                <i class="fas fa-arrow-left fa-3x"></i>
+                                                                {{-- <i class="fas fa-exchange-alt fa-3x"></i> --}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- Image Nova --}}
+                                                    <div class="form-group col-sm-5">
+                                                        <div class="form-group col-sm-12">
+
+                                                            <div class="attachment-block clearfix btn-upload"
+                                                                id="img-upload">
+                                                                <div class="form-group col-sm-12">
+                                                                    <input type="file" name="image" id="image"
+                                                                        accept="image/*" class="pointer">
+                                                                    <img src=""
+                                                                        class="img-thumbnail img-responsive img-fluid"
+                                                                        id="avatar-novo">
+                                                                </div>
+                                                                <div class="form-group col-sm-12">
+                                                                    <p class="lead text-muted text-center mt-1">
+                                                                        <i class="fas fa-cloud-upload-alt"></i><small>
+                                                                            Clique na imagem</small>
+                                                                    </p>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                     </div>
 
                                 </div>
-
                             </div>
+
                         </div>
 
-                    </div>
+                        <div class="modal-footer justify-content-between">
 
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary">Salvar as Alterações</button>
-                    </div>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            {{-- <button type="button" class="btn btn-primary salvar">Salvar as Alterações</button> --}}
+                            <button type="submit" class="btn btn-primary enviar">Enviar</button>
 
+                        </div>
+                        <input type="hidden" id="animalid" name="animalid" value="">
+                        <input type="hidden" id="nome" name="nome" value="">
+
+                    </form>
                 </div>
                 <!-- /.modal-content -->
+
             </div>
             <!-- /.modal-dialog -->
         </div>
@@ -350,13 +336,15 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.semanticui.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css"
-        integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" href="css\util.css">
     <style>
         .align-left {
             text-align: left;
+        }
+
+        .pointer {
+            cursor: pointer;
         }
 
     </style>
@@ -368,7 +356,6 @@
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.semanticui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
     {{-- : Criação do Gráfico de Fases do Animal --}}
     <script>
@@ -495,6 +482,7 @@
 
         //--> Modal: Carregamento da modal de Atualização
         $(document).on("click", ".open-modal", function() {
+
             var ids = $(this).attr('data-id');
 
             var data = {
@@ -522,20 +510,64 @@
             // --> Preenche o modal para atualização do animal
             document.getElementById('animalid').value = animal.idanimal;
             document.getElementById('nome').value = animal.nome;
-            document.getElementById('avatar').src = '/' + (animal.foto ?? 'assets/img/no-foto.jpg');
-            document.getElementById('numero_brinco').value = (animal.numero_brinco ?? '---');
-            document.getElementById('apelido').value = (animal.apelido ?? '---');
-            document.getElementById('numero_sisbov').value = (animal.numero_sisbov ?? '---');
-            document.getElementById('rgd').value = (animal.rgd ?? '---');
-            document.getElementById('rgn').value = (animal.rgn ?? '---');
-            document.getElementById('observacao').value = (animal.observacao ?? '---');
-            console.log('animal: ' + animal);
 
+            document.getElementById('avatar-atual').src = '/' + (animal.foto ?? 'assets/img/no-foto.jpg');
+            document.getElementById('avatar-novo').src = '/assets/img/update-foto.jpg';
 
+            // document.getElementById('numero_brinco').value = (animal.numero_brinco ?? '---');
+            // document.getElementById('apelido').value = (animal.apelido ?? '---');
+            // document.getElementById('numero_sisbov').value = (animal.numero_sisbov ?? '---');
+            // document.getElementById('rgd').value = (animal.rgd ?? '---');
+            // document.getElementById('rgn').value = (animal.rgn ?? '---');
+            // document.getElementById('observacao').value = (animal.observacao ?? '---');
 
         });
         //--> .end modal atualização
 
+        //--> Pré-visualização de imagem no navegador
+        $('#image').on('change', function() {
+            var file = this.files[0];
+            var reader = new FileReader();
+            var imgatual = document.getElementById('avatar-atual');
+            var imgnovo = document.getElementById('avatar-novo');
+
+            if (file && file.type.match('image.*')) {
+                reader.readAsDataURL(file);
+            } else {
+                // img.css('display', 'none');
+                // img.attr('src', '');
+                // qualquer coisa
+            }
+
+            reader.onloadend = function(e) {
+                imgnovo.src = event.target.result;
+                imgatual.classList.add("img-avatar-upload");
+            }
+
+        });
+
+
+        //--> Modal: Carregamento da modal de Atualização
+        $('#formavatar').on("submit", function(e) {
+            e.preventDefault();
+            var form = this;
+
+
+            $.ajax({
+                url: $(form).attr('action'),
+                method: $(form).attr('method'),
+                data: new FormData(form),
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                beforeSend: function() {
+                    console.log('beforeSend');
+                },
+                success: function(response) {
+                    console.log('response: ' + response);
+                }
+            });
+        });
     </script>
 
 @stop

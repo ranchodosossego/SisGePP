@@ -354,7 +354,7 @@
                             //--> Atualiza o lote do animal
                             $.ajax({
                                 type: "POST",
-                                url: "/updateAnimal",
+                                url: "/updateLoteAnimal",
                                 data: dataupdate,
                                 dataType: "json",
                                 success: function(response) {

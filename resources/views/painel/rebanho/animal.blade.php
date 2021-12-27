@@ -320,9 +320,6 @@
             $(document).on('click', '.salvar', function(e) {
                 e.preventDefault();
 
-                // var a = $('#data_real')[0].checked;
-                // console.log('Aqui: ' + a);
-
                 var data = {
                     'nome': $('.nome').val(),
                     'genero': $('.genero').val(),
