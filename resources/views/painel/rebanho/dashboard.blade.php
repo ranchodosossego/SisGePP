@@ -225,7 +225,7 @@
 
     {{-- Modal: Atualizar --}}
     <section>
-        <div class="modal fade" id="modal-atualizar">
+        <div class="modal fade" id="modal-atualizar" data-bs-backdrop="static" data-bs-keyboard="false" >
             <div class="modal-dialog">
 
                 <div class="modal-content">
@@ -550,9 +550,11 @@
         //--> Modal: Carregamento da modal de Atualização
         $('#formavatar').on("submit", function(e) {
             e.preventDefault();
+
+            $('#modal-atualizar').modal('hide');
+            $("[data-dismiss=modal]").trigger({ type: "click" });
+
             var form = this;
-
-
             $.ajax({
                 url: $(form).attr('action'),
                 method: $(form).attr('method'),
@@ -564,7 +566,23 @@
                     console.log('beforeSend');
                 },
                 success: function(response) {
-                    console.log('response: ' + response);
+
+                    //-- Salvo com sucesso
+                    if (response.status == 200) {
+
+
+
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Salvo com sucesso!',
+                            showConfirmButton: false,
+                            text: response.message,
+                            timer: 2000
+                        });
+                        //listar();
+                    }
+
                 }
             });
         });

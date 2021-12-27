@@ -19,7 +19,7 @@ use App\Models\Propriedade;
 use App\Models\ClassificacaoEtaria;
 use MigrationsGenerator\Generators\MigrationConstants\Method\Foreign;
 use Yajra\DataTables\DataTables;
-use Image;
+use Intervention\Image\Facades\Image;
 
 
 
@@ -263,21 +263,35 @@ class AnimalController extends Controller
         $img = Image::make($image->path());
 
         //$resize_image->save(public_path('images').$path,100);
-        $img->resize(200,200, function ($const){
+        $img->resize(200, 200, function ($const) {
             $const->aspectRatio();
-        })->save($filePath. '/' .$imgnome);
+        })->save($filePath . '/' . $imgnome);
 
         // $filePath = public_path('assets/img/animal/thumbs');
         // $img->move($filePath, $imgnome);
         $save_path = 'assets/img/animal/thumbs/' . $imgnome;
 
         //
-        DB::table('animal')
+
+
+        try {
+
+            DB::table('animal')
             ->where('idanimal', $request->animalid)
             ->update(['foto' => $save_path]);
 
+            return response()->json([
+                'status' => 200,
+                'message' => 'Imagem atualizada com sucesso.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 503,
+                'message' => 'Não foi possível atualizar a foto desse animal. Tente novamente.' //$e->getMessage()
+            ]);
+        }
 
-        return redirect('/rebanho');
+        //return redirect('/rebanho');
     }
 
     /**
