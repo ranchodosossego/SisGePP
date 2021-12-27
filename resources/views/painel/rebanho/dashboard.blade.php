@@ -225,7 +225,8 @@
 
     {{-- Modal: Atualizar --}}
     <section>
-        <div class="modal fade" id="modal-atualizar" data-bs-backdrop="static" data-bs-keyboard="false" >
+        <div class="modal fade" id="modal-atualizar" aria-labelledby="exampleModalLabel" aria-hidden="true"
+            data-bs-backdrop="static">
             <div class="modal-dialog">
 
                 <div class="modal-content">
@@ -499,6 +500,7 @@
                     data: data,
                     dataType: "json",
                     async: false,
+                    cache: false,
                     success: function(response) {
                         tmp = response.data[0];
                     }
@@ -514,13 +516,8 @@
             document.getElementById('avatar-atual').src = '/' + (animal.foto ?? 'assets/img/no-foto.jpg');
             document.getElementById('avatar-novo').src = '/assets/img/update-foto.jpg';
 
-            // document.getElementById('numero_brinco').value = (animal.numero_brinco ?? '---');
-            // document.getElementById('apelido').value = (animal.apelido ?? '---');
-            // document.getElementById('numero_sisbov').value = (animal.numero_sisbov ?? '---');
-            // document.getElementById('rgd').value = (animal.rgd ?? '---');
-            // document.getElementById('rgn').value = (animal.rgn ?? '---');
-            // document.getElementById('observacao').value = (animal.observacao ?? '---');
-
+            var imgatual = document.getElementById('avatar-atual');
+            imgatual.classList.remove("img-avatar-upload");
         });
         //--> .end modal atualização
 
@@ -540,7 +537,7 @@
             }
 
             reader.onloadend = function(e) {
-                imgnovo.src = event.target.result;
+                imgnovo.src = e.target.result;
                 imgatual.classList.add("img-avatar-upload");
             }
 
@@ -551,8 +548,10 @@
         $('#formavatar').on("submit", function(e) {
             e.preventDefault();
 
-            $('#modal-atualizar').modal('hide');
-            $("[data-dismiss=modal]").trigger({ type: "click" });
+            //--> Ocultar a modal
+            $("[data-dismiss=modal]").trigger({
+                type: "click"
+            });
 
             var form = this;
             $.ajax({
@@ -562,15 +561,15 @@
                 processData: false,
                 contentType: false,
                 dataType: 'json',
-                beforeSend: function() {
-                    console.log('beforeSend');
-                },
+                beforeSend: function() {},
                 success: function(response) {
 
                     //-- Salvo com sucesso
                     if (response.status == 200) {
 
-
+                        //-- Para recarregar a imagem
+                        d = new Date();
+                        $("#avatar-atual").attr("src", response.url+"?" + d.getTime());
 
                         Swal.fire({
                             position: 'center',
@@ -580,7 +579,7 @@
                             text: response.message,
                             timer: 2000
                         });
-                        //listar();
+                        //setInterval('location.reload()', 3000);
                     }
 
                 }

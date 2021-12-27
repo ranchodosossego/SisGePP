@@ -282,7 +282,8 @@ class AnimalController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Imagem atualizada com sucesso.'
+                'message' => 'Imagem atualizada com sucesso.',
+                'url' => $save_path,
             ]);
         } catch (\Exception $e) {
             return response()->json([
