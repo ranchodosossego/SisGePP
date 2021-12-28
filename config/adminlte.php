@@ -561,7 +561,7 @@ return [
 
     'iframe' => [
         'default_tab' => [
-            'url' => 'rebanho',
+            'url' => 'dieta',
             'title' => null,
         ],
         'buttons' => [

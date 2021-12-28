@@ -579,7 +579,6 @@
                             text: response.message,
                             timer: 2000
                         });
-                        //setInterval('location.reload()', 3000);
                     }
 
                 }

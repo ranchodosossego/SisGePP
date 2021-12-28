@@ -142,7 +142,7 @@ class AnimalController extends Controller
             ->addColumn('actions', function ($lstanimal) {
                 $butoes = '<div class="btn-group btn-group-sm">' .
                     '<a href="#" onclick="deletar(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-danger" data-tooltip="Remover a ' . $lstanimal->nome . '"><i class="fas fa-trash"></i></a>' .
-                    '<a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-warning open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome . '"><i class="fas fa-share-square"></i></a>' .
+                    '<a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-secondary open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome . '"><i class="fas fa-camera"></i>' .
                     '</div>';
                 return $butoes;
             })
