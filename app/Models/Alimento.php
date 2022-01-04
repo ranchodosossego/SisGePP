@@ -6,20 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idalimento
- * @property int    $classe_alimento_idclasse_alimento
  * @property int    $subclasse_idsubclasse
+ * @property int    $classe_alimento_idclasse_alimento
+ * @property int    $ativo
+ * @property float  $fdn
  * @property float  $pndr
  * @property float  $pdr
  * @property float  $pb
  * @property float  $p
  * @property float  $ndt
+ * @property float  $ms
  * @property float  $mm
  * @property float  $lig
- * @property float  $fdn
  * @property float  $em
  * @property float  $ee
  * @property float  $ca
- * @property float  $ms
  * @property string $nome
  */
 class Alimento extends Model
@@ -44,7 +45,7 @@ class Alimento extends Model
      * @var array
      */
     protected $fillable = [
-        'classe_alimento_idclasse_alimento', 'subclasse_idsubclasse', 'pndr', 'pdr', 'pb', 'p', 'nome', 'ndt', 'mm', 'lig', 'fdn', 'em', 'ee', 'ca', 'ms'
+        'fdn', 'subclasse_idsubclasse', 'pndr', 'pdr', 'pb', 'p', 'nome', 'ndt', 'ms', 'mm', 'lig', 'em', 'ee', 'classe_alimento_idclasse_alimento', 'ca', 'ativo'
     ];
 
     /**
@@ -62,7 +63,7 @@ class Alimento extends Model
      * @var array
      */
     protected $casts = [
-        'idalimento' => 'int', 'classe_alimento_idclasse_alimento' => 'int', 'subclasse_idsubclasse' => 'int', 'pndr' => 'float', 'pdr' => 'float', 'pb' => 'float', 'p' => 'float', 'nome' => 'string', 'ndt' => 'float', 'mm' => 'float', 'lig' => 'float', 'fdn' => 'float', 'em' => 'float', 'ee' => 'float', 'ca' => 'float', 'ms' => 'float'
+        'idalimento' => 'int', 'fdn' => 'float', 'subclasse_idsubclasse' => 'int', 'pndr' => 'float', 'pdr' => 'float', 'pb' => 'float', 'p' => 'float', 'nome' => 'string', 'ndt' => 'float', 'ms' => 'float', 'mm' => 'float', 'lig' => 'float', 'em' => 'float', 'ee' => 'float', 'classe_alimento_idclasse_alimento' => 'int', 'ca' => 'float', 'ativo' => 'int'
     ];
 
     /**

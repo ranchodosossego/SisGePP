@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int   $idmspl
- * @property float $percentual_peso_vivo
- * @property float $peso_vivo
  * @property float $producao_leite
+ * @property float $peso_vivo
+ * @property float $percentual_peso_vivo
  */
 class Mspl extends Model
 {
@@ -32,7 +32,7 @@ class Mspl extends Model
      * @var array
      */
     protected $fillable = [
-        'percentual_peso_vivo', 'peso_vivo', 'producao_leite'
+        'producao_leite', 'peso_vivo', 'percentual_peso_vivo'
     ];
 
     /**
@@ -50,7 +50,7 @@ class Mspl extends Model
      * @var array
      */
     protected $casts = [
-        'idmspl' => 'int', 'percentual_peso_vivo' => 'float', 'peso_vivo' => 'float', 'producao_leite' => 'float'
+        'idmspl' => 'int', 'producao_leite' => 'float', 'peso_vivo' => 'float', 'percentual_peso_vivo' => 'float'
     ];
 
     /**

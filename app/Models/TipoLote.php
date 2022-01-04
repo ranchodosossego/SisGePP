@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idtipo_lote
- * @property int    $em_lactacao
  * @property string $nome
  */
 class TipoLote extends Model
@@ -31,7 +30,7 @@ class TipoLote extends Model
      * @var array
      */
     protected $fillable = [
-        'em_lactacao', 'nome'
+        'nome'
     ];
 
     /**
@@ -49,7 +48,7 @@ class TipoLote extends Model
      * @var array
      */
     protected $casts = [
-        'idtipo_lote' => 'int', 'em_lactacao' => 'int', 'nome' => 'string'
+        'idtipo_lote' => 'int', 'nome' => 'string'
     ];
 
     /**

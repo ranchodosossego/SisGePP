@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $idlote
- * @property int    $criado_em
- * @property int    $dieta_iddieta
  * @property int    $quantidade_limite
  * @property int    $tempo_limite
+ * @property int    $criado_em
+ * @property int    $em_lactacao
  * @property int    $tipo_lote_idtipo_lote
+ * @property int    $dieta_iddieta
  * @property string $codigo
  * @property string $observacao
  */
@@ -36,7 +37,7 @@ class Lote extends Model
      * @var array
      */
     protected $fillable = [
-        'codigo', 'criado_em', 'dieta_iddieta', 'observacao', 'quantidade_limite', 'tempo_limite', 'tipo_lote_idtipo_lote'
+        'codigo', 'quantidade_limite', 'tempo_limite', 'criado_em', 'em_lactacao', 'observacao', 'tipo_lote_idtipo_lote', 'dieta_iddieta'
     ];
 
     /**
@@ -54,7 +55,7 @@ class Lote extends Model
      * @var array
      */
     protected $casts = [
-        'idlote' => 'int', 'codigo' => 'string', 'criado_em' => 'timestamp', 'dieta_iddieta' => 'int', 'observacao' => 'string', 'quantidade_limite' => 'int', 'tempo_limite' => 'int', 'tipo_lote_idtipo_lote' => 'int'
+        'idlote' => 'int', 'codigo' => 'string', 'quantidade_limite' => 'int', 'tempo_limite' => 'int', 'criado_em' => 'timestamp', 'em_lactacao' => 'int', 'observacao' => 'string', 'tipo_lote_idtipo_lote' => 'int', 'dieta_iddieta' => 'int'
     ];
 
     /**
