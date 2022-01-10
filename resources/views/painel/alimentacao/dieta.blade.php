@@ -123,9 +123,8 @@
                                 <div class="form-group col-sm-4">
                                     <label for="volumoso">1 - Volumoso (Matéria Seca)<span
                                             class="text-danger">*</span></label>
-                                    <select name="volumoso" id="volumoso" class="volumoso selectpicker" multiple
-                                        data-selected-text-format="count" data-style="btn-dark">
-                                        {{-- <option value="0">----</option> --}}
+                                    <select name="volumoso" id="volumoso" class="volumoso selectpicker"
+                                        data-selected-text-format="count" data-style="btn-dark" title="Nada Selecionado">
                                         @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '1') as $volumoso)
                                             <option value="{{ $volumoso->idalimento }}">{{ $volumoso->nome }}</option>
                                         @endforeach
@@ -133,24 +132,24 @@
                                 </div>
 
                                 <div class="form-group col-sm-4">
-                                    <label for="concentrado">2 - Concentrado ()<span class="text-danger">*</span></label>
-                                    <select name="concentrado" id="concentrado" class="concentrado selectpicker" multiple
-                                        data-selected-text-format="count" data-style="btn-dark">
-                                        {{-- <option value="0">----</option> --}}
-                                        @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '2') as $concentrado)
-                                            <option value="{{ $concentrado->idalimento }}">{{ $concentrado->nome }}
+                                    <label for="concentrado_energetico">2 - Concentrado (Energético)<span
+                                            class="text-danger">*</span></label>
+                                    <select name="concentrado_energetico" id="concentrado_energetico" class="concentrado_energetico selectpicker" multiple
+                                        data-selected-text-format="count" data-style="btn-dark" title="Nada Selecionado">
+                                        @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '2')->where('subclasse_idsubclasse', '=', '1') as $concentrado_energetico)
+                                            <option value="{{ $concentrado_energetico->idalimento }}">{{ $concentrado_energetico->nome }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-group col-sm-4">
-                                    <label for="suplemento">3 - Suplemento ()<span class="text-danger">*</span></label>
-                                    <select name="suplemento" id="suplemento" class="suplemento selectpicker" multiple
+                                    <label for="concentrado_proteico">2 - Concentrado (Proteíco)<span
+                                            class="text-danger">*</span></label>
+                                    <select name="concentrado_proteico" id="concentrado_proteico" class="concentrado_proteico selectpicker" multiple
                                         data-selected-text-format="count" data-style="btn-dark">
-                                        {{-- <option value="0">----</option> --}}
-                                        @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '3') as $suplemento)
-                                            <option value="{{ $suplemento->idalimento }}">{{ $concentrado->nome }}
+                                        @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '2')->where('subclasse_idsubclasse', '=', '2') as $concentrado_proteico)
+                                            <option value="{{ $concentrado_proteico->idalimento }}">{{ $concentrado_proteico->nome }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -226,12 +225,13 @@
 
 
             var volumoso_ids = listar($('#volumoso option:selected'));
-            var concentrado_ids = listar($('#concentrado option:selected'));
-
+            var concentrado_energetico_ids = listar($('#concentrado_energetico option:selected'));
+            var concentrado_proteico_ids = listar($('#concentrado_proteico option:selected'));
 
             var data = {
                 'volumoso_ids': volumoso_ids,
-                'concentrado_ids': concentrado_ids,
+                'concentrado_energetico_ids': concentrado_energetico_ids,
+                'concentrado_proteico_ids': concentrado_proteico_ids,
                 'peso_vivo': $('.peso_vivo').val(),
                 'prodleitedia': $('.prodleitedia').val(),
                 'perc_gordura': $('.perc_gordura').val(),
