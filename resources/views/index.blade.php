@@ -598,13 +598,13 @@
                 <div class="row counters">
 
                     <div class="col-lg-4 col-6 text-center">
-                        <span data-purecounter-start="0" data-purecounter-end="2000000" data-purecounter-duration="1"
+                        <span data-purecounter-start="0" data-purecounter-end="2" data-purecounter-duration="1"
                             class="purecounter"></span>
                         <p>Milhões de Registros</p>
                     </div>
 
                     <div class="col-lg-4 col-6 text-center">
-                        <span data-purecounter-start="1" data-purecounter-end="1100000" data-purecounter-duration="1"
+                        <span data-purecounter-start="1" data-purecounter-end="1.1" data-purecounter-duration="1"
                             class="purecounter"></span>
                         <p>Milhão de Propriedades em 2017</p>
                     </div>
