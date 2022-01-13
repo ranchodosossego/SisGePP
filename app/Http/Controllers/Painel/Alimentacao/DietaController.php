@@ -39,7 +39,7 @@ class DietaController extends Controller
     public function getDieta(Request $request)
     {
 
-        #region Validação
+        #region Validação e Inicialização de Variáveis
         $validator = Validator::make($request->all(), [
             'volumoso_ids' => ['required'],
             'concentrado_energetico_ids' => ['required'],
@@ -57,72 +57,56 @@ class DietaController extends Controller
         }
 
         $dados = $this->get_param($request);
+        $dados_volumoso = [];
+        $dados_concentrado = [];
+        $en_minima = [];
+        $en_producao_leite = [];
+        $en = [];
+
+        $nut_volumosos = [];
+        $nut_concentrado_energetico = [];
+        $nut_concentrado_proteico = [];
+        $mistura_algebrico = [];
 
         #endregion
 
         #region Exigência Nutricional para Mantença e Produção
 
         //--: Nutrientes necessários para a MANUTENÇÃO DA VIDA
-        $arrnutrientes = $this->nutrientes_manutencao($dados[0]['em_lactacao'], $dados[0]['peso_vivo']);
+        $en_minima = $this->nutrientes_manutencao($dados[0]['em_lactacao'], $dados[0]['peso_vivo']);
 
         //--: Nutrientes necessários para a PRODUÇÃO DESEJADA DE LEITE
-        $arrnut_prod_leite = ($dados[0]['prodleitedia'] > 0) ? $this->nutrientes_producaoleite($dados[0]['perc_gordura'], $dados[0]['prodleitedia']) : null;
+        $en_producao_leite = ($dados[0]['prodleitedia'] > 0) ? $this->nutrientes_producaoleite($dados[0]['perc_gordura'], $dados[0]['prodleitedia']) : null;
 
         //--: EXIGÊNCIA NUTRICIONAL MANUTENÇAO + PRODUÇÃO DE LEITE
-        $en = $this->exigencia_nutricional_final($arrnutrientes, $arrnut_prod_leite, $dados);
+        $en = $this->exigencia_nutricional_final($en_minima, $en_producao_leite, $dados);
 
         #endregion
 
-        #region Dados Nutricionais dos Ingredientes que serão usados: Volumoso e Concentrado
+        #region Dados Nutricionais dos Ingredientes que serão usados: Premix, Volumoso e Concentrado
 
         $nut_volumosos = $this->get_nutriente_alimento($dados[0]['volumoso_ids'], 1);
         $nut_concentrado_energetico = $this->get_nutriente_alimento($dados[0]['concentrado_energetico_ids'], 2);
         $nut_concentrado_proteico = $this->get_nutriente_alimento($dados[0]['concentrado_proteico_ids'], 2);
 
-        #endregion
-
-        #region Totais de NDT E PB usados no VOLUMOSO E CONCENTRADO
-
-        //--: % de NDT e PB em relação a MS que o ANIMAL necessita por dia
-        $tot_ndt_animal_perc = round((($en[0]['ndt'] / $en[0]['ms_dia']) * 100), 2);
-        $tot_pb_animal_perc = round((($en[0]['pb'] / $en[0]['ms_dia']) * 100), 2);
-
-        if (is_null($arrnut_prod_leite)) {
-            $dados_volumoso = $this->get_volumoso($en, 0, $nut_volumosos);
-        }
-
-        if (!is_null($arrnut_prod_leite)) {
-            $dados_concentrado =$this->get_concentrado($dados);
-            $dados_volumoso = $this->get_volumoso($en, 0, $nut_volumosos);
-        }
-
-
-
-        //--: OS CONCENTRADOS TEM 88% DE MATÉRIA SECA (Kg)
-        //--: TOTAL DE CONCENTRADO A SER OFERTADO (3Kg Concentrado => 1Kg de leite produzido)
-        //*** SUPLEMENTO tem que ser descontado na matéria seca do concentrado
-        // $tot_concentrado = (is_null($arrnut_prod_leite)) ? 0  : round($dados[0]['prodleitedia'] / 3, 3);
-        // $tot_ms_concentrado_kg = round(88 * $tot_concentrado / 100, 3);
-        //$tot_ms_volumoso_kg = round($en[0]['ms_dia'] - $tot_ms_concentrado_kg, 3);
-
-        //--: CALCULAR Kg DE NDT e PB DO VOLUMOSO
-        //$tot_ndt_volumoso_kg = round(($nut_volumosos[0]['ndt'] * $tot_ms_volumoso_kg / 100), 2);
-        //$tot_pb_volumoso_kg = round(($nut_volumosos[0]['pb'] * $tot_ms_volumoso_kg / 100), 3);
-
-        //--: CALCULAR Kg DE NDT e PB DO CONCENTRADO
-        $en_ndt_concentrado_kg = round((abs($dados_volumoso['ndt_volumoso_kg'] - ((float)$en[0]['ndt']))), 2);
-        $en_pb_concentrado_kg = round((abs($dados_volumoso['pb_volumoso_kg'] - ((float)$en[0]['pb']))), 3);
-
         //--: Valor de PREMIX - Precisa ser cadastrado na base
         $premix = 0.367;  //0.367 valor do nucleo para teste
 
-        //--: % Percentual de NDT e PB que o CONCENTRADO deve ter
-        // $en_ndt_concentrado = round(($en_ndt_concentrado_kg / ($tot_ms_concentrado_kg - $premix)) * 100, 2);
-        // $en_pb_concentrado = round(($en_pb_concentrado_kg / ($tot_ms_concentrado_kg - $premix)) * 100, 2);
-        //--------------
+        #endregion
+
+        #region Totais de NDT E PB de VOLUMOSO E CONCENTRADO
+
+        if (is_null($en_producao_leite)) {
+            $dados_volumoso = $this->get_volumoso($en, 0, $nut_volumosos);
+        }
+
+        if (!is_null($en_producao_leite)) {
+            $dados_volumoso = $this->get_volumoso($en, 0, $nut_volumosos);
+            $dados_concentrado = $this->get_concentrado($dados, $dados_volumoso, $en, $premix);
+        }
 
         // $ndts_mistura = $this->get_mistura($nut_concentrado_energetico, $nut_concentrado_proteico, $en_pb_concentrado, $en_ndt_concentrado);
-        // $mistura_algebrico = $this->get_mistura_algebrico($nut_concentrado_energetico, $nut_concentrado_proteico, $en_ndt_concentrado, $en_pb_concentrado);
+        $mistura_algebrico = $this->get_mistura_algebrico($nut_concentrado_energetico, $nut_concentrado_proteico, $dados_concentrado);
 
 
         // $tot_ms_mistura_kg = round(($tot_ms_concentrado_kg * $ndts_mistura['tot_ndt_mistura_perc'] / 100), 3);
@@ -140,6 +124,53 @@ class DietaController extends Controller
         ]);
     }
 
+    private function get_mistura_algebrico($nut_concentrado_energetico, $nut_concentrado_proteico, $dados_concentrado)
+    {
+        $ingrediente1_pb = $nut_concentrado_energetico[0]['pb'];
+        $ingrediente2_pb = $nut_concentrado_proteico[0]['pb'];
+        $perc = round(((($dados_concentrado[0]['ndt_kg'] * 100) - ($ingrediente1_pb * 100)) / ($ingrediente2_pb - $ingrediente1_pb)), 2);
+        //$perc = round(((($en_ndt_concentrado * 100) - ($ingrediente1_pb * 100)) / ($ingrediente2_pb - $ingrediente1_pb)), 2);
+        $mult_value = [];
+        // $mult_value = Arr::add($mult_value, 'tot_ndt_mistura_perc', $ndt_energetico + $ndt_proteico);
+        // $mult_value = Arr::add($mult_value, 'perc_energetico', $perc_energetico);
+        // $mult_value = Arr::add($mult_value, 'perc_proteico', $perc_proteico);
+
+        return $mult_value;
+    }
+
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $dados
+     * @param [type] $dados_volumoso
+     * @param [type] $en
+     * @return void
+     */
+    private function get_concentrado($dados, $dados_volumoso, $en, $premix)
+    {
+        $ms_kg = round(88 * (round($dados[0]['prodleitedia'] / 3, 3)) / 100, 3);
+
+        //--: Kg de NDT e PB que o CONCENTRADO deve ter
+        $ndt_kg = round((abs($dados_volumoso[0]['ndt_kg'] - ((float)$en[0]['ndt_kg']))), 2);
+        $pb_kg = round((abs($dados_volumoso[0]['pb_kg'] - ((float)$en[0]['pb_kg']))), 3);
+
+        //--: %  de NDT e PB que o CONCENTRADO deve ter.
+        $ndt_perc = round(($ndt_kg / ($ms_kg - $premix)) * 100, 2);
+        $pb_perc = round(($pb_kg / ($ms_kg - $premix)) * 100, 2);
+
+        $mult_values = [];
+        $mult_value = [];
+        $mult_value = Arr::add($mult_value, 'ms_kg', $ms_kg);
+        $mult_value = Arr::add($mult_value, 'ndt_kg', $ndt_kg);
+        $mult_value = Arr::add($mult_value, 'ndt_perc', $ndt_perc);
+        $mult_value = Arr::add($mult_value, 'pb_kg', $pb_kg);
+        $mult_value = Arr::add($mult_value, 'pb_perc', $pb_perc);
+
+        $mult_values = Arr::prepend($mult_values, $mult_value);
+        return $mult_values;
+    }
+
     /**
      * Calcula as quantidades, em Kg, de: Matéria Seca, NDT e PB.
      *
@@ -150,7 +181,7 @@ class DietaController extends Controller
      */
     private function get_volumoso($en, $ms_concentrado, $nut_volumosos)
     {
-        $ms_volumoso_kg = round($en[0]['ms_dia'] - $ms_concentrado, 3);
+        $ms_volumoso_kg = round($en[0]['ms_kg_dia'] - $ms_concentrado, 3);
 
         //--: CALCULAR Kg DE NDT e PB DO VOLUMOSO
         $ndt_volumoso_kg = round(($nut_volumosos[0]['ndt'] * $ms_volumoso_kg / 100), 2);
@@ -164,45 +195,6 @@ class DietaController extends Controller
         $mult_values = Arr::prepend($mult_values, $mult_value);
         return $mult_values;
     }
-
-    private function get_concentrado($dados)
-    {
-        $tot_concentrado = round($dados[0]['prodleitedia'] / 3, 3);
-        $ms_concentrado_kg = round(88 * $tot_concentrado / 100, 3);
-
-        // //--: CALCULAR Kg DE NDT e PB DO CONCENTRADO
-        // $en_ndt_concentrado_kg = round((abs($tot_ndt_volumoso_kg - ((float)$en[0]['ndt']))), 2);
-        // $en_pb_concentrado_kg = round((abs($tot_pb_volumoso_kg - ((float)$en[0]['pb']))), 3);
-
-        $mult_values = [];
-        $mult_value = [];
-        $mult_value = Arr::add($mult_value, 'ms_concentrado_kg', $ms_concentrado_kg);
-
-        // $mult_value = Arr::add($mult_value, 'concentrado_energetico_ids', $request->input('concentrado_energetico_ids'));
-        // $mult_value = Arr::add($mult_value, 'concentrado_proteico_ids', $request->input('concentrado_proteico_ids'));
-        // $mult_value = Arr::add($mult_value, 'peso_vivo',  $this->arred_pesovivo($request->input('peso_vivo')));
-        // $mult_value = Arr::add($mult_value, 'perc_gordura', $request->input('perc_gordura'));
-        // $mult_value = Arr::add($mult_value, 'prodleitedia', $request->input('prodleitedia'));
-        // $mult_value = Arr::add($mult_value, 'em_lactacao', (($request->input('prodleitedia') > 0) ? 1 : 0));
-        $mult_values = Arr::prepend($mult_values, $mult_value);
-        return $mult_values;
-    }
-
-
-
-    private function get_mistura_algebrico($ings_energetico, $ings_proteico, $en_ndt_concentrado, $en_pb_concentrado)
-    {
-        $ingrediente1_pb = $ings_energetico[0]['pb'];
-        $ingrediente2_pb = $ings_proteico[0]['pb'];
-        $perc = round(((($en_ndt_concentrado * 100) - ($ingrediente1_pb * 100)) / ($ingrediente2_pb - $ingrediente1_pb)), 2);
-        $mult_value = [];
-        // $mult_value = Arr::add($mult_value, 'tot_ndt_mistura_perc', $ndt_energetico + $ndt_proteico);
-        // $mult_value = Arr::add($mult_value, 'perc_energetico', $perc_energetico);
-        // $mult_value = Arr::add($mult_value, 'perc_proteico', $perc_proteico);
-
-        return $mult_value;
-    }
-
     /**
      * Obtém a Mistura através do Quadrado de Pearson
      *
@@ -284,20 +276,35 @@ class DietaController extends Controller
     {
         $mult_value = [];
         $mult_values = [];
-        $ms_dia = (float)$this->calcular_consumo_ms($dados[0]['peso_vivo'], $dados[0]['prodleitedia']);
+        $ndt_perc = 0;
+        $pb_perc = 0;
+        $ms_kg_dia = (float)$this->calcular_consumo_ms($dados[0]['peso_vivo'], $dados[0]['prodleitedia']);
+
         if (is_null($en_producao_leite)) {
-            $mult_value = Arr::add($mult_value, 'ms_dia', $ms_dia);
-            $mult_value = Arr::add($mult_value, 'ndt', $en_minima[0]['ndt']);
-            $mult_value = Arr::add($mult_value, 'pb', $en_minima[0]['pb']);
-            $mult_value = Arr::add($mult_value, 'ca', $en_minima[0]['ca']);
-            $mult_value = Arr::add($mult_value, 'p', $en_minima[0]['p']);
+            $ndt_perc = round((($en_minima[0]['ndt'] / $ms_kg_dia) * 100), 2);
+            $pb_perc = round((($en_minima[0]['pb'] / $ms_kg_dia) * 100), 2);
+
+            $mult_value = Arr::add($mult_value, 'ms_kg_dia', $ms_kg_dia);
+            $mult_value = Arr::add($mult_value, 'ndt_kg', $en_minima[0]['ndt']);
+            $mult_value = Arr::add($mult_value, 'ndt_perc', $ndt_perc);
+            $mult_value = Arr::add($mult_value, 'pb_kg', $en_minima[0]['pb']);
+            $mult_value = Arr::add($mult_value, 'pb_perc', $pb_perc);
+            $mult_value = Arr::add($mult_value, 'ca_kg', $en_minima[0]['ca']);
+            $mult_value = Arr::add($mult_value, 'p_kg', $en_minima[0]['p']);
             $mult_values = Arr::prepend($mult_values, $mult_value);
-        } else {
-            $mult_value = Arr::add($mult_value, 'ms_dia', $ms_dia);
-            $mult_value = Arr::add($mult_value, 'ndt', $en_minima[0]['ndt'] + $en_producao_leite[0]['ndt']);
-            $mult_value = Arr::add($mult_value, 'pb', $en_minima[0]['pb'] + $en_producao_leite[0]['pb']);
-            $mult_value = Arr::add($mult_value, 'ca', $en_minima[0]['ca'] + $en_producao_leite[0]['ca']);
-            $mult_value = Arr::add($mult_value, 'p', $en_minima[0]['p'] + $en_producao_leite[0]['p']);
+        }
+
+        if (!is_null($en_producao_leite)) {
+            $ndt_perc = round(((($en_minima[0]['ndt'] + $en_producao_leite[0]['ndt']) / $ms_kg_dia) * 100), 2);
+            $pb_perc = round(((($en_minima[0]['pb'] + $en_producao_leite[0]['pb']) / $ms_kg_dia) * 100), 2);
+
+            $mult_value = Arr::add($mult_value, 'ms_kg_dia', $ms_kg_dia);
+            $mult_value = Arr::add($mult_value, 'ndt_kg', $en_minima[0]['ndt'] + $en_producao_leite[0]['ndt']);
+            $mult_value = Arr::add($mult_value, 'ndt_perc', $ndt_perc);
+            $mult_value = Arr::add($mult_value, 'pb_kg', $en_minima[0]['pb'] + $en_producao_leite[0]['pb']);
+            $mult_value = Arr::add($mult_value, 'pb_perc', $pb_perc);
+            $mult_value = Arr::add($mult_value, 'ca_kg', $en_minima[0]['ca'] + $en_producao_leite[0]['ca']);
+            $mult_value = Arr::add($mult_value, 'p_kg', $en_minima[0]['p'] + $en_producao_leite[0]['p']);
             $mult_values = Arr::prepend($mult_values, $mult_value);
         }
         return $mult_values;
