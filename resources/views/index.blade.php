@@ -1052,7 +1052,7 @@
                     <div class="col-lg-4 col-md-6 portfolio-item filter-fermentado">
                         <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
                         <div class="portfolio-info">
-                            <h4>Leite</h4>
+                            <h4>Fermentado</h4>
                             <p>Leite Fermentado</p>
                             <a href="assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery"
                                 class="portfolio-lightbox preview-link" title="Leite Fermentado"><i
