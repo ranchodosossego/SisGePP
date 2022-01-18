@@ -269,7 +269,7 @@ return [
                     'icon'    => 'fas fa-paw p-1',
                 ],
                 [
-                    'text'    => 'Lote',
+                    'text'    => 'Formação de Lote',
                     'shift'   => 'ml-2',
                     'url'     => 'lote',
                     'icon'    => 'fas fa-grip-horizontal p-1',
