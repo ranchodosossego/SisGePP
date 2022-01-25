@@ -43,7 +43,7 @@
                                         aria-orientation="vertical">
                                         <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill"
                                             href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home"
-                                            aria-selected="true"><i class="fas fa-cog"></i> Formulação Básica</a>
+                                            aria-selected="true"><i class="fas fa-cog"></i> Simulador de Dieta</a>
                                         <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill"
                                             href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile"
                                             aria-selected="false"><i class="fas fa-cogs"></i> Formulação Avançada</a>
@@ -76,12 +76,11 @@
                                                                             class="text-danger">*</span></label>
                                                                     <input type="number" min="400" max="800" step="50"
                                                                         placeholder="400-800"
-                                                                        class="form-control peso w-50 peso_vivo" />
+                                                                        class="form-control peso w-75 peso_vivo" />
                                                                 </div>
 
                                                                 <div class="form-group col-sm-3">
-                                                                    <label for="prodleitedia">Produção de leite
-                                                                        desejada?<span
+                                                                    <label for="prodleitedia">Produção de leite<span
                                                                             class="text-danger">*</span></label>
                                                                     {{-- <input type="number" min="0" max="100" class="form-control leitedia w-50" /> --}}
                                                                     <select class="prodleitedia selectpicker w-50"
@@ -99,8 +98,7 @@
                                                                 </div>
 
                                                                 <div class="form-group col-sm-3">
-                                                                    <label for="perc_gordura">Qual o % de gordura
-                                                                        desejado?<span
+                                                                    <label for="perc_gordura">% de Gordura <span
                                                                             class="text-danger">*</span></label>
                                                                     <input type="number" min="3" max="5" step="0.5"
                                                                         placeholder="3-5"
@@ -108,10 +106,9 @@
                                                                 </div>
 
                                                                 <div class="form-group col-sm-3">
-                                                                    <label for="nucleo">Qual o % de núcleo?<span
+                                                                    <label for="nucleo">% de Núcleo?<span
                                                                             class="text-danger">*</span></label>
-                                                                    <input type="number" min="1" max="10"
-                                                                        placeholder="1-10"
+                                                                    <input type="number" min="0" max="10" placeholder="0-10"
                                                                         class="form-control nucleo w-50" />
                                                                 </div>
 
@@ -127,7 +124,7 @@
                                                                             class="text-danger">*</span></label>
                                                                     <select name="volumoso" id="volumoso"
                                                                         class="volumoso selectpicker"
-                                                                        data-selected-text-format="count" data-width="auto"
+                                                                        data-selected-text-format="count"
                                                                         data-max-options="1" data-live-search="true"
                                                                         data-style="btn-dark" title="Nada Selecionado">
                                                                         @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '1') as $volumoso)
@@ -145,8 +142,8 @@
                                                                     <select name="concentrado_energetico"
                                                                         id="concentrado_energetico"
                                                                         class="concentrado_energetico selectpicker" multiple
-                                                                        data-selected-text-format="count" data-width="auto"
-                                                                        data-max-options="3" data-style="btn-dark"
+                                                                        data-selected-text-format="count"
+                                                                        data-max-options="5" data-style="btn-dark"
                                                                         title="Nada Selecionado">
                                                                         @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '2')->where('subclasse_idsubclasse', '=', '1') as $concentrado_energetico)
                                                                             <option
@@ -165,8 +162,8 @@
                                                                     <select name="concentrado_proteico"
                                                                         id="concentrado_proteico"
                                                                         class="concentrado_proteico selectpicker" multiple
-                                                                        data-selected-text-format="count" data-width="auto"
-                                                                        data-max-options="1" data-style="btn-dark">
+                                                                        data-selected-text-format="count"
+                                                                        data-max-options="5" data-style="btn-dark">
                                                                         @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '2')->where('subclasse_idsubclasse', '=', '2') as $concentrado_proteico)
                                                                             <option
                                                                                 value="{{ $concentrado_proteico->idalimento }}">
@@ -212,57 +209,7 @@
                                                         <div class="card-header">
 
                                                             {{-- Totais Gerais --}}
-                                                            <div class="row">
-                                                                <div class="col-sm-3 col-6">
-                                                                    <div class="description-block border-right">
-                                                                        <span class="description-percentage"
-                                                                            id="tot_dieta_perc">
-                                                                            <i class="fas fa-caret-left"></i> %</span>
-                                                                        <h5 class="description-header" id="tot_deita_mn_kg">
-                                                                            Kg</h5>
-                                                                        <span class="description-text">TOTAL DA
-                                                                            MISTURA</span>
-                                                                    </div>
-                                                                    <!-- /.description-block -->
-                                                                </div>
-                                                                <div class="col-sm-3 col-6">
-                                                                    <div class="description-block border-right">
-                                                                        <span class="description-percentage"
-                                                                            id="tot_volumoso_dieta_perc">
-                                                                            <i class="fas fa-caret-left"></i> %</span>
-                                                                        <h5 class="description-header"
-                                                                            id="volumoso_tot_mn_kg">Kg</h5>
-                                                                        <span class="description-text">TOTAL DE
-                                                                            VOLUMOSO</span>
-                                                                    </div>
-                                                                    <!-- /.description-block -->
-                                                                </div>
-                                                                <!-- /.col -->
-                                                                <div class="col-sm-3 col-6">
-                                                                    <div class="description-block border-right">
-                                                                        <span class="description-percentage"
-                                                                            id="tot_concentrado_dieta_perc">
-                                                                            <i class="fas fa-caret-left"></i> %</span>
-                                                                        <h5 class="description-header"
-                                                                            id="concentrado_tot_mn_kg">Kg</h5>
-                                                                        <span class="description-text">TOTAL DE
-                                                                            CONCENTRADO</span>
-                                                                    </div>
-                                                                    <!-- /.description-block -->
-                                                                </div>
-                                                                <!-- /.col -->
-                                                                <div class="col-sm-3 col-6">
-                                                                    <div class="description-block border-right">
-                                                                        <span class="description-percentage"
-                                                                            id="tot_nucleo_dieta_perc">
-                                                                            <i class="fas fa-caret-left"></i> %</span>
-                                                                        <h5 class="description-header"
-                                                                            id="nucleo_tot_mn_kg">Kg</h5>
-                                                                        <span class="description-text">TOTAL DE
-                                                                            NÚCLEO</span>
-                                                                    </div>
-                                                                    <!-- /.description-block -->
-                                                                </div>
+                                                            <div class="row dados_gerais">
 
                                                             </div>
 
@@ -370,6 +317,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        //--
         $(document).on('click', '.montar', function(e) {
             e.preventDefault();
             $.ajaxSetup({
@@ -391,21 +339,18 @@
             var prodleitedia = $('#prodleitedia option:selected').val();
             var concentrado_energetico_ids = [];
             var concentrado_proteico_ids = [];
-            var nucleo = 0;
 
             if (prodleitedia > 0) {
                 concentrado_energetico_ids = listar($('#concentrado_energetico option:selected'));
                 concentrado_proteico_ids = listar($('#concentrado_proteico option:selected'));
-                nucleo = $('.nucleo').val();
             }
 
-            console.log('nucle: ' + $('.nucleo').val());
             var data = {
                 'volumoso_ids': volumoso_ids,
                 'concentrado_energetico_ids': concentrado_energetico_ids,
                 'concentrado_proteico_ids': concentrado_proteico_ids,
                 'peso_vivo': $('.peso_vivo').val(),
-                'nucleo': nucleo,
+                'nucleo': $('.nucleo').val(),
                 'prodleitedia': prodleitedia,
                 'perc_gordura': $('.perc_gordura').val(),
             }
@@ -416,52 +361,65 @@
                 data: data,
                 dataType: "json",
                 success: function(response) {
+                    $("#itens div").remove();
+                    var dados_gerais = $(".dados_gerais");
+                    const bg_colors = new Array('bg-success', 'bg-warning', 'bg-danger', 'bg-primary',
+                        'bg-dark', 'bg-info');
+                    const icons = new Array('fas fa-caret-up', 'fas fa-caret-left', 'fas fa-caret-down',
+                        'fas fa-plus fa-xs');
+                    const texts = new Array('text-success', 'text-warning', 'text-primary', 'text-info');
 
-                    //-- Variáveis com os totais de CONCENTRADO e VOLUMOSO
-                    var tot_conc_kg = 0;
-                    var tot_conc_perc = 0;
-                    var tot_volumoso_kg = 0;
-                    var tot_volumoso_perc = 0;
-                    var tot_nucleo_kg = -1;
-                    var tot_nucleo_perc = -1;
+                    // COLOCAR A DURAÇÃO DO NÚCLEO EM MESES
+
+                    $.each(response.dados_gerais, function(idx, elem) {
+                        if (idx < 4) {
+                            //let t = (elem.perc == 0) ? texts[2] : (elem.perc < 50) ? texts[1] : (elem.perc >= 50) ? texts[0] : texts[3];
+                            let i = (elem.perc == 0) ? icons[2] : (elem.perc == 100) ? icons[
+                                    3] : (elem.perc < 50) ? icons[1] : (elem.perc >= 50) ?
+                                icons[
+                                    0] : icons[0];
+
+
+                            dados_gerais.append(
+                                "<div class='col-sm-3 col-6' id='itens'>" +
+                                "<div class='description-block border-right'>" +
+                                "<span class='description-percentage " + texts[idx] +
+                                "' id='perc'>" +
+                                "<i class='" + i + "'></i><strong> " + elem.perc +
+                                " % </strong></span>" +
+                                "<h5 class='description-header' id='kg'>" + elem.kg +
+                                " Kg</h5>" +
+                                "<span class='description-text' id='nome'>" + elem.nome +
+                                "</span>" +
+                                "</div>" +
+                                "</div>"
+                            );
+                        }
+
+                    });
+
 
                     //-- Preenche Tabela de Ingredientes
                     $("#ingredientes tbody tr").remove();
                     var table = $("#ingredientes tbody");
+                    var i = 0;
+                    const bg_color = new Array('bg-dark', '', '', '', '', '');
+                    const bar_color = new Array('bg-success', 'bg-info', 'bg-warning', 'bg-danger', 'bg-primary', 'bg-info');
 
-                    $.each(response.grid_ing, function(idx, elem) {
-
-                        switch (elem.classe) {
-                            case 1:
-                                bar_color = 'bg-success';
-                                break;
-                            case 2:
-                                bar_color = (elem.subclasse == 1) ? 'bg-warning' : 'bg-info';
-                                break;
-                            case 8:
-                                bar_color = 'bg-danger';
-                                tot_nucleo_kg = elem.kg;
-                                tot_nucleo_perc = elem.perc;
-                                $("#nucleo_tot_mn_kg").html(tot_nucleo_kg + " Kg");
-                                $("#tot_nucleo_dieta_perc").addClass("text-success");
-                                $("#tot_nucleo_dieta_perc").html('<i class="fas fa-caret-up m-1"></i>' + tot_nucleo_perc + " %");
-                                break;
-                            default:
-                                bar_color = 'bg-primary';
-                        }
+                    $.each(response.dados_grid, function(idx, elem) {
 
                         table.append(
-                            "<tr>" +
-                            "<th scope='row'>" + (idx + 1) + ".</th>" +
+                            "<tr class='" + bg_color[i] + "'>" +
+                            "<th scope='row'>" + (i + 1) + ".</th>" +
                             "<td>" + elem.nome + "</td>" +
                             "<td>" + elem.categoria + "</td>" +
                             "<td>" +
                             "<div id='progressbar' class='progress mt-1'>" +
                             "<div id='progress' class='progress-bar progress-bar-striped progress-bar-animated " +
-                            bar_color + "'" +
+                            bar_color[i] + "'" +
                             "aria-valuemin='0' aria-valuemax='100' role='progressbar'" +
                             "style=' border-radius: 4px; width:" +
-                            (elem.perc + 15)  + "%'>" +
+                            (elem.perc + 15) + "%'>" +
                             "<span class='pe-2 ps-2'><strong>" + elem.perc +
                             "%</strong></span>" +
 
@@ -469,70 +427,144 @@
                             "</div>" +
                             "</td>" +
                             "<td><span style='font-size: 1.1em; width: 70%;' class='p-1 badge " +
-                            bar_color + "'>" + elem.kg +
+                            bar_color[i] + "'>" + elem.kg +
                             " Kg</span>" +
                             "</td>" +
                             "</tr>"
                         );
+                        i++;
 
                     });
 
-                    //-- Volumoso
-                    tot_volumoso_kg = response.dados_volumoso[0].tot_mn_kg;
-                    tot_volumoso_perc = response.dados_volumoso[0].tot_mn_perc;
-                    $("#volumoso_tot_mn_kg").html(tot_volumoso_kg + " Kg");
-                    if (tot_volumoso_perc >= 50) {
-                        $("#tot_volumoso_dieta_perc").removeClass("text-warning").addClass(
-                            "text-success");
-                        $("#tot_volumoso_dieta_perc").html('<i class="fas fa-caret-up m-1"></i>' +
-                            tot_volumoso_perc + " %");
-                    } else {
-                        $("#tot_volumoso_dieta_perc").removeClass("text-success").addClass(
-                            "text-warning");
-                        $("#tot_volumoso_dieta_perc").html('<i class="fas fa-caret-left m-1"></i>' +
-                            tot_volumoso_perc + " %");
-                    }
 
-                    //-- Concentrado
-                    if (typeof response.dados_concentrado !== 'undefined' && response.dados_concentrado
-                        .length > 0) {
+                    // .dados_gerais
+                    // response.tela[0].id
 
-                        tot_conc_kg = response.dados_concentrado[0].tot_mn_kg;
-                        tot_conc_perc = response.dados_concentrado[0].tot_mn_perc;
+                    // //-- Variáveis com os totais de CONCENTRADO e VOLUMOSO
+                    // var tot_conc_kg = 0;
+                    // var tot_conc_perc = 0;
+                    // var tot_volumoso_kg = 0;
+                    // var tot_volumoso_perc = 0;
+                    // var tot_nucleo_kg = -1;
+                    // var tot_nucleo_perc = -1;
+                    // bar_color = 'bg-primary';
+                    // bar_bg = 'bg-primary';
+                    // //-- Preenche Tabela de Ingredientes
+                    // $("#ingredientes tbody tr").remove();
+                    // var table = $("#ingredientes tbody");
 
-                        $("#concentrado_tot_mn_kg").html(tot_conc_kg + " Kg");
+                    // $.each(response.grid_ing, function(idx, elem) {
 
-                        if (response.dados_concentrado[0].tot_mn_perc >= 50) {
-                            $("#tot_concentrado_dieta_perc").removeClass(["text-warning",
-                                "text-danger"
-                            ]).addClass("text-success");
-                            $("#tot_concentrado_dieta_perc").html(
-                                "<i class=\"fas fa-caret-up m-1\"></i>" + tot_conc_perc + " %");
-                        } else {
-                            $("#tot_concentrado_dieta_perc").removeClass(["text-danger",
-                                "text-success"
-                            ]).addClass("text-warning");
-                            $("#tot_concentrado_dieta_perc").html(
-                                "<i class=\"fas fa-caret-left m-1\"></i>" + tot_conc_perc + " %");
-                        }
+                    //     switch (elem.classe) {
+                    //         case 1:
+                    //             bar_color = 'bg-success';
+                    //             bar_bg = 'bg-dark';
+                    //             break;
+                    //         case 2:
+                    //             bar_color = (elem.subclasse == 1) ? 'bg-warning' : 'bg-info';
+                    //             bar_bg = '';
+                    //             break;
+                    //         case 8:
+                    //             bar_color = 'bg-danger';
+                    //             bar_bg = '';
+                    //             tot_nucleo_kg = elem.kg;
+                    //             tot_nucleo_perc = elem.perc;
+                    //             $("#nucleo_tot_mn_kg").html(tot_nucleo_kg + " Kg");
+                    //             $("#tot_nucleo_dieta_perc").addClass("text-success");
+                    //             $("#tot_nucleo_dieta_perc").html(
+                    //                 '<i class="fas fa-caret-up m-1"></i>' +
+                    //                 tot_nucleo_perc + " %");
+                    //             break;
+                    //         default:
+                    //             bar_bg = '';
+                    //             bar_color = 'bg-primary';
+                    //     }
 
-                    } else {
-                        $("#tot_concentrado_dieta_perc").removeClass(["text-warning", "text-success"])
-                            .addClass(
-                                "text-danger");
-                        $("#concentrado_tot_mn_kg").html("0 Kg");
-                        $("#tot_concentrado_dieta_perc").html(
-                            "<i class=\"fas fa-caret-down m-1\"></i> 0 %");
-                    }
+                    //     table.append(
+                    //         "<tr class='" + bar_bg + "'>" +
+                    //         "<th scope='row'>" + (idx + 1) + ".</th>" +
+                    //         "<td>" + elem.nome + "</td>" +
+                    //         "<td>" + elem.categoria + "</td>" +
+                    //         "<td>" +
+                    //         "<div id='progressbar' class='progress mt-1'>" +
+                    //         "<div id='progress' class='progress-bar progress-bar-striped progress-bar-animated " +
+                    //         bar_color + "'" +
+                    //         "aria-valuemin='0' aria-valuemax='100' role='progressbar'" +
+                    //         "style=' border-radius: 4px; width:" +
+                    //         (elem.perc + 15) + "%'>" +
+                    //         "<span class='pe-2 ps-2'><strong>" + elem.perc +
+                    //         "%</strong></span>" +
+
+                    //         "</div>" +
+                    //         "</div>" +
+                    //         "</td>" +
+                    //         "<td><span style='font-size: 1.1em; width: 70%;' class='p-1 badge " +
+                    //         bar_color + "'>" + elem.kg +
+                    //         " Kg</span>" +
+                    //         "</td>" +
+                    //         "</tr>"
+                    //     );
+
+                    // });
+
+                    // //-- Volumoso
+                    // tot_volumoso_kg = response.dados_volumoso[0].tot_mn_kg;
+                    // tot_volumoso_perc = response.dados_volumoso[0].tot_mn_perc;
+                    // $("#volumoso_tot_mn_kg").html(tot_volumoso_kg + " Kg");
+                    // if (tot_volumoso_perc >= 50) {
+                    //     $("#tot_volumoso_dieta_perc").removeClass("text-warning").addClass(
+                    //         "text-success");
+                    //     $("#tot_volumoso_dieta_perc").html('<i class="fas fa-caret-up m-1"></i>' +
+                    //         tot_volumoso_perc + " %");
+                    // } else {
+                    //     $("#tot_volumoso_dieta_perc").removeClass("text-success").addClass(
+                    //         "text-warning");
+                    //     $("#tot_volumoso_dieta_perc").html('<i class="fas fa-caret-left m-1"></i>' +
+                    //         tot_volumoso_perc + " %");
+                    // }
+
+                    // //-- Concentrado
+                    // // var a = (response.dados_concentrado.length > 0);
+                    // // console.log('a: ' + a);
+                    // // var b = (typeof response.dados_concentrado !== 'undefined');
+                    // // console.log('b: ' + b);
+
+                    // if (response.dados_concentrado.length > 0) {
+
+                    //     tot_conc_kg = response.dados_concentrado[0].tot_mn_kg;
+                    //     tot_conc_perc = response.dados_concentrado[0].tot_mn_perc;
+
+                    //     $("#concentrado_tot_mn_kg").html(tot_conc_kg + " Kg");
+
+                    //     if (response.dados_concentrado[0].tot_mn_perc >= 50) {
+                    //         $("#tot_concentrado_dieta_perc").removeClass(["text-warning",
+                    //             "text-danger"
+                    //         ]).addClass("text-success");
+                    //         $("#tot_concentrado_dieta_perc").html(
+                    //             "<i class=\"fas fa-caret-up m-1\"></i>" + tot_conc_perc + " %");
+                    //     } else {
+                    //         $("#tot_concentrado_dieta_perc").removeClass(["text-danger",
+                    //             "text-success"
+                    //         ]).addClass("text-warning");
+                    //         $("#tot_concentrado_dieta_perc").html(
+                    //             "<i class=\"fas fa-caret-left m-1\"></i>" + tot_conc_perc + " %");
+                    //     }
+
+                    // } else {
+                    //     $("#tot_concentrado_dieta_perc").removeClass(["text-warning", "text-success"])
+                    //         .addClass(
+                    //             "text-danger");
+                    //     $("#concentrado_tot_mn_kg").html("0 Kg");
+                    //     $("#tot_concentrado_dieta_perc").html(
+                    //         "<i class=\"fas fa-caret-down m-1\"></i> 0 %");
+                    // }
 
 
-                    //-- Total da Dieta
-                    var tkg = parseFloat(tot_volumoso_kg) + parseFloat(tot_conc_kg);
-                    var tperc = parseFloat(tot_volumoso_perc) + parseFloat(tot_conc_perc);
-
-                    $("#tot_deita_mn_kg").html(parseFloat(tkg).toFixed(3) + " Kg");
-                    $("#tot_dieta_perc").addClass("text-success");
-                    $("#tot_dieta_perc").html("<i class=\"fas fa-plus fa-xs m-1\"></i>" + tperc + " %");
+                    // //-- Total da Dieta
+                    // $("#tot_deita_mn_kg").html(response.tot_mist_kg + " Kg");
+                    // $("#tot_dieta_perc").addClass("text-success");
+                    // $("#tot_dieta_perc").html("<i class=\"fas fa-plus fa-xs m-1\"></i>" + response
+                    //     .tot_mist_perc + " %");
 
                 }
                 //-- end_success
@@ -540,35 +572,36 @@
 
         });
 
-        //-- Carregar Grau de Sangue
-        $(document).on('click', '.lote', function(e) {
-            e.preventDefault();
+        //-- Enable/Disabls dos itens de tela
+        $('#prodleitedia').on('changed.bs.select', function(e, clickedIndex, isSelected, previousValue) {
+            var prodleitedia = $('#prodleitedia option:selected').val();
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            var data = {
-                'tipolote_idlote': $('.lote').val(),
+            if (prodleitedia == 0) {
+                $('.concentrado_energetico').prop('disabled', true);
+                $('.concentrado_energetico').selectpicker('deselectAll');
+                $('.concentrado_energetico').selectpicker('refresh');
+
+
+                $('.concentrado_proteico').prop('disabled', true);
+                $('.concentrado_energetico').selectpicker('deselectAll');
+                $('.concentrado_proteico').selectpicker('refresh');
+
+                $('.perc_gordura').prop('disabled', true);
+                $('.perc_gordura').val('');
+                // $('.nucleo').prop('disabled', true);
+                // $('.nucleo').val('');
+
             }
 
-            $.ajax({
-                type: "GET",
-                url: "/obtemTipoLote",
-                data: data,
-                dataType: "json",
-                success: function(response) {
+            if (prodleitedia != 0) {
+                $('.concentrado_energetico').prop('disabled', false);
+                $('.concentrado_energetico').selectpicker('refresh');
 
-                    if (response.data.length == 0) {
-                        $('#tipolote').val('----');
-                    } else {
-                        $('#tipolote').val(response.data[0].idtipo_lote + ' - ' + response.data[0]
-                            .nome);
-                        $('#observacao').val(response.data[0].observacao);
-                    }
-                }
-            });
+                $('.concentrado_proteico').prop('disabled', false);
+                $('.concentrado_proteico').selectpicker('refresh');
+                $('.perc_gordura').prop('disabled', false);
+                //$('.nucleo').prop('disabled', false);
+            }
 
         });
     </script>

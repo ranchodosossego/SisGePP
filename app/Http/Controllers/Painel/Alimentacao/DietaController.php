@@ -28,8 +28,10 @@ class DietaController extends Controller
 
     public function index()
     {
+        //phpinfo();
         $lstalimento = DB::table('alimento')
             ->where('alimento.ativo', '=', '1')
+            ->orderBy('nome', 'asc')
             ->get();
 
         $lstlote = Lote::all();
@@ -44,7 +46,7 @@ class DietaController extends Controller
             'volumoso_ids' => ['required'],
             'prodleitedia' => ['required'],
             'peso_vivo' => ['required'],
-            'perc_gordura' => ['required'],
+            //'perc_gordura' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -72,31 +74,32 @@ class DietaController extends Controller
                 }
             }
 
-            if (is_null($dados[0]['concentrado_energetico_ids'])) {
-                $validator = Validator::make($request->all(), [
-                    'concentrado_proteico_ids' => ['required'],
-                ]);
-                if ($validator->fails()) {
-                    return response()->json([
-                        'status' => 400,
-                        'errors' => $validator->getMessageBag()->getMessages(),
-                    ]);
-                }
-                $ing_concentrado_proteico = $this->get_nutriente_alimento($dados[0]['concentrado_proteico_ids'], 2);
-            } else {
-                $validator = Validator::make($request->all(), [
-                    'concentrado_energetico_ids' => ['required'],
-                ]);
-                if ($validator->fails()) {
-                    return response()->json([
-                        'status' => 400,
-                        'errors' => $validator->getMessageBag()->getMessages(),
-                    ]);
-                }
-                $ing_concentrado_energetico = $this->get_nutriente_alimento($dados[0]['concentrado_energetico_ids'], 2);
-            }
+            // if (is_null($dados[0]['concentrado_energetico_ids'])) {
+            //     $validator = Validator::make($request->all(), [
+            //         'concentrado_proteico_ids' => ['required'],
+            //     ]);
+            //     if ($validator->fails()) {
+            //         return response()->json([
+            //             'status' => 400,
+            //             'errors' => $validator->getMessageBag()->getMessages(),
+            //         ]);
+            //     }
+            //     $ing_concentrado_proteico = $this->get_nutriente_alimento($dados[0]['concentrado_proteico_ids'], 2);
+            // } else {
+            //     $validator = Validator::make($request->all(), [
+            //         'concentrado_energetico_ids' => ['required'],
+            //     ]);
+            //     if ($validator->fails()) {
+            //         return response()->json([
+            //             'status' => 400,
+            //             'errors' => $validator->getMessageBag()->getMessages(),
+            //         ]);
+            //     }
+            //     $ing_concentrado_energetico = $this->get_nutriente_alimento($dados[0]['concentrado_energetico_ids'], 2);
+            // }
             $validator = Validator::make($request->all(), [
                 'nucleo' => ['required'],
+                //'perc_gordura' => ['required'],
             ]);
             if ($validator->fails()) {
                 return response()->json([
@@ -108,304 +111,329 @@ class DietaController extends Controller
 
         #endregion
 
+        #region Variáveis Locais
+
+        //-- Novos
+        $en_producao_leite = null;
+        $nucleo_perc = [];
+        $en_mantenca = [];
+        $en_total = [];
+
+        //--: Setter de variáveis
         $dados = $this->get_param($request);
-        $dados_volumoso = [];
-        $dados_concentrado = [];
-        $en_minima = [];
-        $en_producao_leite = [];
-        $en = [];
+        $dados_nucleo = [];
+        $dados_volu = [];
+        $dados_conc = [];
+        $dados_gerais = [];
+        $dados_grid = [];
 
-        $ing_volumosos = [];
-        $ing_concentrado_energetico = [];
-        $ing_concentrado_proteico = [];
-        $mistura_algebrico = [];
-        $ms_concentrado_kg = 0;
-        $misturas = [];
-        $grid_ing = [];
-        $tot_dieta_kg = 0;
+        $nucleo_perc = (float)($dados[0]['nucleo']);
 
-        #region Exigência Nutricional para Mantença e Produção
+        //--------------------------------
+        #endregion
 
-        //--: Nutrientes necessários para a MANUTENÇÃO DA VIDA
-        $en_minima = $this->nutrientes_manutencao($dados[0]['em_lactacao'], $dados[0]['peso_vivo']);
+        #region Nova lógica
+        $en_mantenca = $this->get_en_mantenca($dados[0]['em_lactacao'], $dados[0]['peso_vivo']);
+        $en_producao_leite = $this->get_en_producao_leite($dados[0]['perc_gordura'], $dados[0]['prodleitedia']);
+        $en_total = $this->get_en_total($dados, $en_mantenca, $en_producao_leite);
 
-        //--: Nutrientes necessários para a PRODUÇÃO DESEJADA DE LEITE
-        $en_producao_leite = ($dados[0]['prodleitedia'] > 0) ? $this->nutrientes_producaoleite($dados[0]['perc_gordura'], $dados[0]['prodleitedia']) : null;
+        $dados_nucleo = $this->get_dados_nucleo($dados, $nucleo_perc);
+        $dados_volu = $this->get_dados_volumoso($dados, $en_total);
+        $dados_conc = $this->get_dados_concentrado($dados, $dados_volu, $dados_nucleo, $en_total);
 
-        //--: EXIGÊNCIA NUTRICIONAL MANUTENÇAO + PRODUÇÃO DE LEITE
-        $en = $this->exigencia_nutricional_final($en_minima, $en_producao_leite, $dados);
+
+        $ing_mist = $this->monta_misturas($dados, $dados_conc);
+        $dados_grid = $this->get_mistura($ing_mist, $dados_conc, $dados_volu, $dados_nucleo);
 
         #endregion
 
-        #region Dados Nutricionais dos Ingredientes que serão usados: Premix, Volumoso e Concentrado
-        $ing_volumosos = $this->get_nutriente_alimento($dados[0]['volumoso_ids'], 1);
-
-        if ($dados[0]['prodleitedia'] > 0) {
-            $ing_concentrado_energetico = $this->get_nutriente_alimento($dados[0]['concentrado_energetico_ids'], 2);
-            $ing_concentrado_proteico = $this->get_nutriente_alimento($dados[0]['concentrado_proteico_ids'], 2);
-        }
-
-        //--: Valor de PREMIX - Precisa ser cadastrado na base
-        $premix = (float)($dados[0]['nucleo']);
-
-        #endregion
-
-        #region Totais de NDT E PB de VOLUMOSO E CONCENTRADO
-        if (is_null($en_producao_leite)) {
-            $ms_concentrado_kg = 0;
-            $dados_volumoso = $this->get_volumoso($en, 0, $ing_volumosos);
-            $dados_concentrado = [];
-            $tot_dieta_kg = $dados_volumoso[0]['tot_mn_kg'];
-            //$misturas = $this->get_mistura_por_ndt($ing_concentrado_energetico, $ing_concentrado_proteico, $dados_concentrado);
-        }
-
-        if (!is_null($en_producao_leite)) {
-            $ms_concentrado_kg = $this->get_ms_concentrado($dados);
-            $dados_volumoso = $this->get_volumoso($en, $ms_concentrado_kg, $ing_volumosos);
-            $dados_concentrado = $this->get_concentrado($dados, $dados_volumoso, $en, $premix);
-            $misturas = $this->get_mistura_por_ndt($ing_concentrado_energetico, $ing_concentrado_proteico, $dados_concentrado, $dados_volumoso);
-        }
-
-        $grid_ing = $this->get_dados_grid($ing_volumosos, $dados_volumoso, $dados_concentrado, $misturas);
-
-
-        //$a = $dados_volumoso[0]["tot_volumoso_dieta_perc"] + $dados_concentrado[0]["tot_concentrado_dieta_perc"];
-        #endregion
+        $dados_gerais = $this->show_dados_tela($dados_nucleo, $dados_volu, $dados_conc);
 
         return response()->json([
             'status' => 200,
-            'dados_volumoso' => $dados_volumoso,
-            'dados_concentrado' => $dados_concentrado,
-            'misturas' => $misturas,
-            'grid_ing' => $grid_ing,
+            'dados_gerais' => $dados_gerais,
+            'dados_grid' => $dados_grid,
         ]);
     }
 
-    private function get_dados_grid($ing_volumosos, $dados_volumoso, $dados_concentrado, $misturas)
+    private function show_dados_tela($dados_nucleo, $dados_volu, $dados_conc)
     {
+        $volumoso = [];
+        $concentrado = [];
+        $nucleo = [];
+        $mistura = [];
+
+        $tot_mist_kg = 0;
+        $tot_mist_perc = 0;
         $ing = [];
         $grid_ing = [];
+        $geral = [];
 
-        $ing = array(
-            'nome' => $ing_volumosos[0]['nome'],
-            'categoria' => 'Volumoso',
-            'perc' => $dados_volumoso[0]['tot_mn_perc'],
-            'kg' => $dados_volumoso[0]['tot_mn_kg'],
-            'classe' => $ing_volumosos[0]['classe'],
-            'subclasse' => $ing_volumosos[0]['subclasse'],
+        $tot_mist_kg = round($dados_volu["mn_kg"] + $dados_nucleo["nucleo_mn_kg"] + $dados_conc["mn_kg"], 3);
+
+        $volumoso = array(
+            'id' => 1,
+            'nome' => 'TOTAL DE VOLUMOSO',
+            'kg' => $dados_volu['mn_kg'],
+            'perc' => $dados_volu['mn_perc'],
         );
-        array_push($grid_ing, $ing);
-
-        if (empty($misturas)) {
-            return $grid_ing;
-        }
-
-        $ing = array(
-            'nome' => 'Premix',
-            'categoria' => 'Núcleo',
-            'perc' => $dados_concentrado[0]["premix_perc"],
-            'kg' => $misturas[0]['premix_mn_kg'],
-            'classe' => 8,
-            'subclasse' => 5,
+        $concentrado = array(
+            'id' => 2,
+            'nome' => 'TOTAL DE CONCENTRADO',
+            'kg' => $dados_conc["mn_kg"],
+            'perc' => $dados_conc["mn_perc"],
         );
-        array_push($grid_ing, $ing);
+        $nucleo = array(
+            'id' => 3,
+            'nome' => 'TOTAL DE NÚCLEO',
+            'kg' => $dados_nucleo["nucleo_mn_kg"],
+            'perc' => $dados_nucleo["nucleo_mns_perc"],
+        );
+        $mistura = array(
+            'id' => 4,
+            'nome' => 'TOTAL DA MISTURA',
+            'kg' => $tot_mist_kg,
+            'perc' => 100,
+        );
+        array_push($geral, $volumoso, $concentrado, $nucleo, $mistura);
 
-        foreach ($misturas as &$item) {
-            foreach ($item as &$value) {
-                if (is_array($value)) {
-                    $ing = array(
-                        'nome' => $value['nome'],
-                        'categoria' => 'Concentrado',
-                        'perc' => round($value['ms_perc'], 2),
-                        'kg' => round($value['mn_kg'], 3),
-                        'classe' => $value['classe'],
-                        'subclasse' => $value['subclasse'],
+        return $geral;
+    }
 
-                    );
-                    array_push($grid_ing, $ing);
+    private function monta_misturas($dados, $dados_conc)
+    {
+        $result = [];
+
+        if ($dados[0]["em_lactacao"]) {
+
+            $ing_conc_energ = $this->get_alimento($dados[0]['concentrado_energetico_ids'], 2);
+            $ing_conc_prot = $this->get_alimento($dados[0]['concentrado_proteico_ids'], 2);
+
+            //-- Ordena o array por NDT, descrecente.
+            $result = (array)array_merge($ing_conc_energ, $ing_conc_prot);
+            $col = array_column($result, "pb");
+            array_multisort($col, SORT_DESC, $result);
+            $tot_ingredientes = count($result);
+            $eh_impar = ($tot_ingredientes % 2 == 1);
+            $menor = 0;
+            $maior = 0;
+            for ($i = 0; $i < $tot_ingredientes; $i++) {
+                if ($result[$i]["pb"] >= $dados_conc["pb_perc"]) {
+                    $maior++;
+                } else {
+                    $menor++;
+                }
+            }
+
+            if ($eh_impar) {
+                if ($maior < $menor) {
+                    $firstKey = $result[0];
+                    array_unshift($result, $firstKey);
+                }
+                if ($maior > $menor) {
+                    $lastKey = $result[$tot_ingredientes - 1];
+                    array_push($result, $lastKey);
                 }
             }
         }
-
-        return $grid_ing;
+        return $result;
     }
 
-    private function get_mistura_por_ndt($ing_concentrado_energetico, $ing_concentrado_proteico, $dados_concentrado, $dados_volumoso)
+    private function calc_quadrado_pearson_ing($id_mist, $ing1, $ing2, $pb)
     {
         $mistura = [];
-        $ing_misturas = [];
-        $tot_partes_mistura = 0;
-        $tot_dieta_kg = $dados_volumoso[0]['tot_mn_kg'] + $dados_concentrado[0]['tot_mn_kg'];
 
-        $result = array_merge($ing_concentrado_energetico, $ing_concentrado_proteico);
-        $tot_ingredientes = count($result);
-        $eh_par = ($tot_ingredientes % 2 == 0);
+        //--: Variáveis do Quadrado de Pearson
+        $p1 = abs($ing2['pb'] - $pb);
+        $p2 = abs($ing1['pb'] - $pb);
+        $tp = round($p1 + $p2, 2);
 
-        //-- Ordenando por NDT
-        $col = array_column($result, "ndt");
-        array_multisort($col, SORT_DESC, $result);
+        $ing1['perc_mist'] = round($p1 / $tp * 100, 2);
+        $ing2['perc_mist'] = round($p2 / $tp * 100, 2);
 
-        #region //-- Calculando NDT e PB dos Ingredientes
-        if ($eh_par) {
-            $z = 1;
-            for ($i = 0; $i < $tot_ingredientes; $i += 2) {
-                if ($i >= $tot_ingredientes) {
-                    break;
-                } else {
+        $ing1['ndt_perc'] = round($ing1['perc_mist'] * $ing1['ndt'] / 100, 2);
+        $ing2['ndt_perc'] = round($ing2['perc_mist'] * $ing2['ndt'] / 100, 2);
 
-                    //--: Variáveis do Quadrado de Pearson
-                    $ing1_partes = abs(($dados_concentrado[0]['pb_perc'] - $result[$i + 1]['pb']));
-                    $ing2_partes = abs(($dados_concentrado[0]['pb_perc'] - $result[$i]['pb']));
-                    $tot_partes_mistura = round($ing1_partes + $ing2_partes, 2);
-                    $ing1_perc = round(($ing1_partes / $tot_partes_mistura) * 100, 2);
-                    $ing2_perc = round(($ing2_partes / $tot_partes_mistura) * 100, 2);
+        $mistura = array(
+            'nome' => 'Mistura-' . $id_mist,
+            'ingrediente-1' => $ing1,
+            'ingrediente-2' => $ing2,
+            'tot_ndt_mist_perc' => round($ing1['ndt_perc'] + $ing2['ndt_perc'], 2),
+            'ing1_perc' => $ing1['perc_mist'],
+            'ing1_ndt_perc' =>  $ing1['ndt_perc'],
+            'ing2_perc' => $ing2['perc_mist'],
+            'ing2_ndt_perc' =>  $ing2['ndt_perc'],
+        );
 
-                    $ing1_ndt_perc = round(($ing1_perc * $result[$i]['ndt']) / 100, 2);
-                    $ing2_ndt_perc = round(($ing2_perc * $result[$i + 1]['ndt']) / 100, 2);
-                    $tot_ndt_mistura_perc = round($ing1_ndt_perc + $ing2_ndt_perc, 2);
+        return $mistura;
+    }
+
+    private function calc_quadrado_pearson_mist($misturas, $dados_conc, $dados_nucleo)
+    {
+
+            /////// CORRIGIR PAR DOIS ITENS
 
 
-                    $result[$i]['ing_perc'] = $ing1_perc;
-                    $result[$i + 1]['ing_perc'] = $ing2_perc;
 
-                    $mistura = array(
-                        //array(
-                        'nome' => 'Mistura-' . $z++,
-                        'tot_ndt_mistura_perc' => $tot_ndt_mistura_perc,
-                        'ingrediente-1' => $result[$i],
-                        'ing1_perc' => $ing1_perc,
-                        'ing1_ndt_perc' => $ing1_ndt_perc,
-                        'ingrediente-2' => $result[$i + 1],
-                        'ing2_perc' => $ing2_perc,
-                        'ing2_ndt_perc' => $ing2_ndt_perc,
-                        // ),
-                    );
-                    array_push($ing_misturas, $mistura);
+        //--: Variáveis do Quadrado de Pearson
+        $a = $misturas[1]["tot_ndt_mist_perc"];
+        $b = $misturas[0]["tot_ndt_mist_perc"];
+
+        $p1 = round(abs($a - $dados_conc['ndt_perc']), 2);
+        $p2 = round(abs($b - $dados_conc['ndt_perc']), 2);
+        $tp = round($p1 + $p2, 2);
+
+        //-- Misturas: % da Mistura e Kg de MS
+        $misturas[0]['perc_mist'] = round($p1 / $tp * 100, 2);
+        $misturas[0]['mist_ms_kg'] =  round($dados_conc["conc_ms_sem_nucleo_kg"] * $misturas[0]['perc_mist'] / 100, 3);
+        $misturas[1]['perc_mist'] = round($p2 / $tp * 100, 2);
+        $misturas[1]['mist_ms_kg'] =  round($dados_conc["conc_ms_sem_nucleo_kg"] * $misturas[1]['perc_mist'] / 100, 3);
+
+        //-- Ingredientes: Kg de MS
+        foreach ($misturas as &$item) {
+            foreach ($item as $key => &$value) {
+                if (is_array($value)) {
+
+                    // if (array_key_exists("primeiro", $busca_array)) {
+                    //     echo "O elemento 'primeiro' está no array!";
+                    // }
+
+
+                    $ms_kg = round($item['mist_ms_kg'] * $value["ndt_perc"] / 100, 3);
+                    $ms_perc = round($ms_kg * 100 / $dados_conc['ms_kg'], 2);
+                    $mn_kg = round($dados_conc["mn_kg"] * $ms_kg  / $dados_conc['ms_kg'], 3);
+                    $mn_perc = round($mn_kg * 100 / $dados_conc["mn_kg"], 2);
+                    $value['ms_perc'] = $ms_perc;
+                    $value['ms_kg'] = $ms_kg;
+                    $value['mn_perc'] = $mn_perc;
+                    $value['mn_kg'] = $mn_kg;
                 }
+            }
+
+            $item['tot_mn_conc_perc'] = $dados_conc["mn_perc"];
+            $item['tot_mn_conc_kg'] = $dados_conc["mn_kg"];
+        }
+
+        return $misturas;
+    }
+    private function get_mistura($ing_mist, $dados_conc, $dados_volu, $dados_nucleo)
+    {
+        $itens = [];
+        $result = [];
+        $mist = [];
+        $misturas = [];
+        $tot_mist = 0;
+
+        //-- Volumoso
+        if (!empty($dados_volu)) {
+            $itens['idalimento'] = $dados_volu["idalimento"];
+            $itens['nome'] = $dados_volu["nome"];
+            $itens['categoria'] = 'Volumoso';
+            $itens['perc'] = $dados_volu["mn_perc"];
+            $itens['kg'] = $dados_volu["mn_kg"];
+            $itens['classe'] = $dados_volu["classe"];
+            $itens['subclasse'] = $dados_volu["subclasse"];
+            array_push($result, $itens);
+        }
+
+        //-- Núcleo
+        if ($dados_nucleo["nucleo_mns_perc"] > 0) {
+            $itens['idalimento'] = 0;
+            $itens['nome'] = 'Premix';
+            $itens['categoria'] = 'Núcleo';
+            $itens['perc'] = $dados_nucleo["nucleo_mns_perc"];
+            $itens['kg'] = $dados_nucleo["nucleo_mn_kg"];
+            $itens['classe'] = 8;
+            $itens['subclasse'] = 5;
+            array_push($result, $itens);
+        }
+
+        //-- Concentrado
+        if (!empty($ing_mist)) {
+
+            #region Misturas - Quadrado Pearson Ingredientes
+            $tot_ing = count($ing_mist) - 1;
+            $tot_mist = count($ing_mist) / 2;
+            $id_mist = 1;
+            for ($i = 0; $i < $tot_mist; $i++) {
+
+                $ing1 = $ing_mist[$i];
+                $ing2 = $ing_mist[$tot_ing - $i];
+
+                $mist = $this->calc_quadrado_pearson_ing(
+                    $id_mist,
+                    $ing1,
+                    $ing2,
+                    $dados_conc['pb_perc'],
+                    $dados_nucleo,
+                );
+                array_push($misturas, $mist);
+                $id_mist++;
             }
             //-- end_for
-            if (count($ing_misturas) == 1) {
-                $a = $ing_misturas[0];
-            }
-            if (count($ing_misturas) == 2) {
-                $mist1_partes = abs(($dados_concentrado[0]['ndt_perc'] - $ing_misturas[1]['tot_ndt_mistura_perc']));
-                $mist2_partes = abs(($dados_concentrado[0]['ndt_perc'] - $ing_misturas[0]['tot_ndt_mistura_perc']));
-                $tot_partes_misturas = round($mist1_partes + $mist2_partes, 2);
-                $tot_mist1_perc = round(($mist1_partes / $tot_partes_misturas) * 100, 2);
-                $tot_mist2_perc = round(($mist2_partes / $tot_partes_misturas) * 100, 2);
 
-                //-- Mistura-1
-                $ms_mist1_kg = round(($dados_concentrado[0]['ms_sem_premix_kg'] * $tot_mist1_perc) / 100, 3);
+            #endregion
+            $mist = [];
+            $mist = $this->calc_quadrado_pearson_mist($misturas, $dados_conc, $dados_nucleo);
+            foreach ($mist as $key => &$item) {
+                foreach ($item as &$value) {
+                    if (is_array($value)) {
+                        $ing = array(
+                            'idalimento' => $value['idalimento'],
+                            'nome' => $value['nome'],
+                            'categoria' => 'Concentrado',
+                            'perc' => round($value['mn_perc'], 2),
+                            'kg' => round($value['mn_kg'], 3),
+                            'classe' => $value['classe'],
+                            'subclasse' => $value['subclasse'],
 
-                //-- Ingrediente 1
-                $mist1_ing1_ms_kg = round($ms_mist1_kg * $ing_misturas[0]['ing1_perc'] / 100, 3);
-                $mist1_ing1_ms_perc = round($mist1_ing1_ms_kg * 100 / $dados_concentrado[0]['ms_kg'], 2);
-                $ing_misturas[0]['ingrediente-1']['ms_kg'] = $mist1_ing1_ms_kg;
-                $ing_misturas[0]['ingrediente-1']['ms_perc'] = $mist1_ing1_ms_perc;
-                // $ing_misturas[0]['ing1_ms_kg'] = $mist1_ing1_ms_kg;
-                // $ing_misturas[0]['ing1_ms_perc'] = $mist1_ing1_ms_perc;
-
-                //-- Ingrediente 2
-                $mist1_ing2_ms_kg = round($ms_mist1_kg * $ing_misturas[0]['ing2_perc'] / 100, 3);
-                $mist1_ing2_ms_perc = round(($mist1_ing2_ms_kg / $dados_concentrado[0]['ms_kg']) * 100, 2);
-                $ing_misturas[0]['ingrediente-2']['ms_kg'] = $mist1_ing2_ms_kg;
-                $ing_misturas[0]['ingrediente-2']['ms_perc'] = $mist1_ing2_ms_perc;
-
-                // $ing_misturas[0]['ing2_ms_kg'] = $mist1_ing2_ms_kg;
-                // $ing_misturas[0]['ing2_ms_perc'] = $mist1_ing2_ms_perc;
-                //-- end_mistura1
-
-                //-- Mistura-2
-                $ms_mist2_kg = round(($dados_concentrado[0]['ms_sem_premix_kg'] * $tot_mist2_perc) / 100, 3);
-
-                //-- Ingrediente 1
-                $mist2_ing1_ms_kg = round($ms_mist2_kg * $ing_misturas[1]['ing1_perc'] / 100, 3);
-                $mist2_ing1_ms_perc = round($mist2_ing1_ms_kg * 100 / $dados_concentrado[0]['ms_kg'], 2);
-                $ing_misturas[1]['ingrediente-1']['ms_kg'] = $mist2_ing1_ms_kg;
-                $ing_misturas[1]['ingrediente-1']['ms_perc'] = $mist2_ing1_ms_perc;
-                // $ing_misturas[1]['ing1_ms_kg'] = $mist2_ing1_ms_kg;
-                // $ing_misturas[1]['ing1_ms_perc'] = $mist2_ing1_ms_perc;
-
-                //-- Ingrediente 2
-                $mist2_ing2_ms_kg = round($ms_mist2_kg * $ing_misturas[1]['ing2_perc'] / 100, 3);
-                $mist2_ing2_ms_perc = round($mist2_ing2_ms_kg * 100 / $dados_concentrado[0]['ms_kg'], 2);
-                $ing_misturas[1]['ingrediente-2']['ms_kg'] = $mist2_ing2_ms_kg;
-                $ing_misturas[1]['ingrediente-2']['ms_perc'] = $mist2_ing2_ms_perc;
-                // $ing_misturas[1]['ing2_ms_kg'] = $mist2_ing2_ms_kg;
-                // $ing_misturas[1]['ing2_ms_perc'] = $mist2_ing2_ms_perc;
-
-                //$tot_dieta_kg = $dados_concentrado[0]['ms_kg'];
-                //$ing_misturas['premix_mn_kg'] = round(($tot_dieta_kg * 5) / 100, 3);
-                $a = round($dados_concentrado[0]['tot_mn_kg'] * $dados_concentrado[0]['premix_kg'] / $dados_concentrado[0]['ms_kg'], 3);
-                $ing_misturas[0]['ingrediente-1']['mn_kg'] = round($dados_concentrado[0]['tot_mn_kg'] * $mist1_ing1_ms_kg / $dados_concentrado[0]['ms_kg'], 3);
-                $ing_misturas[0]['ingrediente-2']['mn_kg'] = round($dados_concentrado[0]['tot_mn_kg'] * $mist1_ing2_ms_kg / $dados_concentrado[0]['ms_kg'], 3);
-                $ing_misturas[0]['premix_mn_kg'] = round($dados_concentrado[0]['tot_mn_kg'] * $dados_concentrado[0]['premix_kg'] / $dados_concentrado[0]['ms_kg'], 3);
-
-                $ing_misturas[1]['premix_mn_kg'] = round($dados_concentrado[0]['tot_mn_kg'] * $dados_concentrado[0]['premix_kg'] / $dados_concentrado[0]['ms_kg'], 3);
-                $ing_misturas[1]['ingrediente-1']['mn_kg'] = round($dados_concentrado[0]['tot_mn_kg'] * $mist2_ing1_ms_kg / $dados_concentrado[0]['ms_kg'], 3);
-                $ing_misturas[1]['ingrediente-2']['mn_kg'] = round($dados_concentrado[0]['tot_mn_kg'] * $mist2_ing2_ms_kg / $dados_concentrado[0]['ms_kg'], 3);
-            }
-        }
-        #endregion
-
-        return $ing_misturas;
-    }
-
-    private function get_mistura_por_pb($ing_concentrado_energetico, $ing_concentrado_proteico)
-    {
-        $mistura = [];
-        $ing_misturas = [];
-
-        $result = array_merge($ing_concentrado_energetico, $ing_concentrado_proteico);
-        $tot_ingredientes = count($result);
-        $eh_par = ($tot_ingredientes % 2 == 0);
-
-        //-- Ordenando por PB
-        $col = array_column($result, "pb");
-        array_multisort($col, SORT_ASC, $result);
-
-        //-- Criando array de misturas para PB
-        if ($eh_par) {
-            $tot_misturas = $tot_ingredientes / 2;
-            for ($i = 0; $i < $tot_misturas; $i++) {
-                $mistura = array(
-                    array('nome' => 'Mistura-' . $i + 1, 'ingrediente-1' => $result[$i], 'ingrediente-2' => $result[$tot_ingredientes - 1 - $i]),
-                );
-                array_push($ing_misturas, $mistura);
+                        );
+                        array_push($result, $ing);
+                    }
+                }
             }
         }
 
-        return $ing_misturas;
+        $idx_duplicado = [];
+        for ($i = 0; $i < count($result); $i++) {
+            for ($j = $i + 1; $j < count($result); $j++) {
+                if ($result[$i]['idalimento'] === $result[$j]['idalimento']) {
+                    $perc = round($result[$i]['perc'] + $result[$j]['perc'], 2);
+                    $kg = round($result[$i]['kg'] + $result[$j]['kg'], 2);
+                    $result[$i]['perc'] = $perc;
+                    $result[$i]['kg'] = $kg;
+                    $idx_duplicado = $j;
+                }
+            }
+        }
+
+        if(!empty($idx_duplicado)) {
+            unset($result[$idx_duplicado]);
+        }
+
+        return $result;
     }
 
     /**
-     * Obtém a Mistura através do Quadrado de Pearson
+     * Calcula a MS do Concentrado considerando o premix. Caso a
+     * produção de leite seja zero (vaca seca) todos os valores dos
+     * índices virão zerados. Caso contrário, o cálculo considerando
+     * para produzir 3 Kg de leite é necessário 1 Kg de concentrado
+     * será feito. O premix será calculado e descontado da mistura,
+     * a não ser que seja usado zero % de núcleo.
      *
-     * @param [type] $nut_concentrado
-     * @param [type] $tot_ndt_concentrado_perc
-     * @param [type] $tot_pb_concentrado_perc
-     * @return void
+     * @param [type] $dados
+     * @param [type] $premix
+     * @return Retorna 0 para Produção de Leite 0.
      */
-    private function get_mistura($nut_concentrado, $ing_concentrado_proteico, $tot_pb_concentrado_perc, $tot_ndt_concentrado_perc)
+    private function get_ms_mn_concentrado($dados)
     {
+        $mn_kg = round($dados[0]['prodleitedia'] / 3, 3);
+        $ms_kg = round(88 * $mn_kg / 100, 3);
+        $result['mn_kg'] = $mn_kg;
+        $result['ms_kg'] = $ms_kg;
 
-        //--: Quadrado de Pearson: a diferença é feita cruzada entre o item energético e proteíco.
-        $parte_energetica = abs($tot_pb_concentrado_perc - $ing_concentrado_proteico[0]['pb']);
-        $parte_proteica = abs($tot_pb_concentrado_perc - $nut_concentrado[0]['pb']);
-        $tot_partes = $parte_energetica + $parte_proteica;
-
-        $perc_energetico = round(($parte_energetica / $tot_partes) * 100, 2);
-        $perc_proteico = round(($parte_proteica / $tot_partes) * 100, 2);
-
-        $ndt_energetico = round(($perc_energetico * $nut_concentrado[0]['ndt'] / 100), 2);
-        $ndt_proteico = round(($perc_proteico * $ing_concentrado_proteico[0]['ndt'] / 100), 2);
-
-        $mult_value = [];
-        $mult_value = Arr::add($mult_value, 'tot_ndt_mistura_perc', $ndt_energetico + $ndt_proteico);
-        $mult_value = Arr::add($mult_value, 'perc_energetico', $perc_energetico);
-        $mult_value = Arr::add($mult_value, 'perc_proteico', $perc_proteico);
-
-        return $mult_value;
+        return $result;
     }
 
     /**
@@ -416,39 +444,47 @@ class DietaController extends Controller
      * @param [type] $en
      * @return void
      */
-    private function get_concentrado($dados, $dados_volumoso, $en, $premix)
+    private function get_dados_concentrado($dados, $dados_volu, $dados_nucleo, $en_total)
     {
-        $tot_mn_kg = round($dados[0]['prodleitedia'] / 3, 3);
-        $ms_kg = round(88 * $tot_mn_kg / 100, 3);
-        $premix_kg = round($premix * $ms_kg / 100, 3);
-        $ms_sem_premix_kg = $ms_kg - $premix_kg;
+        $ms_defict_kg = 0;
+        $conc_ms_sem_nucleo_kg = 0;
+        $ms_kg = 0;
+        $mn_kg = 0;
+        $mn_perc = 0;
+        $ndt_kg = 0;
+        $ndt_perc = 0;
+        $pb_kg = 0;
+        $pb_perc = 0;
+        $tot_mn_perc = 0;
+        $usa_concentrado = ($dados[0]['prodleitedia'] > 0);
 
-        //--: Kg de NDT e PB que o CONCENTRADO deve ter
-        $ndt_kg = round((abs($dados_volumoso[0]['ndt_kg'] - ((float)$en[0]['ndt_kg']))), 2);
-        $pb_kg = round((abs($dados_volumoso[0]['pb_kg'] - ((float)$en[0]['pb_kg']))), 3);
+        if ($usa_concentrado) {
 
-        //--: %  de NDT e PB que o CONCENTRADO deve ter.
-        $ndt_perc = round(($ndt_kg / ($ms_kg - $premix_kg)) * 100, 2);
-        $pb_perc = round(($pb_kg / ($ms_kg - $premix_kg)) * 100, 2);
+            $materias_conc = $this->get_ms_mn_concentrado($dados); // Retorn 0 para Producao Leite zero
+            $ms_kg = $materias_conc['ms_kg'];
+            $mn_kg = $materias_conc['mn_kg'];
 
-        $tot_mn_perc = round(($ms_kg / $en[0]['ms_kg_dia']) * 100, 2);
+            $conc_ms_sem_nucleo_kg = $dados_nucleo["conc_ms_sem_nucleo_kg"];
+            $ms_defict_kg = $ms_kg - $dados_nucleo["nucleo_ms_kg"];
+            $ndt_kg = round(abs($dados_volu['ndt_kg'] - (float)$en_total["ndt_kg"]), 2);
+            $pb_kg = round(abs($dados_volu['pb_kg'] - (float)$en_total["pb_kg"]), 3);
 
-        $mult_values = [];
-        $mult_value = [];
-        $mult_value = Arr::add($mult_value, 'ms_kg', $ms_kg);
-        $mult_value = Arr::add($mult_value, 'ms_sem_premix_kg', $ms_sem_premix_kg);
-        $mult_value = Arr::add($mult_value, 'ndt_kg', $ndt_kg);
-        $mult_value = Arr::add($mult_value, 'ndt_perc', $ndt_perc);
-        $mult_value = Arr::add($mult_value, 'pb_kg', $pb_kg);
-        $mult_value = Arr::add($mult_value, 'pb_perc', $pb_perc);
-        $mult_value = Arr::add($mult_value, 'tot_mn_perc', $tot_mn_perc);
-        $mult_value = Arr::add($mult_value, 'tot_mn_kg', $tot_mn_kg);
+            //--: %  de NDT e PB que o CONCENTRADO deve ter.
+            $ndt_perc = round($ndt_kg / $ms_defict_kg * 100, 2);
+            $pb_perc = round($pb_kg / $ms_defict_kg * 100, 2);
+            $mn_perc = round($materias_conc['ms_kg'] / (float)$en_total["ms_kg_dia"] * 100, 2);
+        }
 
-        $mult_value = Arr::add($mult_value, 'premix_kg', $premix_kg);
-        $mult_value = Arr::add($mult_value, 'premix_perc', $premix);
+        $result['ms_kg'] = $ms_kg;
+        $result['conc_ms_sem_nucleo_kg'] = $conc_ms_sem_nucleo_kg;
+        $result['ndt_kg'] = $ndt_kg;
+        $result['ndt_perc'] = $ndt_perc;
+        $result['pb_kg'] = $pb_kg;
+        $result['pb_perc'] = $pb_perc;
+        $result['mn_perc'] = $mn_perc;
+        $result['mn_kg'] = $mn_kg;
 
-        $mult_values = Arr::prepend($mult_values, $mult_value);
-        return $mult_values;
+        return $result;
     }
 
     /**
@@ -459,31 +495,93 @@ class DietaController extends Controller
      * @param [array] $ing_volumosos
      * @return void
      */
-    private function get_volumoso($en, $ms_concentrado, $ing_volumosos)
+    private function get_dados_volumoso($dados, $en_total)
     {
-        $ms_volumoso_kg = round($en[0]['ms_kg_dia'] - $ms_concentrado, 3);
-        $tot_mn_kg =  round(($ms_volumoso_kg / $ing_volumosos[0]['ms']) * 100, 3);
+        $materias_conc = [];
+        $ing_volumoso = [];
+        $ms_volumoso_kg = 0;
+        $ndt_volumoso_kg = 0;
+        $pb_volumoso_kg = 0;
+        $mn_kg = 0;
+        $mn_perc = 0;
+
+        $materias_conc = $this->get_ms_mn_concentrado($dados);
+
+        $ing_volumoso = $this->get_alimento($dados[0]['volumoso_ids'], 1);
+        $ms_volumoso_kg = round($en_total['ms_kg_dia'] - $materias_conc['ms_kg'], 3);
+        $mn_kg = round(($ms_volumoso_kg / $ing_volumoso[0]['ms']) * 100, 3);
 
         //--: CALCULAR Kg DE NDT e PB DO VOLUMOSO
-        $ndt_volumoso_kg = round(($ing_volumosos[0]['ndt'] * $ms_volumoso_kg / 100), 2);
-        $pb_volumoso_kg = round(($ing_volumosos[0]['pb'] * $ms_volumoso_kg / 100), 3);
-        $tot_mn_perc = round(($ms_volumoso_kg / $en[0]['ms_kg_dia']) * 100, 2);
+        $ndt_volumoso_kg = round(($ing_volumoso[0]['ndt'] * $ms_volumoso_kg / 100), 2);
+        $pb_volumoso_kg = round(($ing_volumoso[0]['pb'] * $ms_volumoso_kg / 100), 3);
+        $mn_perc = round(($ms_volumoso_kg / $en_total['ms_kg_dia']) * 100, 2);
 
-        $mult_values = [];
-        $mult_value = [];
-        $mult_value = Arr::add($mult_value, 'ms_kg', $ms_volumoso_kg);
-        $mult_value = Arr::add($mult_value, 'ndt_kg', $ndt_volumoso_kg);
-        $mult_value = Arr::add($mult_value, 'pb_kg', $pb_volumoso_kg);
-        $mult_value = Arr::add($mult_value, 'tot_mn_perc', $tot_mn_perc);
-        $mult_value = Arr::add($mult_value, 'tot_mn_kg', $tot_mn_kg);
-
-        $mult_values = Arr::prepend($mult_values, $mult_value);
-        return $mult_values;
+        $result['idalimento'] = $ing_volumoso[0]['idalimento'];
+        $result['nome'] = $ing_volumoso[0]['nome'];
+        $result['ms_kg'] = $ms_volumoso_kg;
+        $result['ndt_kg'] = $ndt_volumoso_kg;
+        $result['pb_kg'] = $pb_volumoso_kg;
+        $result['mn_perc'] = $mn_perc;
+        $result['mn_kg'] = $mn_kg;
+        $result['classe'] = $ing_volumoso[0]['classe'];
+        $result['subclasse'] = $ing_volumoso[0]['subclasse'];
+        return $result;
     }
 
-    private function get_ms_concentrado($dados)
+    /**
+     * Undocumented function
+     *
+     * @param [type] $dados
+     * @param [type] $premix_perc
+     * @return void
+     */
+    private function get_dados_nucleo($dados, $premix_perc)
     {
-        return round(88 * (round($dados[0]['prodleitedia'] / 3, 3)) / 100, 3);
+        $nucleo = [];
+        $nucleo_ms_kg = 0;
+        $nucleo_mn_kg = 0;
+        $nucleo_perc = 0;
+        $ms_kg = 0;
+        $mn_kg = 0;
+        $conc_ms_sem_nucleo_kg = 0;
+        $materia = [];
+        $materias_conc = [];
+
+        if ($dados[0]["em_lactacao"]) {
+            $materias_conc = $this->get_ms_mn_concentrado($dados);
+            $ms_kg = (float)$materias_conc['ms_kg'];
+            $mn_kg = (float)$materias_conc['mn_kg'];
+        } else {
+            $materia = $this->get_consumo_ms($dados[0]['peso_vivo'], $dados[0]['prodleitedia']);
+            $ms_kg = $mn_kg = (float)$materia['ms_kg_dia'];
+        }
+
+        if ($premix_perc > 0) {
+            $nucleo_perc = $premix_perc;
+            $nucleo_ms_kg = round($nucleo_perc * $ms_kg / 100, 3);
+            $nucleo_mn_kg = round($mn_kg * $nucleo_ms_kg / $ms_kg, 3);
+            $conc_ms_sem_nucleo_kg = abs($ms_kg - $nucleo_ms_kg);
+        } else {
+            // Dependendo do fabricante será 30g para 100Kg peso vivo:
+            // round($dados[0]['peso_vivo'] * 0.3, 3).
+            // $nucleo_ms_kg = $nucleo_mn_kg = round($dados[0]['peso_vivo'] * 0.3, 3);
+            // $nucleo_perc = (0.3 * 100);
+            // $conc_ms_sem_nucleo_kg = $nucleo_ms_kg;
+            $nucleo_ms_kg = 0;
+            $nucleo_perc = 0;
+            $conc_ms_sem_nucleo_kg = 0;
+        }
+
+        // Retorno
+        $nucleo['tot_conc_mn_kg'] = $mn_kg;
+        $nucleo['tot_conc_ms_kg'] = $ms_kg;
+
+        $nucleo['nucleo_mn_kg'] = $nucleo_mn_kg;
+        $nucleo['nucleo_ms_kg'] = $nucleo_ms_kg;
+        $nucleo['nucleo_mns_perc'] = $nucleo_perc;
+        $nucleo['conc_ms_sem_nucleo_kg'] = $conc_ms_sem_nucleo_kg;
+
+        return $nucleo;
     }
 
     /**
@@ -502,77 +600,69 @@ class DietaController extends Controller
         $mult_value = Arr::add($mult_value, 'peso_vivo',  $this->arred_pesovivo($request->input('peso_vivo')));
         $mult_value = Arr::add($mult_value, 'perc_gordura', $request->input('perc_gordura'));
         $mult_value = Arr::add($mult_value, 'prodleitedia', $request->input('prodleitedia'));
-        $mult_value = Arr::add($mult_value, 'em_lactacao', (($request->input('prodleitedia') > 0) ? 1 : 0));
+        $mult_value = Arr::add($mult_value, 'em_lactacao', (($request->input('prodleitedia') > 0) ?? 1));
         $mult_value = Arr::add($mult_value, 'nucleo', $request->input('nucleo'));
 
         $mult_values = Arr::prepend($mult_values, $mult_value);
         return $mult_values;
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param [type] $alimento_ids
-     * @param [type] $classealimento
-     * @return void
-     */
-    private function get_nutriente_alimento($alimento_ids, $classealimento)
+    private function get_en_total($dados, $en_mantenca, $en_producao_leite)
     {
-        $lstnutrientesalimentos = DB::table('alimento')
-            ->whereIn('idalimento', $alimento_ids)
-            ->where('ativo', '=', 1)
-            ->where('classe_alimento_idclasse_alimento', '=', $classealimento)
-            ->select('idalimento', 'nome', 'ms', 'ndt', 'pb', 'ca', 'p', 'classe_alimento_idclasse_alimento', 'subclasse_idsubclasse')
-            ->get();
-        return $this->monta_exigencia_nutricional($lstnutrientesalimentos, 1, true);
-    }
 
-    /**
-     * Undocumented function
-     *
-     * @param [type] $en_minima
-     * @param [type] $en_producao_leite
-     * @return void
-     */
-    private function exigencia_nutricional_final($en_minima, $en_producao_leite, $dados)
-    {
-        $mult_value = [];
-        $mult_values = [];
+        $materia = [];
+        $ms_kg_dia = 0;
+        $soma_ndt = 0;
+        $soma_pb = 0;
+        $soma_ca = 0;
+        $soma_p = 0;
+
+        $ndt_kg = 0;
         $ndt_perc = 0;
         $pb_perc = 0;
-        $ms_kg_dia = (float)$this->calcular_consumo_ms($dados[0]['peso_vivo'], $dados[0]['prodleitedia']);
+        $pb_kg = 0;
+        $ca_kg = 0;
+        $p_kg = 0;
 
-        if (is_null($en_producao_leite)) {
-            $ndt_perc = round((($en_minima[0]['ndt'] / $ms_kg_dia) * 100), 2);
-            $pb_perc = round((($en_minima[0]['pb'] / $ms_kg_dia) * 100), 2);
 
-            $mult_value = Arr::add($mult_value, 'ms_kg_dia', $ms_kg_dia);
-            $mult_value = Arr::add($mult_value, 'ndt_kg', $en_minima[0]['ndt']);
-            $mult_value = Arr::add($mult_value, 'ndt_perc', $ndt_perc);
-            $mult_value = Arr::add($mult_value, 'pb_kg', $en_minima[0]['pb']);
-            $mult_value = Arr::add($mult_value, 'pb_perc', $pb_perc);
-            $mult_value = Arr::add($mult_value, 'ca_kg', $en_minima[0]['ca']);
-            $mult_value = Arr::add($mult_value, 'p_kg', $en_minima[0]['p']);
-            $mult_values = Arr::prepend($mult_values, $mult_value);
+        $materia = $this->get_consumo_ms($dados[0]['peso_vivo'], $dados[0]['prodleitedia']);
+        $ms_kg_dia = $materia['ms_kg_dia'];
+
+        if (!empty($en_producao_leite)) {
+            $soma_ndt = $en_mantenca[0]['ndt'] + $en_producao_leite[0]['ndt'];
+            $soma_pb = $en_mantenca[0]['pb'] + $en_producao_leite[0]['pb'];
+            $soma_ca = $en_mantenca[0]['ca'] + $en_producao_leite[0]['ca'];
+            $soma_p = $en_mantenca[0]['p'] + $en_producao_leite[0]['p'];
+
+            $ndt_perc = round($soma_ndt / $ms_kg_dia * 100, 2);
+            $pb_perc = round($soma_pb / $ms_kg_dia * 100, 2);
+            $ndt_kg = $soma_ndt;
+            $pb_kg = $soma_pb;
+            $ca_kg = $soma_ca;
+            $p_kg = $soma_p;
+        }
+        if (empty($en_producao_leite)) {
+
+            $ndt_perc = round($en_mantenca[0]['ndt'] / $ms_kg_dia * 100, 2);
+            $pb_perc = round($en_mantenca[0]['pb'] / $ms_kg_dia * 100, 2);
+            $ndt_kg = $en_mantenca[0]['ndt'];
+            $pb_kg = $en_mantenca[0]['pb'];
+            $ca_kg = $en_mantenca[0]['ca'];
+            $p_kg = $en_mantenca[0]['p'];
         }
 
-        if (!is_null($en_producao_leite)) {
-            $ndt_perc = round(((($en_minima[0]['ndt'] + $en_producao_leite[0]['ndt']) / $ms_kg_dia) * 100), 2);
-            $pb_perc = round(((($en_minima[0]['pb'] + $en_producao_leite[0]['pb']) / $ms_kg_dia) * 100), 2);
+        $result['ms_kg_dia'] = $ms_kg_dia;
+        $result['ndt_kg'] = $ndt_kg;
+        $result['ndt_perc'] = $ndt_perc;
+        $result['pb_kg'] = $pb_kg;
+        $result['pb_perc'] = $pb_perc;
+        $result['ca_kg'] = $ca_kg;
+        $result['p_kg'] = $p_kg;
 
-            $mult_value = Arr::add($mult_value, 'ms_kg_dia', $ms_kg_dia);
-            $mult_value = Arr::add($mult_value, 'ndt_kg', $en_minima[0]['ndt'] + $en_producao_leite[0]['ndt']);
-            $mult_value = Arr::add($mult_value, 'ndt_perc', $ndt_perc);
-            $mult_value = Arr::add($mult_value, 'pb_kg', $en_minima[0]['pb'] + $en_producao_leite[0]['pb']);
-            $mult_value = Arr::add($mult_value, 'pb_perc', $pb_perc);
-            $mult_value = Arr::add($mult_value, 'ca_kg', $en_minima[0]['ca'] + $en_producao_leite[0]['ca']);
-            $mult_value = Arr::add($mult_value, 'p_kg', $en_minima[0]['p'] + $en_producao_leite[0]['p']);
-            $mult_values = Arr::prepend($mult_values, $mult_value);
-        }
-        return $mult_values;
+        return $result;
     }
 
-    private function nutrientes_producaoleite($perc_gordura, $prodleitedia)
+    private function get_en_producao_leite($perc_gordura, $prodleitedia)
     {
         $producaoleite = DB::table('enpl')
             ->where('gordura', '=', $perc_gordura)
@@ -582,13 +672,14 @@ class DietaController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Retorna as Exigências Nutricionais considerando o peso
+     * e se a vaca está em lactação.
      *
-     * @param [type] $em_lactacao
-     * @param [type] $peso_vivo
-     * @return void
+     * @param [tiny] $em_lactacao: 0 || 1
+     * @param [int] $peso_vivo: peso da vaca
+     * @return Array com dados padronizados dos nutrientes.
      */
-    private function nutrientes_manutencao($em_lactacao, $peso_vivo)
+    private function get_en_mantenca($em_lactacao, $peso_vivo)
     {
         $perc_exigido = DB::table('en')
             ->where('em_lactacao', '=', $em_lactacao)
@@ -601,20 +692,37 @@ class DietaController extends Controller
      * Calcular o consumo total de matéria seca
      *
      * @param Request $request
+     * @return array
+     */
+    private function get_consumo_ms($peso_vivo, $prodleitedia)
+    {
+        $perc_exigido = DB::table('mspl')
+            ->where('peso_vivo', '=', $peso_vivo)
+            ->where('producao_leite', '=', $prodleitedia)
+            ->get();
+
+        $result['ms_kg_dia'] = $peso_vivo * $perc_exigido[0]->percentual_peso_vivo / 100;
+        $result['ms_perc_dia'] = $perc_exigido[0]->percentual_peso_vivo;
+
+        return $result;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $alimento_ids
+     * @param [type] $classealimento
      * @return void
      */
-    private function calcular_consumo_ms($peso_vivo, $prodleitedia)
+    private function get_alimento($alimento_ids, $classealimento)
     {
-        $perc_producao = 1.8;
-        if ($prodleitedia > 0) {
-            $perc_exigido = DB::table('mspl')
-                ->where('peso_vivo', '=', $peso_vivo)
-                ->where('producao_leite', '=', $prodleitedia)
-                ->get();
-            $perc_producao = $perc_exigido[0]->percentual_peso_vivo;
-        }
-        $perc_exigido = ($peso_vivo * $perc_producao) / 100;
-        return $perc_exigido;
+        $alimentos = DB::table('alimento')
+            ->whereIn('idalimento', $alimento_ids)
+            ->where('ativo', '=', 1)
+            ->where('classe_alimento_idclasse_alimento', '=', $classealimento)
+            ->select('idalimento', 'nome', 'ms', 'ndt', 'pb', 'ca', 'p', 'classe_alimento_idclasse_alimento', 'subclasse_idsubclasse')
+            ->get();
+        return $this->monta_exigencia_nutricional($alimentos, 1, true);
     }
 
     private function arred_pesovivo($peso_vivo)
@@ -642,38 +750,52 @@ class DietaController extends Controller
     {
         $mult_values = [];
         $mult_value = [];
-        foreach ($obj as &$value) {
-            if ($bln_ms) {
-                $mult_value = Arr::add($mult_value, 'idalimento', $value->idalimento);
-                $mult_value = Arr::add($mult_value, 'nome', $value->nome);
-                $mult_value = Arr::add($mult_value, 'ms', $value->ms);
-            }
 
-            $mult_value = Arr::add($mult_value, 'ndt', $value->ndt * $multplicador);
-            $mult_value = Arr::add($mult_value, 'pb', $value->pb * $multplicador);
-            $mult_value = Arr::add($mult_value, 'ca', $value->ca * $multplicador);
-            $mult_value = Arr::add($mult_value, 'p', $value->p * $multplicador);
-
-            $mult_value =  (isset($value->classe_alimento_idclasse_alimento))
-                ? Arr::add($mult_value, 'classe', $value->classe_alimento_idclasse_alimento)
-                : Arr::add($mult_value, 'classe', 0);
-
-            if (isset($value->classe_alimento_idclasse_alimento)) {
-                $mult_value = Arr::add($mult_value, 'classe', $value->classe_alimento_idclasse_alimento);
-                $mult_value = Arr::add($mult_value, 'subclasse', $value->subclasse_idsubclasse);
-            }
-
-            if (!isset($value->classe_alimento_idclasse_alimento)) {
-                $mult_value = Arr::add($mult_value, 'classe', 0);
-                $mult_value = Arr::add($mult_value, 'subclasse', 0);
-            }
-
-            //subclasse_idsubclasse
-
+        if (is_null($obj)) {
+            $mult_value = Arr::add($mult_value, 'idalimento', 0);
+            $mult_value = Arr::add($mult_value, 'nome', '');
+            $mult_value = Arr::add($mult_value, 'ms', 0);
+            $mult_value = Arr::add($mult_value, 'ndt', 0);
+            $mult_value = Arr::add($mult_value, 'pb', 0);
+            $mult_value = Arr::add($mult_value, 'ca', 0);
+            $mult_value = Arr::add($mult_value, 'p', 0);
+            $mult_value = Arr::add($mult_value, 'classe', 0);
+            $mult_value = Arr::add($mult_value, 'subclasse', 0);
             $mult_values = Arr::prepend($mult_values, $mult_value);
-            $mult_value = [];
-        }
+        } else {
 
+            foreach ($obj as &$value) {
+                if ($bln_ms) {
+                    $mult_value = Arr::add($mult_value, 'idalimento', $value->idalimento);
+                    $mult_value = Arr::add($mult_value, 'nome', $value->nome);
+                    $mult_value = Arr::add($mult_value, 'ms', $value->ms);
+                }
+
+                $mult_value = Arr::add($mult_value, 'ndt', $value->ndt * $multplicador);
+                $mult_value = Arr::add($mult_value, 'pb', $value->pb * $multplicador);
+                $mult_value = Arr::add($mult_value, 'ca', $value->ca * $multplicador);
+                $mult_value = Arr::add($mult_value, 'p', $value->p * $multplicador);
+
+                $mult_value =  (isset($value->classe_alimento_idclasse_alimento))
+                    ? Arr::add($mult_value, 'classe', $value->classe_alimento_idclasse_alimento)
+                    : Arr::add($mult_value, 'classe', 0);
+
+                if (isset($value->classe_alimento_idclasse_alimento)) {
+                    $mult_value = Arr::add($mult_value, 'classe', $value->classe_alimento_idclasse_alimento);
+                    $mult_value = Arr::add($mult_value, 'subclasse', $value->subclasse_idsubclasse);
+                }
+
+                if (!isset($value->classe_alimento_idclasse_alimento)) {
+                    $mult_value = Arr::add($mult_value, 'classe', 0);
+                    $mult_value = Arr::add($mult_value, 'subclasse', 0);
+                }
+
+                //subclasse_idsubclasse
+
+                $mult_values = Arr::prepend($mult_values, $mult_value);
+                $mult_value = [];
+            }
+        }
         return $mult_values;
     }
 }
