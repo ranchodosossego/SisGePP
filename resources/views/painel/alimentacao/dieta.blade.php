@@ -43,10 +43,10 @@
                                         aria-orientation="vertical">
                                         <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill"
                                             href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home"
-                                            aria-selected="true"><i class="fas fa-cog"></i> Simulador de Dieta</a>
+                                            aria-selected="true"><i class="fas fa-cog"></i> Simulador - Vaca Leiteira</a>
                                         <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill"
                                             href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile"
-                                            aria-selected="false"><i class="fas fa-cogs"></i> Formulação Avançada</a>
+                                            aria-selected="false"><i class="fas fa-cogs"></i> Dieta por Lote</a>
                                     </div>
                                 </div>
 
@@ -74,7 +74,7 @@
                                                                 <div class="form-group col-sm-3">
                                                                     <label for="peso_vivo">Qual o peso vivo?<span
                                                                             class="text-danger">*</span></label>
-                                                                    <input type="number" min="400" max="800" step="50"
+                                                                    <input type="number" min="400" max="800" step="25"
                                                                         placeholder="400-800"
                                                                         class="form-control peso w-75 peso_vivo" />
                                                                 </div>
@@ -98,16 +98,14 @@
                                                                 </div>
 
                                                                 <div class="form-group col-sm-3">
-                                                                    <label for="perc_gordura">% de Gordura <span
-                                                                            class="text-danger">*</span></label>
+                                                                    <label for="perc_gordura" class="label_perc_gordura">% de Gordura</label>
                                                                     <input type="number" min="3" max="5" step="0.5"
                                                                         placeholder="3-5"
                                                                         class="form-control perc_gordura w-50" />
                                                                 </div>
 
                                                                 <div class="form-group col-sm-3">
-                                                                    <label for="nucleo">% de Núcleo?<span
-                                                                            class="text-danger">*</span></label>
+                                                                    <label for="nucleo">% de Núcleo?</label>
                                                                     <input type="number" min="0" max="10" placeholder="0-10"
                                                                         class="form-control nucleo w-50" />
                                                                 </div>
@@ -136,9 +134,8 @@
 
                                                                 {{-- 2 - Concentrado (Energético) --}}
                                                                 <div class="form-group col-sm-4">
-                                                                    <label for="concentrado_energetico">2 - Concentrado
-                                                                        (Energético)<span
-                                                                            class="text-danger">*</span></label>
+                                                                    <label for="concentrado_energetico" class="concentrado_energetico">2 - Concentrado
+                                                                        (Energético)</label>
                                                                     <select name="concentrado_energetico"
                                                                         id="concentrado_energetico"
                                                                         class="concentrado_energetico selectpicker" multiple
@@ -156,9 +153,8 @@
 
                                                                 {{-- 3 - Concentrado (Proteíco) --}}
                                                                 <div class="form-group col-sm-4">
-                                                                    <label for="concentrado_proteico">3 - Concentrado
-                                                                        (Proteíco)<span
-                                                                            class="text-danger">*</span></label>
+                                                                    <label for="concentrado_proteico" class="concentrado_proteico">3 - Concentrado
+                                                                        (Proteíco)</label>
                                                                     <select name="concentrado_proteico"
                                                                         id="concentrado_proteico"
                                                                         class="concentrado_proteico selectpicker" multiple
@@ -222,7 +218,7 @@
                                                                         <th scope="col">#</th>
                                                                         <th scope="col">Nome</th>
                                                                         <th scope="col">Categoria</th>
-                                                                        <th scope="col">Mistura em %</th>
+                                                                        <th scope="col">% Ingredientes</th>
                                                                         <th scope="col">Total em Kg</th>
                                                                     </tr>
                                                                 </thead>
@@ -296,6 +292,10 @@
             animation-duration: 1.05s;
         }
 
+        .not-allowed {
+            cursor: not-allowed;
+        }
+
         @keyframes progressbar {
             0% {
                 width: 0%;
@@ -367,7 +367,7 @@
                         'bg-dark', 'bg-info');
                     const icons = new Array('fas fa-caret-up', 'fas fa-caret-left', 'fas fa-caret-down',
                         'fas fa-plus fa-xs');
-                    const texts = new Array('text-success', 'text-warning', 'text-primary', 'text-info');
+                    const texts = new Array('text-teal', 'text-warning', 'text-orange', 'text-info');
 
                     // COLOCAR A DURAÇÃO DO NÚCLEO EM MESES
 
@@ -409,6 +409,7 @@
                     $.each(response.dados_grid, function(idx, elem) {
 
                         table.append(
+
                             "<tr class='" + bg_color[i] + "'>" +
                             "<th scope='row'>" + (i + 1) + ".</th>" +
                             "<td>" + elem.nome + "</td>" +
@@ -431,6 +432,7 @@
                             " Kg</span>" +
                             "</td>" +
                             "</tr>"
+
                         );
                         i++;
 
@@ -583,14 +585,16 @@
 
 
                 $('.concentrado_proteico').prop('disabled', true);
-                $('.concentrado_energetico').selectpicker('deselectAll');
+                $('.concentrado_proteico').selectpicker('deselectAll');
                 $('.concentrado_proteico').selectpicker('refresh');
 
                 $('.perc_gordura').prop('disabled', true);
                 $('.perc_gordura').val('');
-                // $('.nucleo').prop('disabled', true);
-                // $('.nucleo').val('');
 
+                $(".concentrado_energetico").addClass("not-allowed text-muted");
+                $(".concentrado_proteico").addClass("not-allowed text-muted");
+                $(".perc_gordura").addClass("not-allowed text-muted");
+                $(".label_perc_gordura").addClass("not-allowed text-muted");
             }
 
             if (prodleitedia != 0) {
@@ -600,7 +604,12 @@
                 $('.concentrado_proteico').prop('disabled', false);
                 $('.concentrado_proteico').selectpicker('refresh');
                 $('.perc_gordura').prop('disabled', false);
-                //$('.nucleo').prop('disabled', false);
+
+                $(".concentrado_energetico").removeClass("not-allowed text-muted");
+                $(".concentrado_proteico").removeClass("not-allowed text-muted");
+                $(".perc_gordura").removeClass("not-allowed text-muted");
+                $(".label_perc_gordura").removeClass("not-allowed text-muted");
+
             }
 
         });
