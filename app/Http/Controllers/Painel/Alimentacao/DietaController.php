@@ -8,11 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 
 use Illuminate\Http\Request;
-use App\Models\Dieta;
 use App\Models\Lote;
-use App\Models\Alimento;
-use App\Models\Enpl;
-use App\Models\Mspl;
 
 class DietaController extends Controller
 {
@@ -40,80 +36,35 @@ class DietaController extends Controller
 
     private function validacao(Request $request)
     {
-        return 0;
+        $result = [];
+        $dados = [];
+        $validator = null;
+
+        $dados = $this->get_param($request);
+        $validator = Validator::make($request->all(), [
+            'volumoso_ids' => 'required',
+            'prodleitedia' => 'required',
+            'peso_vivo' => 'required|integer|min:400|max:800',
+        ]);
+
+        if ($validator->fails()) {
+            $result['status'] = 400;
+            $result['message'] = $validator->getMessageBag()->getMessages();
+        }
+
+
+        return $result;
     }
 
     public function getDieta(Request $request)
     {
-
-        #region Validação e Inicialização de Variáveis
-        $validator = Validator::make($request->all(), [
-            'volumoso_ids' => ['required'],
-            'prodleitedia' => ['required'],
-            'peso_vivo' => ['required'],
-            //'perc_gordura' => ['required'],
-        ]);
-
-        if ($validator->fails()) {
+        #region Validação
+        $valida = $this->validacao($request);
+        if ($valida['status'] == 400) {
             return response()->json([
-                'status' => 400,
-                'errors' => $validator->getMessageBag()->getMessages(),
+                'validacao' => $valida,
             ]);
         }
-
-        $dados = $this->get_param($request);
-
-        if ($dados[0]['prodleitedia'] > 0) {
-
-
-            if (is_null($dados[0]['concentrado_energetico_ids']) && is_null($dados[0]['concentrado_proteico_ids'])) {
-                // $validator = Validator::make($request->all(), [
-                //     'concentrado_energetico_ids' => ['required'],
-                //     'concentrado_proteico_ids' => ['required'],
-                // ]);
-                if ($validator->fails()) {
-                    return response()->json([
-                        'status' => 400,
-                        'errors' => $validator->getMessageBag()->getMessages(),
-                    ]);
-                }
-            }
-
-            // if (is_null($dados[0]['concentrado_energetico_ids'])) {
-            //     $validator = Validator::make($request->all(), [
-            //         'concentrado_proteico_ids' => ['required'],
-            //     ]);
-            //     if ($validator->fails()) {
-            //         return response()->json([
-            //             'status' => 400,
-            //             'errors' => $validator->getMessageBag()->getMessages(),
-            //         ]);
-            //     }
-            //     $ing_concentrado_proteico = $this->get_nutriente_alimento($dados[0]['concentrado_proteico_ids'], 2);
-            // } else {
-            //     $validator = Validator::make($request->all(), [
-            //         'concentrado_energetico_ids' => ['required'],
-            //     ]);
-            //     if ($validator->fails()) {
-            //         return response()->json([
-            //             'status' => 400,
-            //             'errors' => $validator->getMessageBag()->getMessages(),
-            //         ]);
-            //     }
-            //     $ing_concentrado_energetico = $this->get_nutriente_alimento($dados[0]['concentrado_energetico_ids'], 2);
-            // }
-            $validator = Validator::make($request->all(), [
-                'nucleo' => ['required'],
-                //'perc_gordura' => ['required'],
-            ]);
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 400,
-                    'errors' => $validator->getMessageBag()->getMessages(),
-                ]);
-            }
-        }
-
         #endregion
 
         #region Variáveis Locais
@@ -138,6 +89,7 @@ class DietaController extends Controller
         #endregion
 
         #region Nova lógica
+
         $en_mantenca = $this->get_en_mantenca($dados[0]['em_lactacao'], $dados[0]['peso_vivo']);
         $en_producao_leite = $this->get_en_producao_leite($dados[0]['perc_gordura'], $dados[0]['prodleitedia']);
         $en_total = $this->get_en_total($dados, $en_mantenca, $en_producao_leite);
@@ -150,9 +102,9 @@ class DietaController extends Controller
         $ing_mist = $this->monta_misturas($dados, $dados_conc);
         $dados_grid = $this->get_mistura($ing_mist, $dados_conc, $dados_volu, $dados_nucleo);
 
-        #endregion
-
         $dados_gerais = $this->show_dados_tela($dados_nucleo, $dados_volu, $dados_conc);
+
+        #endregion
 
         return response()->json([
             'status' => 200,
@@ -211,7 +163,6 @@ class DietaController extends Controller
         $ing_conc_energ = [];
         $ing_conc_prot = [];
 
-
         if ($dados[0]["em_lactacao"]) {
 
             $ing_conc_energ = (!is_null($dados[0]['concentrado_energetico_ids'])) ? $this->get_alimento($dados[0]['concentrado_energetico_ids'], 2) : [];
@@ -249,7 +200,12 @@ class DietaController extends Controller
 
     private function calc_quadrado_pearson_ing($id_mist, $ing1, $ing2, $dados_conc)
     {
+
+        //--: Variáveis
         $mistura = [];
+        $p1 = 0;
+        $p2 = 0;
+        $tp = 0;
 
         //--: Variáveis do Quadrado de Pearson
         $p1 = abs($ing2['pb'] - $dados_conc['pb_perc']);
@@ -273,35 +229,23 @@ class DietaController extends Controller
             'ing2_ndt_perc' =>  $ing2['ndt_perc'],
 
         );
-
-        // $ing = array(
-        //     'idalimento' => $value['idalimento'],
-        //     'nome' => $value['nome'],
-        //     'categoria' => 'Concentrado',
-        //     'perc' => round($value['mn_perc'], 2),
-        //     'kg' => round($value['mn_kg'], 3),
-        //     'classe' => $value['classe'],
-        //     'subclasse' => $value['subclasse'],
-
-        // );
-
-
         return $mistura;
     }
 
     private function calc_quadrado_pearson_mist($misturas, $dados_conc, $dados_nucleo)
     {
 
-        /////// CORRIGIR PAR DOIS ITENS
-
-
-
         //--: Variáveis do Quadrado de Pearson
-        $a = $misturas[1]["tot_ndt_mist_perc"];
-        $b = $misturas[0]["tot_ndt_mist_perc"];
+        $p1 = 0;
+        $p2 = 0;
+        $tp = 0;
+        $ms_kg = 0;
+        $ms_perc = 0;
+        $mn_kg = 0;
+        $mn_perc  = 0;
 
-        $p1 = round(abs($a - $dados_conc['ndt_perc']), 2);
-        $p2 = round(abs($b - $dados_conc['ndt_perc']), 2);
+        $p1 = round(abs($misturas[1]["tot_ndt_mist_perc"] - $dados_conc['ndt_perc']), 2);
+        $p2 = round(abs($misturas[0]["tot_ndt_mist_perc"] - $dados_conc['ndt_perc']), 2);
         $tp = round($p1 + $p2, 2);
 
         //-- Misturas: % da Mistura e Kg de MS
@@ -314,20 +258,6 @@ class DietaController extends Controller
         foreach ($misturas as &$item) {
             foreach ($item as $key => &$value) {
                 if (is_array($value)) {
-
-                    // if (array_key_exists("primeiro", $busca_array)) {
-                    //     echo "O elemento 'primeiro' está no array!";
-                    // }
-
-                    // $ing1['mn_kg'] = round($dados_conc['mn_kg'] * $ing1["ms"] / $dados_conc['ms_kg'], 3);
-                    // $ing2['mn_kg'] = round($dados_conc['mn_kg'] * $ing2["ms"] / $dados_conc['ms_kg'], 3);
-                    // //$nucleo_mn_kg = round($conc_mn_kg * $nucleo_ms_kg / $conc_ms_kg, 3);
-
-                    // 'ing1_mn_kg' => $ing1['mn_kg'],
-                    // 'ing2_mn_kg' => $ing2['mn_kg'],
-
-
-
                     $ms_kg = round($item['mist_ms_kg'] * $value["perc_mist"] / 100, 3);
                     $ms_perc = round($ms_kg * 100 / $dados_conc['ms_kg'], 2);
                     $mn_kg = round($dados_conc["mn_kg"] * $ms_kg  / $dados_conc['ms_kg'], 3);
@@ -339,9 +269,6 @@ class DietaController extends Controller
                     $value['mn_kg'] = $mn_kg;
                 }
             }
-
-            // $item['tot_mn_conc_perc'] = $dados_conc["mn_perc"];
-            // $item['tot_mn_conc_kg'] = $dados_conc["mn_kg"];
         }
 
         return $misturas;
@@ -349,6 +276,8 @@ class DietaController extends Controller
 
     private function get_mistura($ing_mist, $dados_conc, $dados_volu, $dados_nucleo)
     {
+
+        #region Variáveis
         $itens = [];
         $result = [];
         $mist = [];
@@ -356,6 +285,7 @@ class DietaController extends Controller
         $tot_mist = 0;
         $result = [];
         $id_mist = 0;
+        #endregion
 
         #region //-- Volumoso
         if (!empty($dados_volu)) {
@@ -383,10 +313,10 @@ class DietaController extends Controller
         }
         #endregion
 
-        //-- Concentrado
+        #region //-- Concentrado
         if (!empty($ing_mist)) {
 
-            #region Misturas - Quadrado Pearson Ingredientes
+            #region Quadrado Pearson Por Ingredientes
 
             $tot_ing = count($ing_mist) - 1;
             $tot_mist = count($ing_mist) / 2;
@@ -412,6 +342,7 @@ class DietaController extends Controller
 
             #endregion
 
+            #region Quadrado Pearson Por Mistura
             if ($id_mist > 1) {
                 $mist = $this->calc_quadrado_pearson_mist($misturas, $dados_conc, $dados_nucleo);
                 //-- Formata apresentação
@@ -433,18 +364,16 @@ class DietaController extends Controller
                     }
                 }
             }
+            #endregion
 
+            #region Formata apresentação para apenas uma mistura
             if ($id_mist <= 1) {
 
-                //-- Formata apresentação
-                foreach ($mist as $key => &$value) {
+                foreach ($mist as &$value) {
                     if (is_array($value)) {
-                        //foreach ($value as &$value) {
-                        //if ($key == $mist["ingrediente-1"]) {
                         $ms_kg = round($dados_conc["conc_ms_sem_nucleo_kg"] * $value["perc_mist"] / 100, 3);
                         $ms_perc = round($ms_kg * 100 / $dados_conc['ms_kg'], 2);
                         $mn_kg = round($dados_conc["mn_kg"] * $ms_kg  / $dados_conc['ms_kg'], 3);
-                        $mn_perc = round($mn_kg * 100 / $dados_conc["mn_kg"], 2);
 
                         $ing = array(
                             'idalimento' => $value['idalimento'],
@@ -455,31 +384,15 @@ class DietaController extends Controller
                             'classe' => $value['classe'],
                             'subclasse' => $value['subclasse'],
                         );
-                        //}
-
                         array_push($result, $ing);
-                        //}
                     }
                 }
             }
-            // else {
-            //     // $ing = array(
-            //     //     'idalimento' => $value['idalimento'],
-            //     //     'nome' => $value['nome'],
-            //     //     'categoria' => 'Concentrado',
-            //     //     'perc' => round($value['mn_perc'], 2),
-            //     //     'kg' => round($value['mn_kg'], 3),
-            //     //     'classe' => $value['classe'],
-            //     //     'subclasse' => $value['subclasse'],
-
-            //     // );
-            // }
-
-
+            #endregion
 
         }
 
-        //if ($id_mist > 1) {
+        #region Soma os ingredientes repetidos e remove um deles.
         $idx_duplicado = [];
         for ($i = 0; $i < count($result); $i++) {
             for ($j = $i + 1; $j < count($result); $j++) {
@@ -495,7 +408,10 @@ class DietaController extends Controller
         if (!empty($idx_duplicado)) {
             unset($result[$idx_duplicado]);
         }
-        //}
+        #endregion
+
+        #endregion
+
         return $result;
     }
 
@@ -588,8 +504,6 @@ class DietaController extends Controller
         $mn_perc = 0;
 
         $materias_conc = $this->get_ms_mn_concentrado($dados); // Retorn 0 para Producao Leite zero
-        // $ms_kg = $materias_conc['ms_kg'];
-        // $mn_kg = $materias_conc['mn_kg'];
 
         $ing_volumoso = $this->get_alimento($dados[0]['volumoso_ids'], 1);
         $ms_volumoso_kg = round($en_total['ms_kg_dia'] - $materias_conc['ms_kg'], 3);
@@ -598,7 +512,6 @@ class DietaController extends Controller
         //--: CALCULAR Kg DE NDT e PB DO VOLUMOSO
         $ndt_volumoso_kg = round(($ing_volumoso[0]['ndt'] * $ms_volumoso_kg / 100), 2);
         $pb_volumoso_kg = round(($ing_volumoso[0]['pb'] * $ms_volumoso_kg / 100), 3);
-        //$mn_perc = round(($ms_volumoso_kg / $en_total['ms_kg_dia']) * 100, 2);
         $mn_perc = 100; //ALTERAR PARA QUANDO PUDER SELECIONAR 2 INGREDIENTES.
 
 
@@ -649,10 +562,6 @@ class DietaController extends Controller
             $conc_ms_sem_nucleo_kg = abs($ms_kg - $nucleo_ms_kg);
         } else {
             // Dependendo do fabricante será 30g para 100Kg peso vivo:
-            // round($dados[0]['peso_vivo'] * 0.3, 3).
-            // $nucleo_ms_kg = $nucleo_mn_kg = round($dados[0]['peso_vivo'] * 0.3, 3);
-            // $nucleo_perc = (0.3 * 100);
-            // $conc_ms_sem_nucleo_kg = $nucleo_ms_kg;
             $nucleo_ms_kg = 0;
             $nucleo_perc = 0;
             $conc_ms_sem_nucleo_kg = 0;
@@ -696,6 +605,7 @@ class DietaController extends Controller
     private function get_en_total($dados, $en_mantenca, $en_producao_leite)
     {
 
+        #region Varáveis
         $materia = [];
         $ms_kg_dia = 0;
         $soma_ndt = 0;
@@ -709,7 +619,7 @@ class DietaController extends Controller
         $pb_kg = 0;
         $ca_kg = 0;
         $p_kg = 0;
-
+        #endregion
 
         $materia = $this->get_consumo_ms($dados[0]['peso_vivo'], $dados[0]['prodleitedia']);
         $ms_kg_dia = $materia['ms_kg_dia'];
@@ -877,8 +787,6 @@ class DietaController extends Controller
                     $mult_value = Arr::add($mult_value, 'classe', 0);
                     $mult_value = Arr::add($mult_value, 'subclasse', 0);
                 }
-
-                //subclasse_idsubclasse
 
                 $mult_values = Arr::prepend($mult_values, $mult_value);
                 $mult_value = [];
