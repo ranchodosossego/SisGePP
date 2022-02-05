@@ -43,7 +43,8 @@
                                         aria-orientation="vertical">
                                         <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill"
                                             href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home"
-                                            aria-selected="true"><i class="fas fa-cog"></i> Simulador - Vaca Leiteira</a>
+                                            aria-selected="true"><i class="fas fa-cog"></i> Simulador - Vaca
+                                            Leiteira</a>
                                         <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill"
                                             href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile"
                                             aria-selected="false"><i class="fas fa-cogs"></i> Dieta por Lote</a>
@@ -98,7 +99,8 @@
                                                                 </div>
 
                                                                 <div class="form-group col-sm-3">
-                                                                    <label for="perc_gordura" class="label_perc_gordura">% de Gordura</label>
+                                                                    <label for="perc_gordura" class="label_perc_gordura">%
+                                                                        de Gordura</label>
                                                                     <input type="number" min="3" max="5" step="0.5"
                                                                         placeholder="3-5"
                                                                         class="form-control perc_gordura w-50" />
@@ -134,13 +136,14 @@
 
                                                                 {{-- 2 - Concentrado (Energético) --}}
                                                                 <div class="form-group col-sm-4">
-                                                                    <label for="concentrado_energetico" class="concentrado_energetico">2 - Concentrado
+                                                                    <label for="concentrado_energetico"
+                                                                        class="concentrado_energetico">2 - Concentrado
                                                                         (Energético)</label>
                                                                     <select name="concentrado_energetico"
                                                                         id="concentrado_energetico"
                                                                         class="concentrado_energetico selectpicker" multiple
                                                                         data-selected-text-format="count"
-                                                                        data-max-options="5" data-style="btn-dark"
+                                                                        data-max-options="4" data-style="btn-dark"
                                                                         title="Nada Selecionado">
                                                                         @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '2')->where('subclasse_idsubclasse', '=', '1') as $concentrado_energetico)
                                                                             <option
@@ -153,13 +156,14 @@
 
                                                                 {{-- 3 - Concentrado (Proteíco) --}}
                                                                 <div class="form-group col-sm-4">
-                                                                    <label for="concentrado_proteico" class="concentrado_proteico">3 - Concentrado
+                                                                    <label for="concentrado_proteico"
+                                                                        class="concentrado_proteico">3 - Concentrado
                                                                         (Proteíco)</label>
                                                                     <select name="concentrado_proteico"
                                                                         id="concentrado_proteico"
                                                                         class="concentrado_proteico selectpicker" multiple
                                                                         data-selected-text-format="count"
-                                                                        data-max-options="5" data-style="btn-dark">
+                                                                        data-max-options="4" data-style="btn-dark">
                                                                         @foreach ($lstalimento->where('classe_alimento_idclasse_alimento', '=', '2')->where('subclasse_idsubclasse', '=', '2') as $concentrado_proteico)
                                                                             <option
                                                                                 value="{{ $concentrado_proteico->idalimento }}">
@@ -306,11 +310,21 @@
             }
         }
 
+        .swal2-popup {
+            /* font-size: 1.01rem !important; */
+            /* font-family: Georgia, serif; */
+        }
+
+        .colored-toast.swal2-icon-error {
+            background-color: #f27474 !important;
+        }
+
     </style>
 
 @stop
 
 @section('js')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/i18n/defaults-pt_BR.min.js"
         integrity="sha512-3l+bzQRu7gLEJq7fP1ox9u/rTpx0ECS2SF1gJpJllASEKQauLHRVwOSAGg1oqGeIfSdr+9iwYo6VGayJ4wc3gQ=="
@@ -326,9 +340,12 @@
                 }
             });
             var listar = function(items) {
+                //console.log(items);
                 var alimento_ids = [];
                 $(items).each(function() {
-                    alimento_ids.push($(this).val());
+                    if ($(this).val() != '') {
+                        alimento_ids.push($(this).val());
+                    }
                 });
                 return alimento_ids;
             };
@@ -345,12 +362,18 @@
                 concentrado_proteico_ids = listar($('#concentrado_proteico option:selected'));
             }
 
+            var value = $('.nucleo').val();
+            var nucleo = ((value === '' || value === null || value === undefined)) ? 0 : $('.nucleo').val();
+
+            // var val_pg = $('.perc_gordura').val();
+            // var pg = ((val_pg === '' || val_pg === null || val_pg === undefined)) ? 0 : $('.perc_gordura').val().toString().replace(",", ".");
+
             var data = {
                 'volumoso_ids': volumoso_ids,
                 'concentrado_energetico_ids': concentrado_energetico_ids,
                 'concentrado_proteico_ids': concentrado_proteico_ids,
                 'peso_vivo': $('.peso_vivo').val(),
-                'nucleo': $('.nucleo').val(),
+                'nucleo': nucleo,
                 'prodleitedia': prodleitedia,
                 'perc_gordura': $('.perc_gordura').val(),
             }
@@ -361,6 +384,54 @@
                 data: data,
                 dataType: "json",
                 success: function(response) {
+
+                    if (response.status != 200) {
+                        const msg = [];
+                        msg.push("<ol class='list-group list-group-numbered'>");
+                        for (var i = 0; i < response.validacao.length; i++) {
+                            var m = response.validacao[i].message;
+                            $.each(m, function(idx, elem) {
+                                msg.push(
+                                    "<li class='list-group-item d-flex justify-content-between align-items-start bg-transparent border-0'>" +
+                                    elem +
+                                    "</li>");
+                            });
+                        }
+                        msg.push("</ol>");
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-right',
+                            iconColor: 'white',
+                            customClass: {
+                                popup: 'colored-toast'
+                            },
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            width: 600,
+                            html: msg.join(' '),
+                            // html: "<div style='text-align:left; margin-left:10px'>" +
+                            //     msg.join(' ') + "</div>",
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal
+                                    .stopTimer)
+                                toast.addEventListener('mouseleave', Swal
+                                    .resumeTimer)
+                            }
+                        });
+                        Toast.fire({
+                            icon: 'error',
+                            //text: msg,
+                        });
+
+
+
+                        $("#itens div").remove();
+                        $("#ingredientes tbody tr").remove();
+                        return;
+                    }
+
                     $("#itens div").remove();
                     var dados_gerais = $(".dados_gerais");
                     const bg_colors = new Array('bg-success', 'bg-warning', 'bg-danger', 'bg-primary',
@@ -404,7 +475,8 @@
                     var table = $("#ingredientes tbody");
                     var i = 0;
                     const bg_color = new Array('bg-dark', '', '', '', '', '');
-                    const bar_color = new Array('bg-success', 'bg-info', 'bg-warning', 'bg-danger', 'bg-primary', 'bg-info');
+                    const bar_color = new Array('bg-success', 'bg-info', 'bg-warning', 'bg-danger',
+                        'bg-primary', 'bg-info');
 
                     $.each(response.dados_grid, function(idx, elem) {
 
@@ -438,135 +510,6 @@
 
                     });
 
-
-                    // .dados_gerais
-                    // response.tela[0].id
-
-                    // //-- Variáveis com os totais de CONCENTRADO e VOLUMOSO
-                    // var tot_conc_kg = 0;
-                    // var tot_conc_perc = 0;
-                    // var tot_volumoso_kg = 0;
-                    // var tot_volumoso_perc = 0;
-                    // var tot_nucleo_kg = -1;
-                    // var tot_nucleo_perc = -1;
-                    // bar_color = 'bg-primary';
-                    // bar_bg = 'bg-primary';
-                    // //-- Preenche Tabela de Ingredientes
-                    // $("#ingredientes tbody tr").remove();
-                    // var table = $("#ingredientes tbody");
-
-                    // $.each(response.grid_ing, function(idx, elem) {
-
-                    //     switch (elem.classe) {
-                    //         case 1:
-                    //             bar_color = 'bg-success';
-                    //             bar_bg = 'bg-dark';
-                    //             break;
-                    //         case 2:
-                    //             bar_color = (elem.subclasse == 1) ? 'bg-warning' : 'bg-info';
-                    //             bar_bg = '';
-                    //             break;
-                    //         case 8:
-                    //             bar_color = 'bg-danger';
-                    //             bar_bg = '';
-                    //             tot_nucleo_kg = elem.kg;
-                    //             tot_nucleo_perc = elem.perc;
-                    //             $("#nucleo_tot_mn_kg").html(tot_nucleo_kg + " Kg");
-                    //             $("#tot_nucleo_dieta_perc").addClass("text-success");
-                    //             $("#tot_nucleo_dieta_perc").html(
-                    //                 '<i class="fas fa-caret-up m-1"></i>' +
-                    //                 tot_nucleo_perc + " %");
-                    //             break;
-                    //         default:
-                    //             bar_bg = '';
-                    //             bar_color = 'bg-primary';
-                    //     }
-
-                    //     table.append(
-                    //         "<tr class='" + bar_bg + "'>" +
-                    //         "<th scope='row'>" + (idx + 1) + ".</th>" +
-                    //         "<td>" + elem.nome + "</td>" +
-                    //         "<td>" + elem.categoria + "</td>" +
-                    //         "<td>" +
-                    //         "<div id='progressbar' class='progress mt-1'>" +
-                    //         "<div id='progress' class='progress-bar progress-bar-striped progress-bar-animated " +
-                    //         bar_color + "'" +
-                    //         "aria-valuemin='0' aria-valuemax='100' role='progressbar'" +
-                    //         "style=' border-radius: 4px; width:" +
-                    //         (elem.perc + 15) + "%'>" +
-                    //         "<span class='pe-2 ps-2'><strong>" + elem.perc +
-                    //         "%</strong></span>" +
-
-                    //         "</div>" +
-                    //         "</div>" +
-                    //         "</td>" +
-                    //         "<td><span style='font-size: 1.1em; width: 70%;' class='p-1 badge " +
-                    //         bar_color + "'>" + elem.kg +
-                    //         " Kg</span>" +
-                    //         "</td>" +
-                    //         "</tr>"
-                    //     );
-
-                    // });
-
-                    // //-- Volumoso
-                    // tot_volumoso_kg = response.dados_volumoso[0].tot_mn_kg;
-                    // tot_volumoso_perc = response.dados_volumoso[0].tot_mn_perc;
-                    // $("#volumoso_tot_mn_kg").html(tot_volumoso_kg + " Kg");
-                    // if (tot_volumoso_perc >= 50) {
-                    //     $("#tot_volumoso_dieta_perc").removeClass("text-warning").addClass(
-                    //         "text-success");
-                    //     $("#tot_volumoso_dieta_perc").html('<i class="fas fa-caret-up m-1"></i>' +
-                    //         tot_volumoso_perc + " %");
-                    // } else {
-                    //     $("#tot_volumoso_dieta_perc").removeClass("text-success").addClass(
-                    //         "text-warning");
-                    //     $("#tot_volumoso_dieta_perc").html('<i class="fas fa-caret-left m-1"></i>' +
-                    //         tot_volumoso_perc + " %");
-                    // }
-
-                    // //-- Concentrado
-                    // // var a = (response.dados_concentrado.length > 0);
-                    // // console.log('a: ' + a);
-                    // // var b = (typeof response.dados_concentrado !== 'undefined');
-                    // // console.log('b: ' + b);
-
-                    // if (response.dados_concentrado.length > 0) {
-
-                    //     tot_conc_kg = response.dados_concentrado[0].tot_mn_kg;
-                    //     tot_conc_perc = response.dados_concentrado[0].tot_mn_perc;
-
-                    //     $("#concentrado_tot_mn_kg").html(tot_conc_kg + " Kg");
-
-                    //     if (response.dados_concentrado[0].tot_mn_perc >= 50) {
-                    //         $("#tot_concentrado_dieta_perc").removeClass(["text-warning",
-                    //             "text-danger"
-                    //         ]).addClass("text-success");
-                    //         $("#tot_concentrado_dieta_perc").html(
-                    //             "<i class=\"fas fa-caret-up m-1\"></i>" + tot_conc_perc + " %");
-                    //     } else {
-                    //         $("#tot_concentrado_dieta_perc").removeClass(["text-danger",
-                    //             "text-success"
-                    //         ]).addClass("text-warning");
-                    //         $("#tot_concentrado_dieta_perc").html(
-                    //             "<i class=\"fas fa-caret-left m-1\"></i>" + tot_conc_perc + " %");
-                    //     }
-
-                    // } else {
-                    //     $("#tot_concentrado_dieta_perc").removeClass(["text-warning", "text-success"])
-                    //         .addClass(
-                    //             "text-danger");
-                    //     $("#concentrado_tot_mn_kg").html("0 Kg");
-                    //     $("#tot_concentrado_dieta_perc").html(
-                    //         "<i class=\"fas fa-caret-down m-1\"></i> 0 %");
-                    // }
-
-
-                    // //-- Total da Dieta
-                    // $("#tot_deita_mn_kg").html(response.tot_mist_kg + " Kg");
-                    // $("#tot_dieta_perc").addClass("text-success");
-                    // $("#tot_dieta_perc").html("<i class=\"fas fa-plus fa-xs m-1\"></i>" + response
-                    //     .tot_mist_perc + " %");
 
                 }
                 //-- end_success

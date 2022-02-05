@@ -36,32 +36,93 @@ class DietaController extends Controller
 
     private function validacao(Request $request)
     {
+        $itens = [];
         $result = [];
-        $dados = [];
         $validator = null;
+        $dados = (array)$this->get_param($request);
+        $is_lact = $dados[0]['em_lactacao'];
+        $is_conc_ener = true;
+        $is_conc_prot = true;
 
-        $dados = $this->get_param($request);
-        $validator = Validator::make($request->all(), [
+        $rules = [
             'volumoso_ids' => 'required',
             'prodleitedia' => 'required',
             'peso_vivo' => 'required|integer|min:400|max:800',
-        ]);
+            'nucleo' => 'integer|min:0|max:10',
+        ];
 
-        if ($validator->fails()) {
-            $result['status'] = 400;
-            $result['message'] = $validator->getMessageBag()->getMessages();
+        $messages = [
+            'volumoso_ids.required' => '<div><div class="fw-bold"><strong>Volumoso:</strong></div> Ao menos 1 volumoso deve ser selecionado.</div>',
+            'prodleitedia.required' => '<div><div class="fw-bold"><strong>Produção de leite:</strong></div> A quantidade de leite desejada a ser produzida deve ser informada.</div>',
+            'peso_vivo.required' => '<div><div class="fw-bold"><strong>Peso Vivo:</strong></div> Deve ser informado.</div>',
+            'peso_vivo.integer' => '<div><div class="fw-bold"><strong>Peso Vivo:</strong></div> Informe somente números sem vírgula.</div>',
+            'peso_vivo.min' => '<div><div class="fw-bold"><strong>Peso Vivo:</strong></div> A dieta é para animais com no mínimo 400 Kg.</div>',
+            'peso_vivo.max' => '<div><div class="fw-bold"><strong>Peso Vivo:</strong></div> A dieta é para animais com no máximo 800 Kg.</div>',
+            'perc_gordura.required' => '<div><div class="fw-bold"><strong>Percentual de Gordura:</strong></div> Deve ser informado.</div>',
+            'perc_gordura.numeric' => '<div><div class="fw-bold"><strong>Percentual de Gordura:</strong></div> Informe somente números.</div>',
+            'perc_gordura.min' => '<div><div class="fw-bold"><strong>Percentual de Gordura:</strong></div> No mínimo de 3%.</div>',
+            'perc_gordura.max' => '<div><div class="fw-bold"><strong>Percentual de Gordura:</strong></div> No máximo de 5%.</div>',
+
+            'nucleo.integer' => '<div><div class="fw-bold"><strong>Núcleo:</strong></div> Informe somente números sem vírgula.</div>',
+            'nucleo.min' => '<div><div class="fw-bold"><strong>Núcleo:</strong></div> No mínimo de 0.</div>',
+            'nucleo.max' => '<div><div class="fw-bold"><strong>Núcleo:</strong></div> No máximo de 10.</div>',
+        ];
+
+        #region Obrigatórios
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($is_lact) {
+
+            $validator->sometimes('perc_gordura', 'required|numeric|min:3|max:5', function ($input) {
+                return $input->prodleitedia > 0;
+            });
+
+            $is_conc_ener = (is_null($dados[0]["concentrado_energetico_ids"]));
+            $is_conc_prot = (is_null($dados[0]["concentrado_proteico_ids"]));
+            if ($is_conc_ener && $is_conc_prot) {
+                $concentrado = array(
+                    'concentrado' => array('<div><div class="fw-bold"><strong>Atenção:</strong></div>É obrigatório o fornecimento de concentrado a animais que estão produzindo leite.</div>'),
+                );
+                $itens['message'] = $concentrado;
+                array_push($result, $itens);
+            } else {
+                $tot_ener = ($is_conc_ener) ? 0 : count($dados[0]["concentrado_energetico_ids"]);
+                $tot_prot = ($is_conc_prot) ? 0 : count($dados[0]["concentrado_proteico_ids"]);
+                $tot = $tot_ener + $tot_prot;
+                if($tot > 4) {
+                    $concentrado = array(
+                        'concentrado' => array('<div><div class="fw-bold"><strong>Atenção:</strong></div>Só é possível montar uma dieta com no máximo 4 ingredientes concentrados, entre energético e proteíco.</div>'),
+                    );
+                    $itens['message'] = $concentrado;
+                    array_push($result, $itens);
+                }
+
+            }
         }
 
+        #endregion
+
+        if ($validator->fails()) {
+            $itens['message'] = $validator->getMessageBag()->getMessages();
+            array_push($result, $itens);
+        }
 
         return $result;
     }
 
+    /**
+     * Obtem a Dieta Completa para um Animal
+     *
+     * @param Request $request
+     * @return void
+     */
     public function getDieta(Request $request)
     {
         #region Validação
         $valida = $this->validacao($request);
-        if ($valida['status'] == 400) {
+        if (!empty($valida)) {
             return response()->json([
+                'status' => 400,
                 'validacao' => $valida,
             ]);
         }
@@ -660,8 +721,10 @@ class DietaController extends Controller
 
     private function get_en_producao_leite($perc_gordura, $prodleitedia)
     {
+        $r = $perc_gordura - floor($perc_gordura);
+        $pg = ($r > 0 && $r <= 0.5) ? floor($perc_gordura) + 0.5 : ceil($perc_gordura);
         $producaoleite = DB::table('enpl')
-            ->where('gordura', '=', $perc_gordura)
+            ->where('gordura', '=', $pg)
             ->get();
 
         $result = $this->monta_exigencia_nutricional($producaoleite, $prodleitedia, false);
