@@ -24,7 +24,6 @@ class DietaController extends Controller
 
     public function index()
     {
-        //phpinfo();
         $lstalimento = DB::table('alimento')
             ->where('alimento.ativo', '=', '1')
             ->orderBy('nome', 'asc')
@@ -36,6 +35,7 @@ class DietaController extends Controller
 
     private function validacao(Request $request)
     {
+        #region Variáveis
         $itens = [];
         $result = [];
         $validator = null;
@@ -43,14 +43,18 @@ class DietaController extends Controller
         $is_lact = $dados[0]['em_lactacao'];
         $is_conc_ener = true;
         $is_conc_prot = true;
+        #endregion
 
+        #region Regras
         $rules = [
             'volumoso_ids' => 'required',
             'prodleitedia' => 'required',
             'peso_vivo' => 'required|integer|min:400|max:800',
             'nucleo' => 'integer|min:0|max:10',
         ];
+        #endregion
 
+        #region Mensagens
         $messages = [
             'volumoso_ids.required' => '<div><div class="fw-bold"><strong>Volumoso:</strong></div> Ao menos 1 volumoso deve ser selecionado.</div>',
             'prodleitedia.required' => '<div><div class="fw-bold"><strong>Produção de leite:</strong></div> A quantidade de leite desejada a ser produzida deve ser informada.</div>',
@@ -67,6 +71,7 @@ class DietaController extends Controller
             'nucleo.min' => '<div><div class="fw-bold"><strong>Núcleo:</strong></div> No mínimo de 0.</div>',
             'nucleo.max' => '<div><div class="fw-bold"><strong>Núcleo:</strong></div> No máximo de 10.</div>',
         ];
+        #endregion
 
         #region Obrigatórios
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -100,14 +105,15 @@ class DietaController extends Controller
             }
         }
 
-        #endregion
-
         if ($validator->fails()) {
             $itens['message'] = $validator->getMessageBag()->getMessages();
             array_push($result, $itens);
         }
 
+        #endregion
+
         return $result;
+
     }
 
     /**
@@ -118,6 +124,7 @@ class DietaController extends Controller
      */
     public function getDieta(Request $request)
     {
+
         #region Validação
         $valida = $this->validacao($request);
         if (!empty($valida)) {
@@ -146,7 +153,6 @@ class DietaController extends Controller
 
         $nucleo_perc = (float)($dados[0]['nucleo']);
 
-        //--------------------------------
         #endregion
 
         #region Nova lógica
