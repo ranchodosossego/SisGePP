@@ -348,6 +348,29 @@
             cursor: pointer;
         }
 
+        .acoes {
+            border: solid 1px #CCC !important;
+            max-width: 52px !important;
+        }
+
+        .acoes span {
+            border-left: solid 1px #CCC !important;
+            margin-left: 3px !important;
+        }
+
+        .dropdown-toggle::after {
+            border: none;
+            font: normal normal normal 12px/1 'Font Awesome 5 Free';
+            content: "\f142";
+            vertical-align: 0;
+            text-align: left !important;
+        }
+
+        .divider {
+            margin: 0 0.5em !important;
+            border-top: #CCC solid 0.1px !important;
+        }
+
     </style>
 @stop
 
@@ -569,7 +592,7 @@
 
                         //-- Para recarregar a imagem
                         d = new Date();
-                        $("#avatar-atual").attr("src", response.url+"?" + d.getTime());
+                        $("#avatar-atual").attr("src", response.url + "?" + d.getTime());
 
                         Swal.fire({
                             position: 'center',

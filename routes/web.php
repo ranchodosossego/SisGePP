@@ -58,10 +58,16 @@ Route::post('/updateLoteAnimal', [App\Http\Controllers\Painel\Rebanho\AnimalCont
 Route::post('/getLotesAnimal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'getLotesAnimal'])->name('get.lotes.animal');
 Route::post('update', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'update'])->name('update.animal');
 
+Route::get('/getfichatecnica/{idanimal}', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'getFichaTecnica']);
+
 // --: Dieta
 Route::get('dieta', [App\Http\Controllers\Painel\Alimentacao\DietaController::class, 'index']);
 Route::get('/getDieta', [App\Http\Controllers\Painel\Alimentacao\DietaController::class, 'getDieta'])->name('get.dieta');
-//Route::post('dieta', [App\Http\Controllers\DietaController::class, 'index'])->name('painel.rebanho.dieta');
 
 // --: Alimento
 Route::get('/getNutrienteAlimentos', [App\Http\Controllers\Painel\Alimentacao\AlimentoController::class, 'getNutrienteAlimentos'])->name('get.nutriente.alimentos');
+
+//--: Sanidade
+Route::get('/prontuario', [App\Http\Controllers\Painel\Sanidade\ProntuarioController::class, 'index']);
+Route::get('/prontuario/{idanimal}', [App\Http\Controllers\Painel\Sanidade\ProntuarioController::class, 'getProntuario']);
+Route::get('/getP', [App\Http\Controllers\Painel\Sanidade\ProntuarioController::class, 'getP'])->name('get.dieta');

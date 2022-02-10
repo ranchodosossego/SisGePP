@@ -374,7 +374,7 @@ return [
                 [
                     'text' => 'Prontuário',
                     'shift'   => 'ml-3',
-                    'url'  => '#',
+                    'url'  => 'prontuario',
                     'icon'    => 'fas fa-notes-medical p-1',
                 ],
                 [
@@ -561,7 +561,7 @@ return [
 
     'iframe' => [
         'default_tab' => [
-            'url' => 'dieta',
+            'url' => 'rebanho',
             'title' => null,
         ],
         'buttons' => [

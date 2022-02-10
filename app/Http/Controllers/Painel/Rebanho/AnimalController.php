@@ -7,21 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\URL;
+
+use Yajra\DataTables\DataTables;
+use Intervention\Image\Facades\Image;
 
 use App\Models\Raca;
 use App\Models\Animal;
 use App\Models\Origem;
-use App\Models\Lote;
-use App\Models\TipoLote;
 use App\Models\Usuario;
-use App\Models\GrauSangue;
-use App\Models\Propriedade;
-use App\Models\ClassificacaoEtaria;
-use MigrationsGenerator\Generators\MigrationConstants\Method\Foreign;
-use Yajra\DataTables\DataTables;
-use Intervention\Image\Facades\Image;
-
-
 
 class AnimalController extends Controller
 {
@@ -123,6 +118,23 @@ class AnimalController extends Controller
         ]);
     }
 
+    private function getAcoes($lstanimal)
+    {
+        $path = URL::to('/getfichatecnica') . '/' . $lstanimal->idanimal;
+
+        $result = '<div class="btn-group">' .
+            '<button type="button" class="btn btn-light btn-sm dropdown-toggle acoes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ações <span class="fas fa-ellipsis-v fa-sm pl-2"></span></button>' .
+            '<ul class="dropdown-menu bg-light">' .
+            '<li><a href="#" onclick="deletar(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-default" data-tooltip="Remover a ' . $lstanimal->nome . '"><i class="fas fa-trash fa-sm"></i> Excluir</a></li>' .
+            '<li><a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-default open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome . '"><i class="fas fa-sync-alt fa-sm"></i> Atualizar Avatar</a></li>' .
+            '<li role="separator" class="divider"></li>' .
+            '<li><a href="' . $path . '" data-id="' . $lstanimal->idanimal . '" class="btn btn-outline-default prontuario" data-tooltip="Abrir o Prontuário da ' . $lstanimal->nome . '"><i class="fas fa-paste fa-sm"></i> Ficha Técnica</a></li>' .
+            '</ul>' .
+            '</div>';
+
+        return $result;
+    }
+
     public function getAnimalList()
     {
         $lstanimal = DB::table('animal')
@@ -140,10 +152,11 @@ class AnimalController extends Controller
                 return '<button onclick="msgs(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-success btn-sm col-8 me-0">' . $lstanimal->nome . '</button>';
             })
             ->addColumn('actions', function ($lstanimal) {
-                $butoes = '<div class="btn-group btn-group-sm">' .
-                    '<a href="#" onclick="deletar(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-danger" data-tooltip="Remover a ' . $lstanimal->nome . '"><i class="fas fa-trash"></i></a>' .
-                    '<a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-secondary open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome . '"><i class="fas fa-camera"></i>' .
-                    '</div>';
+                $butoes = $this->getAcoes($lstanimal);
+                // $butoes = '<div class="btn-group btn-group-sm">' .
+                //     '<a href="#" onclick="deletar(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-danger" data-tooltip="Remover a ' . $lstanimal->nome . '"><i class="fas fa-trash"></i></a>' .
+                //     '<a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-secondary open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome . '"><i class="fas fa-camera"></i>' .
+                //     '</div>';
                 return $butoes;
             })
             ->rawColumns(['action', 'actions'])
@@ -255,30 +268,21 @@ class AnimalController extends Controller
             'animalid' => 'required',
             'nome' => 'required',
         ]);
-        $animal = new Animal;
 
         $image = $request->file('image');
         $imgnome = 'RSGL-' . $request->animalid . '-' . $request->nome . '.' . $image->extension();
         $filePath = public_path('assets/img/animal/thumbs');
         $img = Image::make($image->path());
-
-        //$resize_image->save(public_path('images').$path,100);
         $img->resize(200, 200, function ($const) {
             $const->aspectRatio();
         })->save($filePath . '/' . $imgnome);
-
-        // $filePath = public_path('assets/img/animal/thumbs');
-        // $img->move($filePath, $imgnome);
         $save_path = 'assets/img/animal/thumbs/' . $imgnome;
-
-        //
-
 
         try {
 
             DB::table('animal')
-            ->where('idanimal', $request->animalid)
-            ->update(['foto' => $save_path]);
+                ->where('idanimal', $request->animalid)
+                ->update(['foto' => $save_path]);
 
             return response()->json([
                 'status' => 200,
@@ -291,8 +295,6 @@ class AnimalController extends Controller
                 'message' => 'Não foi possível atualizar a foto desse animal. Tente novamente.' //$e->getMessage()
             ]);
         }
-
-        //return redirect('/rebanho');
     }
 
     /**
@@ -317,5 +319,91 @@ class AnimalController extends Controller
             'ativo' => 1,
         ));
         return ($animal);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getFichaTecnica($idanimal)
+    {
+        //phpinfo();
+        $lstanimal = $this->obtemAnimalFichaTecnica($idanimal);
+        $lsthp = $this->obtemHistoricoPeso($idanimal);
+
+        return view('painel.rebanho.fichatecnica', compact('lstanimal', 'lsthp'));
+    }
+
+    private function obtemAnimalFichaTecnica($idanimal)
+    {
+        $lstanimal = DB::table('animal')
+            ->join('lote', 'animal.lote_idlote', '=', 'lote.idlote')
+            ->join('tipo_lote', 'tipo_lote.idtipo_lote', '=', 'lote.tipo_lote_idtipo_lote')
+            ->join('grau_sangue', 'grau_sangue.idgrau_sangue', '=', 'animal.grau_sangue_idgrau_sangue')
+            ->join('raca', 'raca.idraca', '=', 'grau_sangue.raca_idraca')
+            ->join('origem', 'origem.idorigem', '=', 'animal.origem_idorigem')
+            ->where(
+                [
+                    ['animal.ativo', '=', '1'],
+                    ['animal.idanimal', '=', $idanimal],
+                ]
+            )
+            ->select([
+                'animal.idanimal',
+                'animal.numero_brinco',
+                'animal.nome',
+                'animal.dias_vida',
+                'animal.peso_entrada',
+                'animal.data_nascimento',
+                'animal.data_entrada',
+                'animal.apelido',
+                'animal.foto',
+                'animal.observacao',
+                'tipo_lote.nome as tlnome',
+                'raca.nome as rnome',
+                'grau_sangue.descricao as gsnome',
+                'origem.nome as ornome',
+            ])
+            ->get();
+        return $lstanimal;
+    }
+
+    private function obtemHistoricoPeso($idanimal)
+    {
+        $lsthp = [];
+        $lsthistoricopeso = DB::table('historico_peso')
+            ->where('historico_peso.animal_idanimal', '=', $idanimal)
+            ->select([
+                'historico_peso.peso_anterior',
+                'historico_peso.peso_atual',
+                'historico_peso.data_pesagem',
+            ])
+            ->orderBy('historico_peso.idhistorico_peso', 'desc')
+            ->take(5)
+            ->get();
+
+        $lsthp = $this->order_histpeso($lsthistoricopeso);
+        return $lsthp;
+    }
+
+    private function order_histpeso($obj)
+    {
+        $itens = [];
+        $result = [];
+        $perc = 0;
+        foreach ($obj as $item) {
+
+            $perc = round(($item->peso_atual - $item->peso_anterior)  / $item->peso_anterior * 100, 2);
+            $itens['peso_anterior'] = round($item->peso_anterior, 2);
+            $itens['peso_atual'] = round($item->peso_atual, 2);
+            $itens['data_pesagem'] = date('d/m/Y', strtotime($item->data_pesagem));
+            $itens['perc_variacao'] = $perc;
+            $itens['color_icon'] = ($perc < 0) ? "fas fa-caret-down text-danger" : "fas fa-caret-up text-success";
+
+            array_push($result, $itens);
+        }
+
+        return $result;
     }
 }

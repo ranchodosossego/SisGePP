@@ -1,0 +1,65 @@
+.salvar {
+    box-shadow: 0 0 2px #c5c5c5 !important;
+}
+
+.nav a:link {
+    color: #f5f5f5 !important;
+}
+
+.nav a:hover {
+    color: #a6a6a6 !important;
+}
+
+#progress {
+    animation-name: progressbar;
+    animation-iteration-count: 1;
+    animation-duration: 1.05s;
+}
+
+.not-allowed {
+    cursor: not-allowed;
+}
+
+@keyframes progressbar {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 40%;
+    }
+}
+
+.swal2-popup {
+    font-size: 0.8rem !important;
+    margin: 0 !important;
+    padding: 0 1.2rem 0 0 !important;
+
+    /* font-family: Georgia, serif; */
+}
+.swal2-html-container {
+    text-align: justify !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.swal2-html-container .list-group {
+    padding: 0 !important;
+    margin-right: 2em !important;
+}
+
+.swal2-icon {
+    width: 2em !important;
+    height: 2em !important;
+    margin-right: 1em !important;
+    margin-left: 1em !important;
+    vertical-align: super !important;
+}
+
+.colored-toast.swal2-icon-error {
+    color: #f27474 !important;
+    background-color: #fff !important;
+    position: absolute !important;
+    top: 40px;
+    left: 40px !important;
+}
