@@ -67,6 +67,8 @@
                                                         <div class="description-block">
                                                             <h5 class="description-header">{{ $animal->tlnome }}</h5>
                                                             <span class="description-text">LOTE</span>
+                                                            <p class="description-text text-muted text-lote"><small>Código: {{ $animal->ltcodigo }}</small></p>
+                                                            {{-- <span class="text-muted"><small>Kg</small></span> --}}
                                                         </div>
 
                                                     </div>
@@ -85,8 +87,10 @@
                                         <!-- /.widget-user -->
                                     </div>
 
+                                    {{-- Compos da ficha do animal --}}
                                     <div class="form-group col-sm-6">
 
+                                        {{-- Nome / Peso Inicial --}}
                                         <div class="row">
                                             <div class="form-group col-sm-6">
                                                 <label for="anome">Nome</label>
@@ -105,6 +109,7 @@
 
                                         </div>
 
+                                        {{-- Data Nascimento / Dias de Vida --}}
                                         <div class="row">
 
                                             <div class="form-group col-sm-6">
@@ -123,6 +128,7 @@
 
                                         </div>
 
+                                        {{-- Data de Chegada / Raça --}}
                                         <div class="row">
 
                                             <div class="form-group col-sm-6">
@@ -141,6 +147,7 @@
 
                                         </div>
 
+                                        {{-- Grau de Sangue --}}
                                         <div class="row">
 
                                             <div class="form-group col-sm-12">
@@ -152,9 +159,11 @@
 
                                         </div>
 
+                                        {{-- Observação --}}
                                         <div class="row">
 
                                             <div class="form-group col-sm-12">
+
                                                 <label for="observacao">Observação</label>
                                                 <p id="observacao" class="form-control form-control-border"
                                                     style="height: auto !important;">
@@ -222,7 +231,6 @@
                                             style="height: auto !important;">
                                             <div class="card-comment">
 
-                                                {{-- <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image"> --}}
                                                 <div class="info-box mb-3 bg-warning">
                                                     <span class="info-box-icon"><i
                                                             class="fas fa-exclamation-triangle"></i></span>
@@ -256,7 +264,7 @@
                                         {{-- Tabela Historico de Peso --}}
                                         <div class="row">
 
-                                            <table class="table table-striped table-sm historico_peso" id="historico_peso">
+                                            <table class="table table-dark table-striped table-sm table-hover historico_peso" id="historico_peso">
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">#</th>
@@ -269,14 +277,14 @@
                                                 <tbody id="tblhistorico">
 
                                                     @for ($i = 0; $i < count($lsthp); $i++)
-                                                        <tr class="bg-dark">
-                                                            <td scope="row">{{ count($lsthp) - $i }}.</td>
+                                                        {!! $a = ($i == 0) ? "<tr class='bg-secondary'>" : "<tr>" !!}
+                                                            <th scope="row">{{ count($lsthp) - $i }}.</th>
                                                             <td>{{ $lsthp[$i]['data_pesagem'] }}</td>
-                                                            <td>{{ $lsthp[$i]['peso_anterior'] }} <span class="text-muted">Kg</span></td>
-                                                            <td>{{ $lsthp[$i]['peso_atual'] }} <span class="text-muted">Kg</span></td>
+                                                            <td>{{ $lsthp[$i]['peso_anterior'] }} <small>Kg</small></td>
+                                                            <td>{{ $lsthp[$i]['peso_atual'] }} <small>Kg</small></td>
                                                             <td><i class="{{ $lsthp[$i]['color_icon'] }}"></i>
                                                                 {{ $lsthp[$i]['perc_variacao'] }}
-                                                                <span class="text-muted">%</span>
+                                                                <small>%</small>
                                                             </td>
                                                         </tr>
                                                     @endfor
@@ -290,9 +298,9 @@
                                         <div class="row">
 
                                             {{-- Peso Médio --}}
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-6 medias">
 
-                                                <div class="small-box bg-yellow">
+                                                <div class="small-box bg-yellow item">
                                                     <div class="inner">
                                                         <p>Peso Médio</p>
                                                         <h3>{{ array_sum(array_column($lsthp, 'peso_atual')) / count($lsthp) }}
@@ -304,19 +312,24 @@
                                                     </div>
                                                     <a href="#" class="small-box-footer">
                                                         <i class="fas fa-history fa-sm me-1"></i>
-                                                        <span>{{ Carbon::createFromDate(Carbon::createFromFormat('d/m/Y', $lsthp[0]['data_pesagem'])->format('d-m-Y'))
-                                                        ->diffForHumans(
-                                                            Carbon::createFromDate(Carbon::createFromFormat('d/m/Y', $lsthp[4]['data_pesagem'])->format('d-m-Y')))}}</span>
+                                                        <span>
+                                                            {{ 'Pesado  ' }}
+                                                            {{ Carbon::createFromFormat('d/m/Y', $lsthp[4]['data_pesagem'])->diffForHumans() }}
+                                                        </span>
+                                                            {{-- {{ Carbon::createFromDate(Carbon::createFromFormat('d/m/Y', $lsthp[0]['data_pesagem'])->format('d-m-Y'))
+                                                        ->longRelativeDiffForHumans(
+                                                            Carbon::createFromDate(Carbon::createFromFormat('d/m/Y', $lsthp[4]['data_pesagem'])->format('d-m-Y')))}}</span> --}}
+
                                                     </a>
                                                 </div>
 
                                             </div>
 
                                             {{-- Percentual de Variação --}}
-                                            <div class="form-group col-sm-6">
+                                            <div class="form-group col-sm-6 medias">
 
                                                 @if (array_sum(array_column($lsthp, 'perc_variacao')) / count($lsthp) < 0)
-                                                    <div class="small-box bg-danger">
+                                                    <div class="small-box bg-danger item">
                                                         <div class="inner">
                                                             <p>Perda Média</p>
                                                             <h3>{{ round(array_sum(array_column($lsthp, 'perc_variacao')) / count($lsthp), 2) }}
@@ -328,7 +341,7 @@
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <div class="small-box bg-light">
+                                                    <div class="small-box bg-light item">
                                                         <div class="inner">
                                                             <p>Aumento Médio</p>
                                                             <h3>{{ round(array_sum(array_column($lsthp, 'perc_variacao')) / count($lsthp), 2) }}<sup
@@ -339,10 +352,8 @@
                                                             <i class="far fa-thumbs-up"></i>
                                                         </div>
                                                         <a href="#" class="small-box-footer">
-                                                            <i class="fas fa-history fa-sm me-1"></i>
-                                                            <span>{{ Carbon::createFromDate(Carbon::createFromFormat('d/m/Y', $lsthp[0]['data_pesagem'])->format('d-m-Y'))
-                                                            ->diffForHumans(
-                                                                Carbon::createFromDate(Carbon::createFromFormat('d/m/Y', $lsthp[4]['data_pesagem'])->format('d-m-Y')))}}</span>
+                                                            <i class="fas fa-percentage fa-sm me-1"></i>
+                                                            <span>de variação de peso</span>
                                                         </a>
                                                     </div>
                                                 @endif
@@ -431,14 +442,20 @@
             text-shadow: 0 0 3px #000 !important, 0 0 5px #000 !important;
         }
 
-        .historico_peso {
-            font-size: .7rem !important;
-            line-height: 1.0rem !important;
+        .historico_peso tr {
+            font-size: .8rem !important;
+            /* line-height: .2rem !important; */
             border-bottom: 1px solid #6c757d !important;
         }
 
         .historico_peso th {
             font-size: .8rem !important;
+        }
+        .medias .item {
+            box-shadow: 4px 4px 15px -3px rgba(0,0,0,0.9);
+        }
+        .text-lote small {
+            text-shadow: 1px 1px 0px black !important;
         }
 
     </style>

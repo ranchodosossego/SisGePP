@@ -276,6 +276,7 @@ return [
                 ],
             ],
         ],
+
         //-- Dieta
         [
             'text'    => 'Alimentação',
@@ -295,6 +296,7 @@ return [
                 ],
             ],
         ],
+
         //-- Plantio
         [
             'text'    => 'Pantio',
@@ -327,10 +329,10 @@ return [
             'icon'    => 'fas fa-warehouse p-1',
             'submenu' => [
                 [
-                    'text' => 'Silagem',
+                    'text' => 'Ração',
                     'shift'   => 'ml-3',
-                    'url'  => '#',
-                    'icon'    => 'fas fa-seedling p-1',
+                    'url'  => 'racao',
+                    'icon'    => 'fas fa-utensils p-1',
                 ],
                 [
                     'text' => 'Insumos',
@@ -340,6 +342,7 @@ return [
                 ],
             ],
         ],
+
         //-- Produção <i class="fab fa-affiliatetheme"></i>
         [
             'text'    => 'Produção',
@@ -366,6 +369,7 @@ return [
 
             ],
         ],
+
         //-- Sanidade
         [
             'text'    => 'Sanidade',
@@ -397,6 +401,7 @@ return [
                 ],
             ],
         ],
+
         //--> Equipe
         [
             'text'    => 'Equipe',
@@ -423,6 +428,7 @@ return [
 
             ],
         ],
+
         // Autenticação
         [
             'header'   => '',

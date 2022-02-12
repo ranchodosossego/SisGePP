@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Carbon;
 
 use Yajra\DataTables\DataTables;
 use Intervention\Image\Facades\Image;
@@ -120,15 +121,18 @@ class AnimalController extends Controller
 
     private function getAcoes($lstanimal)
     {
-        $path = URL::to('/getfichatecnica') . '/' . $lstanimal->idanimal;
+        $path = '';
+
+        //$path = URL::to('/getfichatecnica') . '/' . $lstanimal['idanimal'];
+        $path = '/getfichatecnica' . '/' . $lstanimal['idanimal'];
 
         $result = '<div class="btn-group">' .
             '<button type="button" class="btn btn-light btn-sm dropdown-toggle acoes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ações <span class="fas fa-ellipsis-v fa-sm pl-2"></span></button>' .
             '<ul class="dropdown-menu bg-light">' .
-            '<li><a href="#" onclick="deletar(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-default" data-tooltip="Remover a ' . $lstanimal->nome . '"><i class="fas fa-trash fa-sm"></i> Excluir</a></li>' .
-            '<li><a href="#" data-toggle="modal" data-id="' . $lstanimal->idanimal . '"  data-target="#modal-atualizar" class="btn btn-outline-default open-modal" data-tooltip="Atualizar a ' . $lstanimal->nome . '"><i class="fas fa-sync-alt fa-sm"></i> Atualizar Avatar</a></li>' .
+            '<li><a href="#" onclick="deletar(\'' . $lstanimal['idanimal'] . '\');" class="btn btn-outline-default" data-tooltip="Remover a ' . $lstanimal['nome'] . '"><i class="fas fa-trash fa-sm"></i> Excluir</a></li>' .
+            '<li><a href="#" data-toggle="modal" data-id="' . $lstanimal['idanimal'] . '"  data-target="#modal-atualizar" class="btn btn-outline-default open-modal" data-tooltip="Atualizar a ' . $lstanimal['nome'] . '"><i class="fas fa-sync-alt fa-sm"></i> Atualizar Avatar</a></li>' .
             '<li role="separator" class="divider"></li>' .
-            '<li><a href="' . $path . '" data-id="' . $lstanimal->idanimal . '" class="btn btn-outline-default prontuario" data-tooltip="Abrir o Prontuário da ' . $lstanimal->nome . '"><i class="fas fa-paste fa-sm"></i> Ficha Técnica</a></li>' .
+            '<li><a target="" href="' . $path . '" data-id="' . $lstanimal['idanimal'] . '#panel-default" class="btn btn-outline-default breadcrumb-item prontuario" data-tooltip="Abrir o Prontuário da ' . $lstanimal['nome'] . '"><i class="fas fa-paste fa-sm"></i> Ficha Técnica</a></li>' .
             '</ul>' .
             '</div>';
 
@@ -137,19 +141,23 @@ class AnimalController extends Controller
 
     public function getAnimalList()
     {
-        $lstanimal = DB::table('animal')
+        $lsta = [];
+        $lstanimal = [];
+        $lsta = DB::table('animal')
             ->join('lote', 'animal.lote_idlote', '=', 'lote.idlote')
             ->join('tipo_lote', 'tipo_lote.idtipo_lote', '=', 'lote.tipo_lote_idtipo_lote')
             ->where('animal.ativo', '=', '1')
-            ->select(['animal.idanimal', 'animal.numero_brinco', 'animal.nome', 'animal.dias_vida', 'animal.apelido', 'tipo_lote.nome  as tnome'])
+            ->select(['animal.idanimal', 'animal.numero_brinco', 'animal.nome', 'animal.data_nascimento', 'animal.apelido', 'tipo_lote.nome  as tnome'])
             ->get();
 
+        $lstanimal = $this->order_list_animal_lote($lsta);
+
         return DataTables::of($lstanimal)
-            ->addColumn('numero_brinco', function ($lstanimal) {
-                return Str::padLeft((string)$lstanimal->numero_brinco, 5, '0');
+            ->addColumn("numero_brinco", function ($lstanimal) {
+                return Str::padLeft((string)$lstanimal["numero_brinco"], 5, '0');
             })
             ->addColumn('action', function ($lstanimal) {
-                return '<button onclick="msgs(\'' . $lstanimal->idanimal . '\');" class="btn btn-outline-success btn-sm col-8 me-0">' . $lstanimal->nome . '</button>';
+                return '<button onclick="msgs(\'' . $lstanimal["idanimal"] . '\');" class="btn btn-outline-success btn-sm col-8 me-0">' . $lstanimal["nome"] . '</button>';
             })
             ->addColumn('actions', function ($lstanimal) {
                 $butoes = $this->getAcoes($lstanimal);
@@ -161,6 +169,27 @@ class AnimalController extends Controller
             })
             ->rawColumns(['action', 'actions'])
             ->make(true);
+    }
+
+    private function order_list_animal_lote($obj)
+    {
+        $itens = [];
+        $result = [];
+        $dv = 0;
+
+        foreach ($obj as $item) {
+            $dv = Carbon::createFromDate(Carbon::createFromFormat('d/m/Y', $item->data_nascimento)->format('d-m-Y'))->diffInDays(Carbon::now());
+            $itens["idanimal"] = $item->idanimal;
+            $itens["numero_brinco"] = $item->numero_brinco;
+            $itens["nome"] = $item->nome;
+            $itens["dias_vida"] = $dv;
+            $itens["apelido"] = $item->apelido;
+            $itens["tnome"] = $item->tnome;
+
+            array_push($result, $itens);
+        }
+
+        return $result;
     }
 
     /**
@@ -364,6 +393,7 @@ class AnimalController extends Controller
                 'raca.nome as rnome',
                 'grau_sangue.descricao as gsnome',
                 'origem.nome as ornome',
+                'lote.codigo as ltcodigo',
             ])
             ->get();
         return $lstanimal;

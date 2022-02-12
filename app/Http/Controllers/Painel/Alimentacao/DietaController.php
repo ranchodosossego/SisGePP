@@ -199,19 +199,19 @@ class DietaController extends Controller
             'id' => 1,
             'nome' => 'TOTAL DE VOLUMOSO',
             'kg' => $dados_volu['mn_kg'],
-            'perc' => $dados_volu['mn_perc'],
+            'perc' => round($dados_volu['mn_kg'] * 100 / $tot_mist_kg, 2),//$dados_volu['mn_perc'],
         );
         $concentrado = array(
             'id' => 2,
             'nome' => 'TOTAL DE CONCENTRADO',
             'kg' => $dados_conc["mn_kg"],
-            'perc' => $dados_conc["mn_perc"],
+            'perc' => round($dados_conc["mn_kg"] * 100 / $tot_mist_kg, 2),//$dados_conc["mn_perc"],
         );
         $nucleo = array(
             'id' => 3,
             'nome' => 'TOTAL DE NÚCLEO',
             'kg' => $dados_nucleo["nucleo_mn_kg"],
-            'perc' => $dados_nucleo["nucleo_mns_perc"],
+            'perc' => round($dados_nucleo["nucleo_mn_kg"] * 100 / $tot_mist_kg, 2),//$dados_nucleo["nucleo_mns_perc"],
         );
         $mistura = array(
             'id' => 4,

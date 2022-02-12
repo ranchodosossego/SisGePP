@@ -47,7 +47,6 @@ Route::get('/obtemTipoLote', [App\Http\Controllers\Painel\Rebanho\TipoLoteContro
 // --: Controller: GrauSangueController
 Route::post('/getGrauSangue', [App\Http\Controllers\Painel\Rebanho\GrauSangueController::class, 'getGrauSangue'])->name('get.grau.sangue');
 
-
 // --: Controller: AnimalController
 Route::get('animal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'index']);
 Route::post('animal', [App\Http\Controllers\Painel\Rebanho\AnimalController::class, 'create']);
@@ -71,3 +70,6 @@ Route::get('/getNutrienteAlimentos', [App\Http\Controllers\Painel\Alimentacao\Al
 Route::get('/prontuario', [App\Http\Controllers\Painel\Sanidade\ProntuarioController::class, 'index']);
 Route::get('/prontuario/{idanimal}', [App\Http\Controllers\Painel\Sanidade\ProntuarioController::class, 'getProntuario']);
 Route::get('/getP', [App\Http\Controllers\Painel\Sanidade\ProntuarioController::class, 'getP'])->name('get.dieta');
+
+// --: Estoque
+Route::get('/racao', [App\Http\Controllers\Painel\Estoque\EstoqueController::class, 'racao']);
