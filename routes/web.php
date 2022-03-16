@@ -73,3 +73,4 @@ Route::get('/getP', [App\Http\Controllers\Painel\Sanidade\ProntuarioController::
 
 // --: Estoque
 Route::get('/racao', [App\Http\Controllers\Painel\Estoque\EstoqueController::class, 'racao']);
+Route::get('/getEstoqueAlimento', [App\Http\Controllers\Painel\Estoque\EstoqueController::class, 'getEstoqueAlimento']);

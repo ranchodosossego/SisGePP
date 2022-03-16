@@ -234,11 +234,12 @@ $(function () {
             },
             //-- end_success
         });
+
     });
 
     //-- Enable/Disabls dos itens de tela
-    $("#prodleitedia").on(
-        "changed.bs.select",
+    $("#prodleitedia").on("changed.bs.select",
+
         function (e, clickedIndex, isSelected, previousValue) {
             var prodleitedia = $("#prodleitedia option:selected").val();
 
@@ -278,5 +279,6 @@ $(function () {
                 $(".label_perc_gordura").removeClass("not-allowed text-muted");
             }
         }
+
     );
 });

@@ -329,7 +329,7 @@ return [
             'icon'    => 'fas fa-warehouse p-1',
             'submenu' => [
                 [
-                    'text' => 'Ração',
+                    'text' => 'Ingredientes para Ração',
                     'shift'   => 'ml-3',
                     'url'  => 'racao',
                     'icon'    => 'fas fa-utensils p-1',
